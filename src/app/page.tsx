@@ -1,6 +1,6 @@
 // src/app/page.tsx
-import { TarotCardDemo } from "@/components/cards/TarotCard";
+import CardSelection from "@/components/cards/CardSelection";
 
 export default function Home() {
-  return <TarotCardDemo />;
+  return <CardSelection />;
 }
