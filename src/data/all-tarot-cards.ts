@@ -71,10 +71,11 @@ export const DECK_STATS = {
   wands: getCardsBySuit("wands").length,
 };
 
-console.log(`🎴 칠팔 타로 데이터 로드 완료!`);
-console.log(
-  `📊 총 ${DECK_STATS.total}장 | 메이저: ${DECK_STATS.major}장 | 마이너: ${DECK_STATS.minor}장`
-);
-console.log(
-  `💕 컵: ${DECK_STATS.cups}장 | 💰 펜타클: ${DECK_STATS.pentacles}장 | ⚔️ 소드: ${DECK_STATS.swords}장 | 🔥 완드: ${DECK_STATS.wands}장`
-);
+// 디버깅용 로그 (프로덕션에서는 주석 처리)
+// console.log(`🎴 칠팔 타로 데이터 로드 완료!`);
+// console.log(
+//   `📊 총 ${DECK_STATS.total}장 | 메이저: ${DECK_STATS.major}장 | 마이너: ${DECK_STATS.minor}장`
+// );
+// console.log(
+//   `💕 컵: ${DECK_STATS.cups}장 | 💰 펜타클: ${DECK_STATS.pentacles}장 | ⚔️ 소드: ${DECK_STATS.swords}장 | 🔥 완드: ${DECK_STATS.wands}장`
+// );
