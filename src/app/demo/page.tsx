@@ -1,11 +1,11 @@
 // src/app/demo/page.tsx
 import FullscreenLayout from "@/components/layout/FullscreenLayout";
-import { TarotCardDemo } from "@/components/cards/TarotCard";
+import RealImageCardDemo from "@/components/cards/RealImageCard";
 
 export default function DemoPage() {
   return (
     <FullscreenLayout>
-      <TarotCardDemo />
+      <RealImageCardDemo />
     </FullscreenLayout>
   );
 }
