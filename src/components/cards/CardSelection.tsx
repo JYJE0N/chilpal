@@ -1,6 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { majorArcanaCards } from "@/data/major-arcana";
+import { cupsCards } from "@/data/cups-minor-arcana";
+import { pentaclesCards } from "@/data/pentacles-minor-arcana";
+import { swordsCards } from "@/data/swords-minor-arcana";
+import { wandsCards } from "@/data/wands-minor-arcana";
 
 // 임시 타입 정의 (실제로는 @/types/tarot에서 import)
 interface TarotCard {
@@ -37,7 +42,7 @@ const sampleCards: TarotCard[] = [
     upright_interpretation: "새로운 여정이 시작됩니다.",
     upright_keywords: ["새로운 시작", "모험"],
     has_reversal: true,
-    image_url: "/images/cards/major/00-fool.jpg",
+    image_url: "/images/cards/major/00-fool.png",
   },
   {
     id: 1,
@@ -47,7 +52,7 @@ const sampleCards: TarotCard[] = [
     upright_interpretation: "당신에게 필요한 모든 도구가 있습니다.",
     upright_keywords: ["의지력", "창조"],
     has_reversal: true,
-    image_url: "/images/cards/major/01-magician.jpg",
+    image_url: "/images/cards/major/01-magician.png",
   },
   {
     id: 22,
@@ -58,7 +63,7 @@ const sampleCards: TarotCard[] = [
     upright_interpretation: "새로운 감정적 경험이 시작됩니다.",
     upright_keywords: ["새로운 사랑", "기쁨"],
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/ace-cups.jpg",
+    image_url: "/images/cards/minor/cups/ace-cups.png",
   },
   {
     id: 36,
@@ -69,7 +74,7 @@ const sampleCards: TarotCard[] = [
     upright_interpretation: "새로운 사업 기회가 찾아옵니다.",
     upright_keywords: ["새로운 기회", "번영"],
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/ace-pentacles.jpg",
+    image_url: "/images/cards/minor/pentacles/ace-pentacles.png",
   },
   {
     id: 50,
@@ -80,7 +85,7 @@ const sampleCards: TarotCard[] = [
     upright_interpretation: "새로운 통찰이 떠오릅니다.",
     upright_keywords: ["새로운 아이디어", "명료함"],
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/ace-swords.jpg",
+    image_url: "/images/cards/minor/swords/ace-swords.png",
   },
   {
     id: 64,
@@ -91,7 +96,7 @@ const sampleCards: TarotCard[] = [
     upright_interpretation: "창조적 에너지가 솟아납니다.",
     upright_keywords: ["창조적 영감", "열정"],
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/ace-wands.jpg",
+    image_url: "/images/cards/minor/wands/ace-wands.png",
   },
   {
     id: 21,
@@ -101,7 +106,7 @@ const sampleCards: TarotCard[] = [
     upright_interpretation: "긴 여정이 성공적으로 마무리됩니다.",
     upright_keywords: ["완성", "성취"],
     has_reversal: true,
-    image_url: "/images/cards/major/21-world.jpg",
+    image_url: "/images/cards/major/21-world.png",
   },
 ];
 
@@ -176,7 +181,15 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
 
   // 7장 랜덤 카드 생성
   const shuffleCards = () => {
-    const shuffled = [...sampleCards].sort(() => Math.random() - 0.5);
+    // 모든 카드를 합치기
+    const allCards = [
+      ...majorArcanaCards,
+      ...cupsCards,
+      ...pentaclesCards,
+      ...swordsCards,
+      ...wandsCards
+    ];
+    const shuffled = [...allCards].sort(() => Math.random() - 0.5);
     setAvailableCards(shuffled.slice(0, 7));
     setSelectedCards([]);
     setRevealedCards(new Set());
@@ -343,25 +356,13 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           : "opacity-0 rotate-y-180"
                       }`}
                     >
-                      <div
-                        className={`w-full h-full bg-white rounded-lg border-2 ${getSuitColor(
+                      <img
+                        src={card.image_url}
+                        alt={card.name}
+                        className={`w-full h-full object-cover rounded-lg border-2 ${getSuitColor(
                           card.suit
-                        )} flex flex-col p-2`}
-                      >
-                        <div className="text-center text-xs font-bold text-gray-800 mb-1">
-                          {getSuitEmoji(card.suit)} {card.name}
-                        </div>
-                        <div className="flex-1 flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="text-2xl mb-1">
-                              {getSuitEmoji(card.suit)}
-                            </div>
-                            <div className="text-xs text-gray-600">
-                              {card.suit.toUpperCase()}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                        )}`}
+                      />
                     </div>
                   </div>
 
@@ -421,11 +422,23 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                       {["과거", "현재", "미래"][index]}
                     </h4>
                     <div className="bg-white rounded-lg p-4 shadow-lg">
+                      {/* 카드 이미지 */}
+                      <div className="relative w-32 h-48 mx-auto mb-3">
+                        <img
+                          src={card.image_url}
+                          alt={card.name}
+                          className={`w-full h-full object-cover rounded-lg border-2 ${getSuitColor(card.suit)} ${
+                            card.is_reversed ? "rotate-180" : ""
+                          }`}
+                        />
+                        {card.is_reversed && (
+                          <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                            역방향
+                          </div>
+                        )}
+                      </div>
                       <h5 className="font-bold text-gray-800 mb-2">
                         {card.name}
-                        {card.is_reversed && (
-                          <span className="text-red-500 ml-1">(역방향)</span>
-                        )}
                       </h5>
                       <p className="text-sm text-gray-600 mb-2">
                         {card.current_meaning}
@@ -433,6 +446,17 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                       <p className="text-xs text-gray-500">
                         {card.current_interpretation}
                       </p>
+                      {/* 키워드 */}
+                      <div className="flex flex-wrap gap-1 justify-center mt-3">
+                        {card.current_keywords.slice(0, 3).map((keyword, idx) => (
+                          <span
+                            key={idx}
+                            className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full"
+                          >
+                            {keyword}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ))}

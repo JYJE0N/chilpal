@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 
 // 타입 정의
 interface TarotCard {
@@ -89,8 +88,8 @@ function CardImage({
 
   const design = getSuitDesign(card.suit);
 
-  // 이미지 로딩 실패 또는 로딩 중일 때 플레이스홀더
-  if (imageError || imageLoading) {
+  // 이미지 로딩 실패시 플레이스홀더
+  if (imageError) {
     return (
       <div
         className={`relative ${className} ${isReversed ? "rotate-180" : ""}`}
@@ -110,21 +109,14 @@ function CardImage({
 
           {/* 메인 영역 */}
           <div className="flex-1 flex items-center justify-center p-4">
-            {imageLoading && !imageError ? (
-              <div className="text-center text-white">
-                <div className="animate-spin text-2xl mb-2">🔄</div>
-                <div className="text-xs">Loading...</div>
+            <div className="text-center">
+              <div className="text-4xl mb-2 animate-pulse">
+                {design.symbol}
               </div>
-            ) : (
-              <div className="text-center">
-                <div className="text-4xl mb-2 animate-pulse">
-                  {design.symbol}
-                </div>
-                <div className="text-white text-xs font-semibold bg-black/30 px-2 py-1 rounded">
-                  {card.suit.toUpperCase()}
-                </div>
+              <div className="text-white text-xs font-semibold bg-black/30 px-2 py-1 rounded">
+                {card.suit.toUpperCase()}
               </div>
-            )}
+            </div>
           </div>
 
           {/* 의미 미리보기 */}
@@ -134,38 +126,38 @@ function CardImage({
             </div>
           </div>
         </div>
-
-        {/* 실제 이미지 (숨겨진 상태로 로딩) */}
-        {!imageError && (
-          <Image
-            src={card.image_url}
-            alt={card.name}
-            fill
-            className="opacity-0 absolute inset-0"
-            onLoad={() => setImageLoading(false)}
-            onError={() => {
-              setImageError(true);
-              setImageLoading(false);
-            }}
-          />
-        )}
       </div>
     );
   }
 
-  // 실제 이미지 표시
+  // 실제 이미지 표시 (로딩 중이거나 로드 완료)
   return (
     <div
       className={`relative ${className} ${
         isReversed ? "rotate-180" : ""
       } overflow-hidden rounded-lg`}
     >
-      <Image
+      {/* 로딩 중일 때 플레이스홀더 표시 */}
+      {imageLoading && (
+        <div
+          className={`absolute inset-0 bg-gradient-to-br ${design.gradient} rounded-lg ${design.border} border-2 shadow-lg overflow-hidden flex items-center justify-center z-10`}
+        >
+          <div className="text-center text-white">
+            <div className="animate-spin text-2xl mb-2">🔄</div>
+            <div className="text-xs">Loading...</div>
+          </div>
+        </div>
+      )}
+
+      <img
         src={card.image_url}
         alt={card.name}
-        fill
-        className="object-cover rounded-lg"
-        priority={size === "large"}
+        className="w-full h-full object-cover rounded-lg"
+        onLoad={() => setImageLoading(false)}
+        onError={() => {
+          setImageError(true);
+          setImageLoading(false);
+        }}
       />
 
       {/* 역방향 오버레이 */}
