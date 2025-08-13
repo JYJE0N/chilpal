@@ -23,7 +23,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 1,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/ace-cups.jpg",
+    image_url: "/images/cards/minor/cups/ace-cups.png",
 
     upright_meaning: "새로운 사랑, 감정의 시작, 영적 깨달음, 기쁨",
     upright_interpretation:
@@ -46,7 +46,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 2,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/02-cups.jpg",
+    image_url: "/images/cards/minor/cups/02-cups.png",
 
     upright_meaning: "파트너십, 상호 사랑, 화합, 균형",
     upright_interpretation:
@@ -69,7 +69,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 3,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/03-cups.jpg",
+    image_url: "/images/cards/minor/cups/03-cups.png",
 
     upright_meaning: "축하, 우정, 공동체, 기쁨 공유",
     upright_interpretation:
@@ -92,7 +92,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 4,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/04-cups.jpg",
+    image_url: "/images/cards/minor/cups/04-cups.png",
 
     upright_meaning: "무관심, 지루함, 기회 놓침, 명상",
     upright_interpretation:
@@ -115,7 +115,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 5,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/05-cups.jpg",
+    image_url: "/images/cards/minor/cups/05-cups.png",
 
     upright_meaning: "상실, 슬픔, 후회, 실망",
     upright_interpretation:
@@ -130,7 +130,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 6,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/06-cups.jpg",
+    image_url: "/images/cards/minor/cups/06-cups.png",
 
     upright_meaning: "향수, 어린 시절, 순수함, 옛 친구",
     upright_interpretation:
@@ -152,7 +152,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 7,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/07-cups.jpg",
+    image_url: "/images/cards/minor/cups/07-cups.png",
 
     upright_meaning: "환상, 선택의 혼란, 꿈, 비현실적 기대",
     upright_interpretation:
@@ -175,7 +175,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 8,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/08-cups.jpg",
+    image_url: "/images/cards/minor/cups/08-cups.png",
 
     upright_meaning: "포기, 떠남, 새로운 추구, 실망",
     upright_interpretation:
@@ -198,7 +198,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 9,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/09-cups.jpg",
+    image_url: "/images/cards/minor/cups/09-cups.png",
 
     upright_meaning: "만족, 소원 성취, 행복, 감정적 충족",
     upright_interpretation:
@@ -221,7 +221,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: 10,
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/10-cups.jpg",
+    image_url: "/images/cards/minor/cups/10-cups.png",
 
     upright_meaning: "완전한 행복, 가족, 조화, 감정적 완성",
     upright_interpretation:
@@ -243,7 +243,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: "page",
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/page-cups.jpg",
+    image_url: "/images/cards/minor/cups/page-cups.png",
 
     upright_meaning: "감정적 메시지, 직감, 창의성, 순수함",
     upright_interpretation:
@@ -266,7 +266,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: "knight",
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/knight-cups.jpg",
+    image_url: "/images/cards/minor/cups/knight-cups.png",
 
     upright_meaning: "로맨틱, 이상주의, 감정적 추구, 예술적 영감",
     upright_interpretation:
@@ -288,7 +288,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: "queen",
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/queen-cups.jpg",
+    image_url: "/images/cards/minor/cups/queen-cups.png",
 
     upright_meaning: "직감적 지혜, 감정적 성숙, 공감, 돌봄",
     upright_interpretation:
@@ -311,7 +311,7 @@ export const cupsCards: MinorArcana[] = [
     suit: "cups",
     number: "king",
     has_reversal: false,
-    image_url: "/images/cards/minor/cups/king-cups.jpg",
+    image_url: "/images/cards/minor/cups/king-cups.png",
 
     upright_meaning: "감정적 균형, 지혜로운 조언, 자비, 평정심",
     upright_interpretation:

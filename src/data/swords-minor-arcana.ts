@@ -9,7 +9,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 1,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/ace-swords.jpg",
+    image_url: "/images/cards/minor/swords/ace-swords.png",
 
     upright_meaning: "새로운 아이디어, 정신적 명료함, 진실 발견, 돌파구",
     upright_interpretation:
@@ -31,7 +31,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 2,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/02-swords.jpg",
+    image_url: "/images/cards/minor/swords/02-swords.png",
 
     upright_meaning: "결정 장애, 딜레마, 균형, 정보 부족",
     upright_interpretation:
@@ -53,7 +53,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 3,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/03-swords.jpg",
+    image_url: "/images/cards/minor/swords/03-swords.png",
 
     upright_meaning: "이별, 배신, 상처, 슬픔",
     upright_interpretation:
@@ -75,7 +75,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 4,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/04-swords.jpg",
+    image_url: "/images/cards/minor/swords/04-swords.png",
 
     upright_meaning: "휴식, 명상, 회복, 평화로운 고요",
     upright_interpretation:
@@ -97,7 +97,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 5,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/05-swords.jpg",
+    image_url: "/images/cards/minor/swords/05-swords.png",
 
     upright_meaning: "갈등, 패배, 불공정한 승리, 배신",
     upright_interpretation:
@@ -120,7 +120,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 6,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/06-swords.jpg",
+    image_url: "/images/cards/minor/swords/06-swords.png",
 
     upright_meaning: "전환, 여행, 어려움에서 벗어남, 새로운 시작",
     upright_interpretation:
@@ -143,7 +143,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 7,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/07-swords.jpg",
+    image_url: "/images/cards/minor/swords/07-swords.png",
 
     upright_meaning: "기만, 도둑질, 전략적 행동, 혼자 행동",
     upright_interpretation:
@@ -165,7 +165,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 8,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/08-swords.jpg",
+    image_url: "/images/cards/minor/swords/08-swords.png",
 
     upright_meaning: "속박감, 제한, 피해자 의식, 자기 제한",
     upright_interpretation:
@@ -187,7 +187,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 9,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/09-swords.jpg",
+    image_url: "/images/cards/minor/swords/09-swords.png",
 
     upright_meaning: "불안, 악몽, 걱정, 정신적 고통",
     upright_interpretation:
@@ -210,7 +210,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: 10,
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/10-swords.jpg",
+    image_url: "/images/cards/minor/swords/10-swords.png",
 
     upright_meaning: "완전한 패배, 끝, 배신, 새로운 시작의 전조",
     upright_interpretation:
@@ -233,7 +233,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: "page",
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/page-swords.jpg",
+    image_url: "/images/cards/minor/swords/page-swords.png",
 
     upright_meaning: "호기심, 정보 수집, 감시, 새로운 아이디어",
     upright_interpretation:
@@ -256,7 +256,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: "knight",
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/knight-swords.jpg",
+    image_url: "/images/cards/minor/swords/knight-swords.png",
 
     upright_meaning: "충동적 행동, 급진적 변화, 용감함, 무모함",
     upright_interpretation:
@@ -278,7 +278,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: "queen",
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/queen-swords.jpg",
+    image_url: "/images/cards/minor/swords/queen-swords.png",
 
     upright_meaning: "지적 독립성, 명확한 판단, 직설적 소통, 냉정함",
     upright_interpretation:
@@ -301,7 +301,7 @@ export const swordsCards: TarotCard[] = [
     suit: "swords",
     number: "king",
     has_reversal: false,
-    image_url: "/images/cards/minor/swords/king-swords.jpg",
+    image_url: "/images/cards/minor/swords/king-swords.png",
 
     upright_meaning: "지적 권위, 공정한 판단, 전략적 사고, 리더십",
     upright_interpretation:
