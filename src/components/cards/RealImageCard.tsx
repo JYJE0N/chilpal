@@ -192,7 +192,7 @@ const foolCard: TarotCard = {
     "성급한 결정을 피하세요. 충분한 준비 없이 시작하면 위험할 수 있습니다.",
   reversed_keywords: ["무모함", "경솔함", "준비부족", "위험", "충동", "실수"],
   has_reversal: true,
-  image_url: "/images/cards/major/00-fool.jpg", // 여기에 실제 이미지 경로
+  image_url: "/images/cards/major/00-fool.png", // 여기에 실제 이미지 경로
   description:
     "절벽 끝에 서 있는 젊은이. 새로운 모험을 향한 순수한 마음을 상징합니다.",
 };
@@ -320,7 +320,7 @@ export default function RealImageCardDemo() {
             <p className="mb-2">
               📁 이미지 경로:{" "}
               <code className="bg-black/30 px-2 py-1 rounded">
-                public/images/cards/major/00-fool.jpg
+                public/images/cards/major/00-fool.png
               </code>
             </p>
             <p>💡 이미지가 없으면 자동으로 플레이스홀더가 표시됩니다!</p>
