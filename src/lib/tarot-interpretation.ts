@@ -69,16 +69,18 @@ export const generatePositionInterpretation = (
   
   let interpretation = `${positionContext[position]}: `;
   
+  const contextKey = questionType as keyof typeof questionContext;
+  
   if (position === 'past') {
-    interpretation += `${card.name}은 당신의 ${questionContext[questionType]} 지나온 경험을 나타냅니다. `;
+    interpretation += `${card.name}은 당신의 ${questionContext[contextKey]} 지나온 경험을 나타냅니다. `;
     interpretation += card.current_interpretation;
     interpretation += ' 이러한 과거의 에너지가 현재 상황에 영향을 미치고 있습니다.';
   } else if (position === 'present') {
-    interpretation += `${card.name}이 보여주는 ${questionContext[questionType]} 현재의 핵심입니다. `;
+    interpretation += `${card.name}이 보여주는 ${questionContext[contextKey]} 현재의 핵심입니다. `;
     interpretation += card.current_interpretation;
     interpretation += ' 지금 이 순간에 집중하여 현명한 선택을 하세요.';
   } else {
-    interpretation += `${card.name}이 ${questionContext[questionType]} 다가올 가능성을 암시합니다. `;
+    interpretation += `${card.name}이 ${questionContext[contextKey]} 다가올 가능성을 암시합니다. `;
     interpretation += card.current_interpretation;
     interpretation += ' 현재의 노력이 이러한 미래로 이어질 것입니다.';
   }

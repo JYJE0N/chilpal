@@ -4,10 +4,6 @@ import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/chilpal-tarot';
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
-
 interface MongooseConnection {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
@@ -27,6 +23,10 @@ if (!cached) {
 }
 
 async function connectDB() {
+  if (!MONGODB_URI) {
+    console.warn('MongoDB URI not defined, using fallback');
+  }
+  
   if (cached!.conn) {
     return cached!.conn;
   }
@@ -39,6 +39,9 @@ async function connectDB() {
     cached!.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       console.log('✅ MongoDB connected successfully');
       return mongoose;
+    }).catch((error) => {
+      console.error('MongoDB connection error:', error);
+      throw error;
     });
   }
 
