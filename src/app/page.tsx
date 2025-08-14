@@ -16,16 +16,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="space-y-4 max-w-md mx-auto">
+          <div className="max-w-md mx-auto">
             <Link href="/reading">
               <button className="w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 text-lg shadow-lg">
                 🔮 타로 리딩 시작하기
-              </button>
-            </Link>
-
-            <Link href="/demo">
-              <button className="w-full px-6 py-3 bg-white/20 text-white rounded-full hover:bg-white/30 transition-all border border-white/30">
-                🎴 카드 UI 데모 보기
               </button>
             </Link>
           </div>

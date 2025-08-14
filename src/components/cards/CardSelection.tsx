@@ -273,7 +273,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder="예: 새로운 직장은 어떨까요?"
-                className="w-full p-4 text-lg rounded-lg border-2 border-purple-300 focus:border-purple-500 focus:outline-none mb-6"
+                className="w-full p-4 text-lg text-gray-800 placeholder-gray-400 bg-white/90 rounded-lg border-2 border-purple-300 focus:border-purple-500 focus:outline-none mb-6"
                 onKeyPress={(e) => e.key === "Enter" && startReading()}
               />
               <button

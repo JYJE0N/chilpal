@@ -1,14 +1,14 @@
 // src/app/api/readings/stats/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
+import dbConnect from '@/lib/mongodb';
 import Reading from '@/models/Reading';
 import { cookies } from 'next/headers';
 
 // GET - 리딩 통계 조회
 export async function GET(_request: NextRequest) {
   try {
-    await connectDB();
+    await dbConnect();
     
     const cookieStore = await cookies();
     const sessionId = cookieStore.get('tarot-session')?.value;

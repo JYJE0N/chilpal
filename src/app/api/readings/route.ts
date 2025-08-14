@@ -1,7 +1,7 @@
 // src/app/api/readings/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
+import dbConnect from '@/lib/mongodb';
 import Reading from '@/models/Reading';
 import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,7 +21,7 @@ async function getOrCreateSession(_request: NextRequest): Promise<string> {
 // GET - 리딩 히스토리 조회
 export async function GET(request: NextRequest) {
   try {
-    await connectDB();
+    await dbConnect();
     
     const sessionId = await getOrCreateSession(request);
     const { searchParams } = new URL(request.url);
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
 // POST - 새 리딩 저장
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
+    await dbConnect();
     
     const sessionId = await getOrCreateSession(request);
     const body = await request.json();

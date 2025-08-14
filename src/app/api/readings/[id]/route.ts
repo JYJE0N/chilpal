@@ -1,7 +1,7 @@
 // src/app/api/readings/[id]/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
+import dbConnect from '@/lib/mongodb';
 import Reading from '@/models/Reading';
 import { cookies } from 'next/headers';
 
@@ -12,7 +12,7 @@ type RouteContext = {
 // GET - 특정 리딩 조회
 export async function GET(request: NextRequest, { params }: RouteContext) {
   try {
-    await connectDB();
+    await dbConnect();
     
     const cookieStore = await cookies();
     const sessionId = cookieStore.get('tarot-session')?.value;
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
 // DELETE - 리딩 삭제
 export async function DELETE(request: NextRequest, { params }: RouteContext) {
   try {
-    await connectDB();
+    await dbConnect();
     
     const cookieStore = await cookies();
     const sessionId = cookieStore.get('tarot-session')?.value;
