@@ -6,7 +6,7 @@ import Reading from '@/models/Reading';
 import { cookies } from 'next/headers';
 
 // GET - 리딩 통계 조회
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     await connectDB();
     
