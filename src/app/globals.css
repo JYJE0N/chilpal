@@ -207,4 +207,38 @@ body {
       0 0 0 3px rgba(186, 133, 196, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
+
+  /* 네비게이션 전용 글래스모피즘 */
+  .glass-nav {
+    background: rgba(45, 25, 83, 0.1);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(186, 133, 196, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .glass-nav-scrolled {
+    background: rgba(45, 25, 83, 0.3);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(186, 133, 196, 0.3);
+    box-shadow: 
+      0 4px 32px rgba(45, 25, 83, 0.2),
+      inset 0 1px 0 rgba(186, 133, 196, 0.1);
+  }
+
+  /* 네비게이션 링크 호버 효과 */
+  .nav-link-hover {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .nav-link-hover:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(186, 133, 196, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 
+      0 4px 12px rgba(186, 133, 196, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
 }

@@ -15,7 +15,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 pt-24">
       <div className="max-w-md w-full">
         <div className="mystic-bg rounded-2xl p-8 text-center shadow-2xl mystic-glow">
           {/* 에러 아이콘 */}

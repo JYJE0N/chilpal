@@ -2,25 +2,45 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Disc, Sparkles, Home, BookOpen, Dot } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="mystic-bg border-b border-white/20 sticky top-0 z-50 mystic-glow">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "glass-nav-scrolled backdrop-blur-xl"
+          : "glass-nav backdrop-blur-sm"
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* 로고 */}
           <Link
             href="/"
-            className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+            className="flex items-center space-x-3 hover:opacity-80 transition-all hover:scale-105"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <span className="text-2xl">🌙</span>
-            <h1 className="text-xl font-bold mystic-text-gradient">칠팔 타로</h1>
-            <span className="text-lg">✨</span>
+            <div className="flex items-center gap-0.5">
+              <Sparkles className="w-5 h-5 text-pink-300 animate-pulse" />
+            </div>
+            <h1 className="text-xl font-bold mystic-text-gradient">
+              칠팔 타로
+            </h1>
           </Link>
 
           {/* 데스크톱 네비게이션 */}
@@ -29,8 +49,8 @@ export default function Header() {
               href="/"
               className={`px-4 py-2 rounded-full transition-all ${
                 pathname === "/"
-                  ? "mystic-button mystic-glow text-white shadow-lg"
-                  : "text-white/80 hover:text-white hover:bg-white/10 mystic-glow-hover"
+                  ? "glass-button text-white"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
               }`}
             >
               홈
@@ -39,8 +59,8 @@ export default function Header() {
               href="/reading"
               className={`px-4 py-2 rounded-full transition-all ${
                 pathname === "/reading"
-                  ? "mystic-button mystic-glow text-white shadow-lg"
-                  : "text-white/80 hover:text-white hover:bg-white/10 mystic-glow-hover"
+                  ? "glass-button text-white"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
               }`}
             >
               타로 리딩
@@ -49,8 +69,8 @@ export default function Header() {
               href="/history"
               className={`px-4 py-2 rounded-full transition-all ${
                 pathname === "/history"
-                  ? "mystic-button mystic-glow text-white shadow-lg"
-                  : "text-white/80 hover:text-white hover:bg-white/10 mystic-glow-hover"
+                  ? "glass-button text-white"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
               }`}
             >
               히스토리
@@ -95,34 +115,36 @@ export default function Header() {
                 href="/"
                 className={`block px-4 py-2 rounded-lg transition-all ${
                   pathname === "/"
-                    ? "bg-purple-600 text-white"
+                    ? "glass-button text-white"
                     : "text-purple-200 hover:text-white hover:bg-white/10"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                🏠 홈
+                <Home className="inline w-4 h-4 mr-2" />홈
               </Link>
               <Link
                 href="/reading"
                 className={`block px-4 py-2 rounded-lg transition-all ${
                   pathname === "/reading"
-                    ? "bg-purple-600 text-white"
+                    ? "glass-button text-white"
                     : "text-purple-200 hover:text-white hover:bg-white/10"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                🔮 타로 리딩
+                <Sparkles className="inline w-4 h-4 mr-2" />
+                타로 리딩
               </Link>
               <Link
                 href="/history"
                 className={`block px-4 py-2 rounded-lg transition-all ${
                   pathname === "/history"
-                    ? "bg-purple-600 text-white"
+                    ? "glass-button text-white"
                     : "text-purple-200 hover:text-white hover:bg-white/10"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                📚 히스토리
+                <BookOpen className="inline w-4 h-4 mr-2" />
+                히스토리
               </Link>
             </div>
           </nav>

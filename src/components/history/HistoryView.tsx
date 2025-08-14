@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { BookOpen, Sparkles, Dot, Heart, Briefcase, DollarSign, Heart as Health, Star } from "lucide-react";
 
 interface ReadingRecord {
   _id: string;
@@ -124,21 +125,28 @@ export default function HistoryView() {
   };
 
   const getQuestionTypeLabel = (type: string) => {
-    const labels: Record<string, string> = {
-      love: '💕 연애',
-      career: '💼 직업',
-      money: '💰 재물',
-      health: '🏥 건강',
-      general: '🌟 일반'
+    const labels: Record<string, { icon: any, label: string }> = {
+      love: { icon: Heart, label: '연애' },
+      career: { icon: Briefcase, label: '직업' },
+      money: { icon: DollarSign, label: '재물' },
+      health: { icon: Health, label: '건강' },
+      general: { icon: Star, label: '일반' }
     };
-    return labels[type] || '🌟 일반';
+    const typeData = labels[type] || labels['general'];
+    const IconComponent = typeData.icon;
+    return (
+      <span className="flex items-center gap-1">
+        <IconComponent className="w-3 h-3" />
+        {typeData.label}
+      </span>
+    );
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-white text-center">
-          <div className="text-4xl mb-4">🔮</div>
+          <Sparkles className="w-10 h-10 mx-auto mb-4 text-purple-300 animate-pulse" />
           <p>히스토리를 불러오는 중...</p>
         </div>
       </div>
@@ -146,15 +154,17 @@ export default function HistoryView() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 p-4">
+    <div className="min-h-screen p-4">
       <div className="max-w-7xl mx-auto">
         {/* 헤더 */}
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            📚 리딩 히스토리
+        <header className="text-center mb-12">
+          <h1 className="text-5xl font-bold mystic-text-gradient mb-4 drop-shadow-2xl flex items-center justify-center gap-4">
+            <BookOpen className="w-10 h-10 text-purple-300" />
+            타로 히스토리
+            <Sparkles className="w-8 h-8 text-yellow-300 animate-pulse" />
           </h1>
-          <p className="text-purple-200 text-lg">
-            당신의 타로 여정을 돌아보세요
+          <p className="text-white/90 text-xl drop-shadow-lg">
+            당신의 신비로운 타로 여정을 돌아보세요
           </p>
         </header>
 
@@ -164,7 +174,7 @@ export default function HistoryView() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center"
+              className="glass-card-dark p-6 text-center"
             >
               <div className="text-2xl font-bold text-white">{stats.totalReadings}</div>
               <div className="text-purple-200 text-sm">총 리딩</div>
@@ -174,7 +184,7 @@ export default function HistoryView() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center"
+              className="glass-card-dark p-6 text-center"
             >
               <div className="text-2xl font-bold text-white">
                 {Object.values(stats.questionTypes).reduce((a, b) => Math.max(a, b), 0)}
@@ -193,7 +203,7 @@ export default function HistoryView() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center"
+              className="glass-card-dark p-6 text-center"
             >
               <div className="text-2xl font-bold text-white">
                 {stats.favoriteCards[0]?.count || 0}
@@ -205,7 +215,7 @@ export default function HistoryView() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center"
+              className="glass-card-dark p-6 text-center"
             >
               <div className="text-2xl font-bold text-white">
                 {stats.spreadTypes['one-card'] || 0}
@@ -216,14 +226,14 @@ export default function HistoryView() {
         )}
 
         {/* 필터 */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 mb-8">
+        <div className="glass-card-dark p-6 mb-8">
           <div className="flex flex-wrap gap-4 items-center">
             <div>
               <label className="text-white text-sm mr-2">질문 유형:</label>
               <select 
                 value={filter.type}
                 onChange={(e) => setFilter(prev => ({ ...prev, type: e.target.value }))}
-                className="bg-white/20 text-white rounded px-3 py-1 text-sm"
+                className="glass-input text-white rounded-lg px-4 py-2 text-sm focus:outline-none"
               >
                 <option value="all">전체</option>
                 <option value="love">연애</option>
@@ -239,7 +249,7 @@ export default function HistoryView() {
               <select 
                 value={filter.spread}
                 onChange={(e) => setFilter(prev => ({ ...prev, spread: e.target.value }))}
-                className="bg-white/20 text-white rounded px-3 py-1 text-sm"
+                className="glass-input text-white rounded-lg px-4 py-2 text-sm focus:outline-none"
               >
                 <option value="all">전체</option>
                 <option value="one-card">원카드</option>
@@ -252,14 +262,18 @@ export default function HistoryView() {
         {/* 리딩 목록 */}
         {readings.length === 0 ? (
           <div className="text-center py-16">
-            <div className="text-6xl mb-4">🔮</div>
+            <div className="mb-4">
+              <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+            </div>
             <h3 className="text-xl text-white mb-2">아직 리딩 기록이 없습니다</h3>
             <p className="text-purple-200 mb-6">첫 번째 타로 리딩을 시작해보세요!</p>
             <Link href="/">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all"
+                className="px-8 py-4 glass-button text-white font-bold rounded-full transition-all text-lg"
               >
                 타로 리딩 시작하기
               </motion.button>
@@ -274,12 +288,13 @@ export default function HistoryView() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="bg-white/10 backdrop-blur-lg rounded-xl p-6 cursor-pointer"
+                className="glass-card-light p-6 cursor-pointer transition-all hover:scale-105"
                 onClick={() => setSelectedReading(reading)}
               >
                 <div className="flex justify-between items-start mb-4">
-                  <span className="text-xs bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-3 py-1 rounded-full font-bold">
-                    {reading.spreadType === 'one-card' ? '🎴 원카드' : '🔮 3카드'}
+                  <span className="text-xs bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-3 py-1 rounded-full font-bold flex items-center gap-1">
+                    <Dot className="w-3 h-3" />
+                    {reading.spreadType === 'one-card' ? '원카드' : '3카드'}
                   </span>
                   <span className="text-xs text-purple-300">
                     {formatDate(reading.createdAt)}
@@ -333,34 +348,35 @@ export default function HistoryView() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+                className="glass-card-light max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
                 onClick={e => e.stopPropagation()}
               >
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
-                    <h2 className="text-xl font-bold text-gray-800">
+                    <h2 className="text-xl font-bold text-purple-900">
                       {selectedReading.question}
                     </h2>
                     <button
                       onClick={() => setSelectedReading(null)}
-                      className="text-gray-500 hover:text-gray-700"
+                      className="text-purple-600 hover:text-purple-800 p-2 rounded-full hover:bg-white/20 transition-all"
                     >
                       ✕
                     </button>
                   </div>
                   
                   <div className="mb-4">
-                    <span className="inline-block bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">
-                      {selectedReading.spreadType === 'one-card' ? '🎴 원카드 리딩' : '🔮 과거-현재-미래 리딩'}
+                    <span className="inline-block bg-purple-200/80 text-purple-800 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm flex items-center gap-2">
+                      <Dot className="w-3 h-3" />
+                      {selectedReading.spreadType === 'one-card' ? '원카드 리딩' : '과거-현재-미래 리딩'}
                     </span>
-                    <span className="ml-2 text-sm text-gray-500">
+                    <span className="ml-2 text-sm text-purple-600">
                       {formatDate(selectedReading.createdAt)}
                     </span>
                   </div>
                   
                   <div className="grid gap-4 mb-6">
                     {selectedReading.cards.map((card, idx) => (
-                      <div key={idx} className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+                      <div key={idx} className="flex gap-4 p-4 bg-white/40 rounded-lg backdrop-blur-sm border border-white/30">
                         <div className="relative w-16 h-24 flex-shrink-0">
                           <Image
                             src={card.image_url}
@@ -373,11 +389,11 @@ export default function HistoryView() {
                           />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-800 mb-1">
+                          <h4 className="font-semibold text-purple-900 mb-1">
                             {card.name}
                             {card.is_reversed && <span className="text-red-500 ml-2">(역방향)</span>}
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-purple-800">
                             {card.current_meaning}
                           </p>
                         </div>
@@ -385,9 +401,9 @@ export default function HistoryView() {
                     ))}
                   </div>
                   
-                  <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                    <h4 className="font-semibold text-gray-800 mb-2">종합 해석</h4>
-                    <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                  <div className="bg-white/50 p-6 rounded-lg mb-6 backdrop-blur-sm border border-white/30">
+                    <h4 className="font-semibold text-purple-900 mb-3 text-lg">🔮 종합 해석</h4>
+                    <p className="text-sm text-purple-900 whitespace-pre-line leading-relaxed">
                       {selectedReading.interpretation}
                     </p>
                   </div>
@@ -395,13 +411,13 @@ export default function HistoryView() {
                   <div className="flex justify-end gap-2">
                     <button
                       onClick={() => deleteReading(selectedReading._id)}
-                      className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                      className="px-6 py-3 bg-red-500/80 text-white rounded-lg hover:bg-red-600 transition-all backdrop-blur-sm font-medium"
                     >
                       삭제
                     </button>
                     <button
                       onClick={() => setSelectedReading(null)}
-                      className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                      className="px-6 py-3 glass-button text-white rounded-lg transition-all font-medium"
                     >
                       닫기
                     </button>
