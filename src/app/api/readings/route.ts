@@ -19,7 +19,7 @@ async function getOrCreateSession(_request: NextRequest): Promise<string> {
 }
 
 // GET - 리딩 히스토리 조회
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     await connectDB();
     
