@@ -32,7 +32,6 @@ function CardImage({
   card,
   isReversed = false,
   className = "",
-  size: _size = "medium",
 }: CardImageProps) {
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);

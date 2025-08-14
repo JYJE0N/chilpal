@@ -49,11 +49,9 @@ export default function HistoryView() {
   const [filter, setFilter] = useState({ type: 'all', spread: 'all' });
 
   useEffect(() => {
-    const fetchData = async () => {
-      await loadReadings();
-      await loadStats();
-    };
-    fetchData();
+    loadReadings();
+    loadStats();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, filter]);
 
   const loadReadings = async () => {

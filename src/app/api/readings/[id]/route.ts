@@ -5,18 +5,16 @@ import connectDB from '@/lib/mongodb';
 import Reading from '@/models/Reading';
 import { cookies } from 'next/headers';
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
+type RouteContext = {
+  params: Promise<{ id: string }>;
+};
 
 // GET - 특정 리딩 조회
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(_request: NextRequest, { params }: RouteContext) {
   try {
     await connectDB();
     
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionId = cookieStore.get('tarot-session')?.value;
     
     if (!sessionId) {
@@ -26,8 +24,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
     
+    const resolvedParams = await params;
     const reading = await Reading.findOne({
-      _id: params.id,
+      _id: resolvedParams.id,
       userSession: sessionId
     }).lean();
     
@@ -53,11 +52,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // DELETE - 리딩 삭제
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(_request: NextRequest, { params }: RouteContext) {
   try {
     await connectDB();
     
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionId = cookieStore.get('tarot-session')?.value;
     
     if (!sessionId) {
@@ -67,8 +66,9 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
     
+    const resolvedParams = await params;
     const reading = await Reading.findOneAndDelete({
-      _id: params.id,
+      _id: resolvedParams.id,
       userSession: sessionId
     });
     
