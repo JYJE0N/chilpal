@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { TarotCard, DrawnCard } from "@/types/tarot";
@@ -9,6 +9,12 @@ import {
   drawRandomCards, 
   drawCardWithPosition 
 } from "@/data/all-tarot-cards";
+import {
+  classifyQuestion,
+  generatePositionInterpretation,
+  generateOverallInterpretation,
+  generateKeywordInsights
+} from "@/lib/tarot-interpretation";
 
 // 수트별 색상 매핑
 const getSuitColor = (suit: string) => {
@@ -57,58 +63,65 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
   const [selectedCards, setSelectedCards] = useState<DrawnCard[]>([]);
   const [revealedCards, setRevealedCards] = useState<Set<number>>(new Set());
   const [isShuffling, setIsShuffling] = useState(false);
-  const [phase, setPhase] = useState<"question" | "selection" | "result">(
-    "question"
+  const [spreadType, setSpreadType] = useState<"three-card" | "one-card">("three-card");
+  const [phase, setPhase] = useState<"spread-selection" | "question" | "selection" | "result">(
+    "spread-selection"
   );
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  // 14장 랜덤 카드 생성 with 셔플 애니메이션
+  // 스크롤 진행률 추적
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const currentProgress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(Math.min(currentProgress, 100));
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 카드 생성 with 셔플 애니메이션
   const shuffleCards = async () => {
-    // 먼저 셔플 상태로 변경하고 기존 카드들을 페이드 아웃
     setIsShuffling(true);
     
-    // 짧은 딜레이로 애니메이션 전환 시간 확보
     await new Promise(resolve => setTimeout(resolve, 100));
     
-    // 새 카드 생성
-    const randomCards = drawRandomCards(14);
+    // 스프레드 유형에 따라 카드 개수 결정
+    const cardCount = spreadType === 'one-card' ? 1 : 14;
+    const randomCards = drawRandomCards(cardCount);
     setAvailableCards(randomCards);
     setSelectedCards([]);
     setRevealedCards(new Set());
     
-    // 셔플 애니메이션 종료
     setTimeout(() => setIsShuffling(false), 800);
   };
 
   // 카드 선택 처리
   const handleCardClick = (card: TarotCard) => {
-    if (selectedCards.length >= 3) return;
+    const maxCards = spreadType === 'one-card' ? 1 : 3;
+    if (selectedCards.length >= maxCards) return;
 
-    // 카드 공개
     setRevealedCards((prev) => new Set([...prev, card.id]));
 
-    // 0.5초 후 선택된 카드에 추가
     setTimeout(() => {
       const drawnCard = drawCardWithPosition(card);
       setSelectedCards((prev) => [...prev, drawnCard]);
+      
+      // 원카드는 즉시 결과 표시
+      if (spreadType === 'one-card') {
+        setTimeout(() => completeReading(), 1000);
+      }
     }, 500);
   };
 
-  // 리딩 시작
-  const startReading = () => {
-    if (!question.trim()) {
-      alert("질문을 입력해주세요!");
-      return;
-    }
-    shuffleCards();
-    setPhase("selection");
-  };
 
-  // 리딩 완료
-  const completeReading = () => {
-    setPhase("result");
-    if (onComplete) {
-      onComplete(selectedCards);
-    }
+  // 페이지 상단으로 부드럽게 스크롤
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
 
   // 다시 시작
@@ -116,11 +129,79 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     setQuestion("");
     setSelectedCards([]);
     setRevealedCards(new Set());
-    setPhase("question");
+    setSpreadType("three-card");
+    setPhase("spread-selection");
+    
+    setTimeout(scrollToTop, 100);
+  };
+
+  // 리딩 시작 시에도 스크롤
+  const startReading = () => {
+    if (!question.trim()) {
+      alert("질문을 입력해주세요!");
+      return;
+    }
+    shuffleCards();
+    setPhase("selection");
+    
+    // 카드 선택 영역으로 부드럽게 스크롤
+    setTimeout(scrollToTop, 300);
+  };
+
+  // 리딩 완료 시에도 스크롤 조정
+  const completeReading = async () => {
+    setPhase("result");
+    if (onComplete) {
+      onComplete(selectedCards);
+    }
+    
+    // MongoDB에 리딩 저장
+    try {
+      const interpretation = generateOverallInterpretation(
+        question,
+        selectedCards,
+        classifyQuestion(question)
+      );
+      
+      const readingData = {
+        question,
+        spreadType,
+        cards: selectedCards,
+        interpretation,
+        questionType: classifyQuestion(question)
+      };
+      
+      const response = await fetch('/api/readings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(readingData)
+      });
+      
+      if (response.ok) {
+        console.log('✅ 리딩이 히스토리에 저장되었습니다');
+      }
+    } catch (error) {
+      console.error('리딩 저장 실패:', error);
+    }
+    
+    // 결과 영역이 보이도록 스크롤
+    setTimeout(scrollToTop, 200);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 p-4 relative">
+      {/* 스크롤 진행 표시기 */}
+      <div className="fixed top-0 left-0 w-full h-1 bg-white/10 z-50">
+        <motion.div
+          className="h-full bg-gradient-to-r from-yellow-400 to-pink-500"
+          initial={{ width: 0 }}
+          animate={{ width: `${scrollProgress}%` }}
+          transition={{ duration: 0.1 }}
+        />
+      </div>
+      
       <div className="max-w-6xl mx-auto">
         {/* 헤더 */}
         <header className="text-center mb-8">
@@ -131,6 +212,72 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             마음의 질문을 품고 운명의 카드를 선택하세요
           </p>
         </header>
+
+        {/* 스프레드 선택 단계 */}
+        {phase === "spread-selection" && (
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 text-center">
+            <h2 className="text-2xl font-semibold text-white mb-6">
+              🎴 리딩 스타일 선택 🎴
+            </h2>
+            <p className="text-purple-200 mb-8">
+              어떤 방식으로 카드를 띄고 싶으신가요?
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {/* 원카드 리딩 */}
+              <motion.div
+                onClick={() => {
+                  setSpreadType("one-card");
+                  setPhase("question");
+                  setTimeout(scrollToTop, 300);
+                }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-sm rounded-xl p-6 cursor-pointer border-2 border-yellow-400/30 hover:border-yellow-400/60 transition-all"
+              >
+                <div className="text-4xl mb-4">🎴</div>
+                <h3 className="text-xl font-bold text-white mb-3">원카드 리딩</h3>
+                <p className="text-yellow-200 text-sm mb-4">
+                  빠르고 간단한 답변을 원할 때
+                </p>
+                <ul className="text-yellow-100 text-xs space-y-1">
+                  <li>• 오늘의 운세는?</li>
+                  <li>• 지금 집중해야 할 것은?</li>
+                  <li>• 예/아니오 질문</li>
+                </ul>
+                <div className="mt-4 text-yellow-300 text-sm font-medium">
+                  약 1분 소요
+                </div>
+              </motion.div>
+              
+              {/* 3카드 리딩 */}
+              <motion.div
+                onClick={() => {
+                  setSpreadType("three-card");
+                  setPhase("question");
+                  setTimeout(scrollToTop, 300);
+                }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-xl p-6 cursor-pointer border-2 border-purple-400/30 hover:border-purple-400/60 transition-all"
+              >
+                <div className="text-4xl mb-4">🔮</div>
+                <h3 className="text-xl font-bold text-white mb-3">과거-현재-미래 리딩</h3>
+                <p className="text-purple-200 text-sm mb-4">
+                  상세하고 종합적인 해석을 원할 때
+                </p>
+                <ul className="text-purple-100 text-xs space-y-1">
+                  <li>• 인생의 중요한 결정</li>
+                  <li>• 복잡한 상황 분석</li>
+                  <li>• 깊이 있는 통찰</li>
+                </ul>
+                <div className="mt-4 text-purple-300 text-sm font-medium">
+                  약 3-5분 소요
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        )}
 
         {/* 질문 입력 단계 */}
         {phase === "question" && (
@@ -171,38 +318,60 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             {/* 선택 진행 상황 */}
             <div className="text-center">
               <h3 className="text-2xl font-semibold text-white mb-4">
-                {isShuffling ? "카드를 섞는 중..." : "운명이 보여준 14장 중에서 3장을 선택하세요"}
+                {isShuffling 
+                  ? "카드를 섞는 중..." 
+                  : spreadType === 'one-card'
+                    ? "운명의 카드를 선택하세요"
+                    : "운명이 보여준 14장 중에서 3장을 선택하세요"
+                }
               </h3>
-              <div className="flex justify-center gap-2 mb-6">
-                {[0, 1, 2].map((index) => (
-                  <div
-                    key={index}
-                    className={`w-4 h-4 rounded-full ${
-                      index < selectedCards.length
-                        ? "bg-yellow-400"
-                        : "bg-white/30"
-                    }`}
-                  />
-                ))}
-              </div>
-              <p className="text-purple-200 mb-6">
-                {selectedCards.length === 0 &&
-                  "첫 번째 카드를 선택하세요 (과거)"}
-                {selectedCards.length === 1 &&
-                  "두 번째 카드를 선택하세요 (현재)"}
-                {selectedCards.length === 2 &&
-                  "마지막 카드를 선택하세요 (미래)"}
-                {selectedCards.length === 3 && "🎉 모든 카드를 선택했습니다!"}
-              </p>
+              {spreadType === 'three-card' && (
+                <>
+                  <div className="flex justify-center gap-2 mb-6">
+                    {[0, 1, 2].map((index) => (
+                      <div
+                        key={index}
+                        className={`w-4 h-4 rounded-full ${
+                          index < selectedCards.length
+                            ? "bg-yellow-400"
+                            : "bg-white/30"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-purple-200 mb-6">
+                    {selectedCards.length === 0 &&
+                      "첫 번째 카드를 선택하세요 (과거)"}
+                    {selectedCards.length === 1 &&
+                      "두 번째 카드를 선택하세요 (현재)"}
+                    {selectedCards.length === 2 &&
+                      "마지막 카드를 선택하세요 (미래)"}
+                    {selectedCards.length === 3 && "🎉 모든 카드를 선택했습니다!"}
+                  </p>
+                </>
+              )}
+              
+              {spreadType === 'one-card' && (
+                <p className="text-yellow-200 mb-6">
+                  {selectedCards.length === 0 
+                    ? "마음이 이끌리는 카드를 선택하세요" 
+                    : "🎆 카드가 선택되었습니다! 잠시만 기다려주세요..."
+                  }
+                </p>
+              )}
             </div>
 
             {/* 카드 그리드 */}
             <div className="relative min-h-[300px] md:min-h-[200px] px-4">
-              <div className="grid grid-cols-4 md:grid-cols-7 lg:grid-cols-7 gap-3 justify-items-center">
+              <div className={`${
+                spreadType === 'one-card' 
+                  ? 'flex justify-center'
+                  : 'grid grid-cols-4 md:grid-cols-7 lg:grid-cols-7 gap-3 justify-items-center'
+              }`}>
               <AnimatePresence mode="sync">
               {isShuffling ? (
                 // 셔플 애니메이션 표시
-                Array.from({ length: 14 }).map((_, index) => (
+                Array.from({ length: spreadType === 'one-card' ? 1 : 14 }).map((_, index) => (
                   <motion.div
                     key={`shuffle-${index}`}
                     layout
@@ -290,7 +459,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                   onClick={() => {
                     if (
                       !selectedCards.some((sc) => sc.id === card.id) &&
-                      selectedCards.length < 3 &&
+                      selectedCards.length < (spreadType === 'one-card' ? 1 : 3) &&
                       !isShuffling
                     ) {
                       handleCardClick(card);
@@ -355,15 +524,24 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             </div>
 
             {/* 완료 버튼 */}
-            {selectedCards.length === 3 && (
-              <div className="text-center mt-8">
-                <button
+            {((spreadType === 'three-card' && selectedCards.length === 3) || 
+              (spreadType === 'one-card' && selectedCards.length === 1)) && 
+             spreadType === 'three-card' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center mt-8"
+              >
+                <motion.button
                   onClick={completeReading}
-                  className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-full hover:from-yellow-600 hover:to-orange-600 transition-all transform hover:scale-105 shadow-lg text-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-full hover:from-yellow-600 hover:to-orange-600 transition-all shadow-lg text-lg"
                 >
                   🔮 리딩 결과 보기 🔮
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             )}
 
             {/* 다시 섞기 버튼 */}
@@ -384,23 +562,33 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
         {/* 결과 단계 */}
         {phase === "result" && (
           <div className="space-y-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 text-center">
-              <h2 className="text-3xl font-bold text-white mb-4">
+            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
+              <h2 className="text-3xl font-bold text-white mb-4 text-center">
                 🌟 리딩 완료! 🌟
               </h2>
-              <p className="text-purple-200 mb-6">
+              <p className="text-purple-200 mb-8 text-center">
                 {`"${question}"에 대한 답이 여기 있습니다.`}
               </p>
 
               {/* 선택된 카드들 표시 */}
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className={`gap-6 mb-8 ${
+                spreadType === 'one-card' 
+                  ? 'flex justify-center' 
+                  : 'grid md:grid-cols-3'
+              }`}>
                 {selectedCards.map((card, index) => (
-                  <div
+                  <motion.div
                     key={card.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.2 }}
                     className="text-center"
                   >
                     <h4 className="text-white text-lg font-semibold mb-2">
-                      {["과거", "현재", "미래"][index]}
+                      {spreadType === 'one-card' 
+                        ? "운명의 카드" 
+                        : ["과거", "현재", "미래"][index]
+                      }
                     </h4>
                     <div className="bg-white rounded-lg p-4 shadow-lg">
                       {/* 카드 이미지 */}
@@ -427,9 +615,21 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                       <p className="text-sm text-gray-600 mb-2">
                         {card.current_meaning}
                       </p>
-                      <p className="text-xs text-gray-500">
-                        {card.current_interpretation}
-                      </p>
+                      
+                      {/* 위치별 상세 해석 */}
+                      <div className="bg-gray-50 p-3 rounded mt-3">
+                        <p className="text-xs text-gray-700 leading-relaxed">
+                          {spreadType === 'one-card' 
+                            ? `이 카드는 "${question}"에 대한 직접적인 답변을 제공합니다. ${card.current_interpretation}`
+                            : generatePositionInterpretation(
+                                card, 
+                                ["past", "present", "future"][index] as any,
+                                classifyQuestion(question)
+                              )
+                          }
+                        </p>
+                      </div>
+                      
                       {/* 키워드 */}
                       <div className="flex flex-wrap gap-1 justify-center mt-3">
                         {card.current_keywords.slice(0, 3).map((keyword, idx) => (
@@ -442,16 +642,52 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
-              <button
-                onClick={resetReading}
-                className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+              {/* 종합 해석 */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 backdrop-blur-sm rounded-xl p-6 mb-6"
               >
-                🔮 새로운 질문하기 🔮
-              </button>
+                <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                  <span className="mr-2">🔮</span>
+                  종합 해석
+                </h3>
+                <div className="text-purple-100 text-sm leading-relaxed whitespace-pre-line">
+                  {generateOverallInterpretation(
+                    question,
+                    selectedCards,
+                    classifyQuestion(question)
+                  )}
+                </div>
+                
+                {/* 추가 인사이트 */}
+                {generateKeywordInsights(selectedCards).length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-white/20">
+                    <h4 className="text-white font-semibold mb-2">✨ 추가 인사이트</h4>
+                    {generateKeywordInsights(selectedCards).map((insight, idx) => (
+                      <p key={idx} className="text-purple-200 text-sm mb-1">
+                        • {insight}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+
+              <div className="text-center">
+                <motion.button
+                  onClick={resetReading}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg"
+                >
+                  🔮 새로운 질문하기 🔮
+                </motion.button>
+              </div>
             </div>
           </div>
         )}

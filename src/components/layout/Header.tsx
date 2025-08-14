@@ -45,14 +45,14 @@ export default function Header() {
               타로 리딩
             </Link>
             <Link
-              href="/demo"
+              href="/history"
               className={`px-4 py-2 rounded-full transition-all ${
-                pathname === "/demo"
+                pathname === "/history"
                   ? "bg-purple-600 text-white shadow-lg"
                   : "text-purple-200 hover:text-white hover:bg-white/10"
               }`}
             >
-              카드 데모
+              히스토리
             </Link>
           </nav>
 
@@ -113,15 +113,15 @@ export default function Header() {
                 🔮 타로 리딩
               </Link>
               <Link
-                href="/demo"
+                href="/history"
                 className={`block px-4 py-2 rounded-lg transition-all ${
-                  pathname === "/demo"
+                  pathname === "/history"
                     ? "bg-purple-600 text-white"
                     : "text-purple-200 hover:text-white hover:bg-white/10"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                🎴 카드 데모
+                📚 히스토리
               </Link>
             </div>
           </nav>
