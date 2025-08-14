@@ -146,7 +146,19 @@ export const generateOverallInterpretation = (
     return generateOneCardInterpretation(question, cards[0], questionType);
   }
   
+  // 3카드 스프레드 안전성 검사
+  if (cards.length < 3) {
+    return generateOneCardInterpretation(question, cards[0], questionType);
+  }
+  
   const [pastCard, presentCard, futureCard] = cards;
+  
+  // 카드 객체 유효성 검사
+  if (!pastCard || !presentCard || !futureCard || 
+      !pastCard.name || !presentCard.name || !futureCard.name) {
+    console.error('Invalid card data:', { pastCard, presentCard, futureCard });
+    return generateOneCardInterpretation(question, cards[0] || cards.find(c => c && c.name), questionType);
+  }
   
   let overall = `"${question}"에 대한 타로의 답변:\n\n`;
   

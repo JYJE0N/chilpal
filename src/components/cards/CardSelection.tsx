@@ -226,11 +226,11 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 p-4 relative">
+    <div className="min-h-screen p-4 relative">
       {/* 스크롤 진행 표시기 */}
       <div className="fixed top-0 left-0 w-full h-1 bg-white/10 z-50">
         <motion.div
-          className="h-full bg-gradient-to-r from-yellow-400 to-pink-500"
+          className="h-full bg-gradient-to-r from-yellow-300 via-pink-400 to-purple-500 mystic-glow"
           initial={{ width: 0 }}
           animate={{ width: `${scrollProgress}%` }}
           transition={{ duration: 0.1 }}
@@ -240,11 +240,11 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
       <div className="max-w-6xl mx-auto">
         {/* 헤더 */}
         <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            🔮 칠팔 타로 리딩 🔮
+          <h1 className="text-5xl font-bold mystic-text-gradient mb-4 drop-shadow-2xl">
+            🌙 칠팔 타로 리딩 ✨
           </h1>
-          <p className="text-purple-200 text-lg">
-            마음의 질문을 품고 운명의 카드를 선택하세요
+          <p className="text-white/90 text-xl drop-shadow-lg">
+            신비로운 별빛 아래에서 운명의 카드를 선택하세요
           </p>
         </header>
 
@@ -331,7 +331,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
               />
               <button
                 onClick={startReading}
-                className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg"
+                className="px-8 py-3 mystic-button text-white font-bold rounded-full transition-all transform hover:scale-105 mystic-glow-hover starlight-shimmer"
               >
                 ✨ 카드 뽑기 시작 ✨
               </button>
@@ -442,16 +442,14 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                     {/* 셔플 애니메이션 중 카드 뒷면 */}
                     <div className="w-full h-full rounded-lg overflow-hidden shadow-lg relative">
                       <Image
-                        src="/images/cards/card-back.png"
+                        src="/card-back-design.png"
                         alt="Card Back"
                         fill
                         sizes="(max-width: 640px) 80px, 96px"
                         className="object-cover rounded-lg"
-                        priority={false}
                         loading="lazy"
                         placeholder="blur"
                         blurDataURL={CARD_BACK_BLUR_DATA_URL}
-                        priority
                       />
                     </div>
                   </motion.div>
@@ -729,7 +727,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                   onClick={resetReading}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg"
+                  className="px-8 py-3 mystic-button text-white font-bold rounded-full transition-all mystic-glow-hover starlight-shimmer"
                 >
                   🔮 새로운 질문하기 🔮
                 </motion.button>

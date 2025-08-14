@@ -18,19 +18,25 @@ export default function HomePage() {
     <MainLayout>
       <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
         <div className="text-center space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-6xl font-bold text-white">🔮 칠팔 타로 🔮</h1>
-            <p className="text-purple-200 text-xl max-w-2xl">
-              78장의 완전한 타로 덱으로 당신의 운명을 확인해보세요.
-              <br />
-              과거, 현재, 미래의 메시지가 기다리고 있습니다.
-            </p>
+          <div className="space-y-6">
+            <h1 className="text-7xl font-bold mystic-text-gradient drop-shadow-2xl">
+              🌙 칠팔 타로 ✨
+            </h1>
+            <div className="space-y-3">
+              <p className="text-2xl font-semibold text-white/90 drop-shadow-lg">
+                신비로운 밤하늘이 전하는 메시지
+              </p>
+              <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
+                78장의 완전한 타로 덱으로 당신의 운명을 확인해보세요.<br />
+                과거, 현재, 미래의 메시지가 별빛과 함께 기다리고 있습니다.
+              </p>
+            </div>
           </div>
 
           <div className="max-w-md mx-auto">
             <Link href="/reading">
-              <button className="w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 text-lg shadow-lg">
-                🔮 타로 리딩 시작하기
+              <button className="w-full px-8 py-4 mystic-button mystic-glow-hover text-white font-bold rounded-full text-lg transition-all transform hover:scale-105 starlight-shimmer">
+                🔮 운명의 카드 뽑기 ✨
               </button>
             </Link>
           </div>

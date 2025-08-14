@@ -9,7 +9,7 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-black/20 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
+    <header className="mystic-bg border-b border-white/20 sticky top-0 z-50 mystic-glow">
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* 로고 */}
@@ -18,8 +18,9 @@ export default function Header() {
             className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <span className="text-2xl">🔮</span>
-            <h1 className="text-xl font-bold text-white">칠팔</h1>
+            <span className="text-2xl">🌙</span>
+            <h1 className="text-xl font-bold mystic-text-gradient">칠팔 타로</h1>
+            <span className="text-lg">✨</span>
           </Link>
 
           {/* 데스크톱 네비게이션 */}
@@ -28,8 +29,8 @@ export default function Header() {
               href="/"
               className={`px-4 py-2 rounded-full transition-all ${
                 pathname === "/"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "text-purple-200 hover:text-white hover:bg-white/10"
+                  ? "mystic-button mystic-glow text-white shadow-lg"
+                  : "text-white/80 hover:text-white hover:bg-white/10 mystic-glow-hover"
               }`}
             >
               홈
@@ -38,8 +39,8 @@ export default function Header() {
               href="/reading"
               className={`px-4 py-2 rounded-full transition-all ${
                 pathname === "/reading"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "text-purple-200 hover:text-white hover:bg-white/10"
+                  ? "mystic-button mystic-glow text-white shadow-lg"
+                  : "text-white/80 hover:text-white hover:bg-white/10 mystic-glow-hover"
               }`}
             >
               타로 리딩
@@ -48,8 +49,8 @@ export default function Header() {
               href="/history"
               className={`px-4 py-2 rounded-full transition-all ${
                 pathname === "/history"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "text-purple-200 hover:text-white hover:bg-white/10"
+                  ? "mystic-button mystic-glow text-white shadow-lg"
+                  : "text-white/80 hover:text-white hover:bg-white/10 mystic-glow-hover"
               }`}
             >
               히스토리

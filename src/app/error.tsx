@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { motion } from 'framer-motion';
 
 export default function Error({
   error,
@@ -16,28 +15,18 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-md w-full"
-      >
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center shadow-2xl border border-white/20">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="max-w-md w-full">
+        <div className="mystic-bg rounded-2xl p-8 text-center shadow-2xl mystic-glow">
           {/* 에러 아이콘 */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="mb-6"
-          >
-            <div className="w-24 h-24 mx-auto bg-red-500/20 rounded-full flex items-center justify-center">
+          <div className="mb-6">
+            <div className="w-24 h-24 mx-auto bg-red-500/20 rounded-full flex items-center justify-center mystic-glow animate-pulse">
               <span className="text-5xl">😵</span>
             </div>
-          </motion.div>
+          </div>
 
           {/* 에러 메시지 */}
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-3xl font-bold mystic-text-gradient mb-4 drop-shadow-lg">
             앗! 문제가 발생했습니다
           </h2>
           
@@ -63,14 +52,14 @@ export default function Error({
           <div className="flex gap-3 justify-center">
             <button
               onClick={reset}
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg"
+              className="px-6 py-3 mystic-button text-white font-semibold rounded-full transition-all transform hover:scale-105 mystic-glow-hover"
             >
               다시 시도
             </button>
             
             <button
               onClick={() => window.location.href = '/'}
-              className="px-6 py-3 bg-white/20 text-white font-semibold rounded-full hover:bg-white/30 transition-all border border-white/30"
+              className="px-6 py-3 bg-white/20 text-white font-semibold rounded-full hover:bg-white/30 transition-all border border-white/30 mystic-glow-hover"
             >
               홈으로
             </button>
@@ -81,7 +70,7 @@ export default function Error({
             문제가 계속되면 잠시 후 다시 방문해 주세요 💜
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

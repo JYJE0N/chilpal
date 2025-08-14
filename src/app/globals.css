@@ -3,31 +3,44 @@
 @import "tailwindcss/utilities";
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  /* 신비로운 밤하늘 색상 팔레트 */
+  --mystic-purple-dark: 45, 25, 83;    /* #2d1953 - 깊은 밤하늘 */
+  --mystic-purple: 68, 41, 139;        /* #44298b - 주요 퍼플 */
+  --mystic-purple-light: 99, 67, 181;  /* #6343b5 - 밝은 퍼플 */
+  --mystic-blue-dark: 46, 44, 107;     /* #2e2c6b - 어두운 블루 */
+  --mystic-blue: 71, 85, 162;          /* #4755a2 - 주요 블루 */
+  --mystic-blue-light: 109, 140, 207;  /* #6d8ccf - 밝은 블루 */
+  --mystic-pink: 186, 133, 196;        /* #ba85c4 - 신비한 핑크 */
+  --mystic-gold: 255, 215, 175;        /* #ffd7af - 신비한 골드 */
+  --starlight: 240, 230, 255;          /* #f0e6ff - 별빛 */
+  
+  /* 그라데이션 색상 */
+  --bg-gradient-start: var(--mystic-purple-dark);
+  --bg-gradient-middle: var(--mystic-blue-dark);
+  --bg-gradient-end: var(--mystic-purple);
+  
+  /* 텍스트 색상 */
+  --text-primary: var(--starlight);
+  --text-secondary: var(--mystic-pink);
+  --text-accent: var(--mystic-gold);
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: rgb(var(--text-primary));
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    135deg,
+    rgb(var(--bg-gradient-start)) 0%,
+    rgb(var(--bg-gradient-middle)) 35%,
+    rgb(var(--mystic-blue)) 70%,
+    rgb(var(--bg-gradient-end)) 100%
+  );
+  min-height: 100vh;
+  background-attachment: fixed;
 }
 
-/* 애니메이션을 위한 유틸리티 클래스 */
+/* 신비로운 밤하늘 효과를 위한 유틸리티 클래스 */
 @layer utilities {
+  /* 애니메이션 딜레이 */
   .animate-delay-100 {
     animation-delay: 100ms;
   }
@@ -42,5 +55,94 @@ body {
   }
   .animate-delay-500 {
     animation-delay: 500ms;
+  }
+
+  /* 신비로운 글로우 효과 */
+  .mystic-glow {
+    box-shadow: 
+      0 0 20px rgba(186, 133, 196, 0.3),
+      0 0 40px rgba(99, 67, 181, 0.2),
+      0 0 60px rgba(71, 85, 162, 0.1);
+  }
+
+  .mystic-glow-hover:hover {
+    box-shadow: 
+      0 0 30px rgba(186, 133, 196, 0.5),
+      0 0 60px rgba(99, 67, 181, 0.3),
+      0 0 90px rgba(71, 85, 162, 0.2);
+    transition: box-shadow 0.3s ease;
+  }
+
+  /* 별빛 반짝임 효과 */
+  .starlight-shimmer {
+    background: linear-gradient(
+      45deg,
+      rgba(240, 230, 255, 0.8),
+      rgba(255, 215, 175, 0.6),
+      rgba(186, 133, 196, 0.8),
+      rgba(240, 230, 255, 0.8)
+    );
+    background-size: 200% 200%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* 몽환적 배경 */
+  .mystic-bg {
+    background: linear-gradient(
+      135deg,
+      rgba(45, 25, 83, 0.9) 0%,
+      rgba(46, 44, 107, 0.8) 35%,
+      rgba(71, 85, 162, 0.7) 70%,
+      rgba(68, 41, 139, 0.9) 100%
+    );
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(186, 133, 196, 0.2);
+  }
+
+  /* 신비로운 버튼 스타일 */
+  .mystic-button {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 67, 181, 0.8) 0%,
+      rgba(186, 133, 196, 0.9) 50%,
+      rgba(109, 140, 207, 0.8) 100%
+    );
+    border: 1px solid rgba(255, 215, 175, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .mystic-button:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 67, 181, 1) 0%,
+      rgba(186, 133, 196, 1) 50%,
+      rgba(109, 140, 207, 1) 100%
+    );
+    transform: translateY(-2px);
+    box-shadow: 
+      0 10px 25px rgba(186, 133, 196, 0.4),
+      0 5px 15px rgba(99, 67, 181, 0.3);
+  }
+
+  /* 텍스트 그라데이션 */
+  .mystic-text-gradient {
+    background: linear-gradient(
+      135deg,
+      rgb(var(--starlight)) 0%,
+      rgb(var(--mystic-gold)) 50%,
+      rgb(var(--mystic-pink)) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
