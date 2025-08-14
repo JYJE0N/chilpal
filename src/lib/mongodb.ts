@@ -23,6 +23,12 @@ if (!cached) {
 }
 
 async function connectDB() {
+  // Skip connection during build
+  if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
+    console.warn('MongoDB URI not defined in production');
+    return null;
+  }
+  
   if (!MONGODB_URI) {
     console.warn('MongoDB URI not defined, using fallback');
   }
@@ -34,6 +40,8 @@ async function connectDB() {
   if (!cached!.promise) {
     const opts = {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
     };
 
     cached!.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
@@ -41,6 +49,10 @@ async function connectDB() {
       return mongoose;
     }).catch((error) => {
       console.error('MongoDB connection error:', error);
+      // Don't throw during build
+      if (process.env.NEXT_PHASE === 'phase-production-build') {
+        return null;
+      }
       throw error;
     });
   }
@@ -49,6 +61,10 @@ async function connectDB() {
     cached!.conn = await cached!.promise;
   } catch (e) {
     cached!.promise = null;
+    // Don't throw during build
+    if (process.env.NEXT_PHASE === 'phase-production-build') {
+      return null;
+    }
     throw e;
   }
 

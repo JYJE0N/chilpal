@@ -99,7 +99,7 @@ export const generateOneCardInterpretation = (
   interpretation += `${card.name}이 당신의 질문에 대한 핵심 메시지를 전달합니다.\n\n`;
   
   // 질문 유형별 맞춤 해석
-  const contextMessage = {
+  const contextMessage: Record<string, string> = {
     love: '사랑과 인간관계에서',
     career: '직업과 성장에서',
     money: '재정과 물질적 측면에서',
@@ -123,7 +123,7 @@ export const generateOneCardInterpretation = (
   if (card.suit === 'major') {
     interpretation += '인생의 중요한 전환점에 서 있습니다. 이 순간을 놓치지 마세요.';
   } else {
-    const suitAdvice = {
+    const suitAdvice: Record<string, string> = {
       cups: '감정과 직감을 믿고 따라가세요.',
       pentacles: '실용적이고 현실적인 접근을 취하세요.',
       swords: '명확한 사고와 소통이 열쇠입니다.',
