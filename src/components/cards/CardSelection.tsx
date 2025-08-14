@@ -63,19 +63,20 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
 
   // 14장 랜덤 카드 생성 with 셔플 애니메이션
   const shuffleCards = async () => {
+    // 먼저 셔플 상태로 변경하고 기존 카드들을 페이드 아웃
     setIsShuffling(true);
-    setAvailableCards([]);
     
-    // 짧은 딜레이 후 카드 생성 (셔플 효과)
-    await new Promise(resolve => setTimeout(resolve, 300));
+    // 짧은 딜레이로 애니메이션 전환 시간 확보
+    await new Promise(resolve => setTimeout(resolve, 100));
     
+    // 새 카드 생성
     const randomCards = drawRandomCards(14);
     setAvailableCards(randomCards);
     setSelectedCards([]);
     setRevealedCards(new Set());
     
     // 셔플 애니메이션 종료
-    setTimeout(() => setIsShuffling(false), 500);
+    setTimeout(() => setIsShuffling(false), 800);
   };
 
   // 카드 선택 처리
@@ -196,39 +197,54 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             </div>
 
             {/* 카드 그리드 */}
-            <div className="grid grid-cols-4 md:grid-cols-7 lg:grid-cols-7 gap-3 justify-items-center px-4">
-              <AnimatePresence>
+            <div className="relative min-h-[300px] md:min-h-[200px] px-4">
+              <div className="grid grid-cols-4 md:grid-cols-7 lg:grid-cols-7 gap-3 justify-items-center">
+              <AnimatePresence mode="sync">
               {isShuffling ? (
                 // 셔플 애니메이션 표시
                 Array.from({ length: 14 }).map((_, index) => (
                   <motion.div
                     key={`shuffle-${index}`}
-                    initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                    layout
+                    initial={{ 
+                      opacity: 0, 
+                      scale: 0.3,
+                      rotateY: -180,
+                      y: -50
+                    }}
                     animate={{ 
                       opacity: 1, 
                       scale: 1,
-                      y: 0,
-                      rotateY: [0, 180, 360],
+                      rotateY: 360,
+                      y: 0
                     }}
-                    exit={{ opacity: 0, scale: 0.5 }}
+                    exit={{ 
+                      opacity: 0, 
+                      scale: 0.8,
+                      y: 20,
+                      transition: { duration: 0.2 }
+                    }}
                     transition={{ 
                       duration: 0.6,
-                      delay: index * 0.04,
-                      scale: {
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 15
-                      },
+                      delay: index * 0.03,
+                      ease: "easeOut",
                       rotateY: {
-                        duration: 1.2,
-                        repeat: Infinity,
-                        ease: "linear"
+                        duration: 0.8,
+                        ease: "easeInOut"
                       }
                     }}
                     className="w-20 h-32 lg:w-24 lg:h-36"
                   >
-                    <div className="w-full h-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-lg border-2 border-yellow-400 flex items-center justify-center shadow-lg">
-                      <span className="text-yellow-400 text-2xl animate-pulse">🌙</span>
+                    {/* 셔플 애니메이션 중 카드 뒷면 */}
+                    <div className="w-full h-full rounded-lg overflow-hidden shadow-lg relative">
+                      <Image
+                        src="/images/cards/card-back.png"
+                        alt="Card Back"
+                        fill
+                        sizes="96px"
+                        className="object-cover rounded-lg"
+                        priority
+                      />
                     </div>
                   </motion.div>
                 ))
@@ -236,12 +252,27 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
               availableCards.map((card, index) => (
                 <motion.div
                   key={card.id}
-                  initial={{ opacity: 0, y: 50, rotateY: 180 }}
-                  animate={{ opacity: 1, y: 0, rotateY: 0 }}
-                  exit={{ opacity: 0, scale: 0 }}
+                  layout
+                  layoutId={`card-${card.id}`}
+                  initial={{ 
+                    opacity: 0, 
+                    scale: 0.6,
+                    rotateX: 90
+                  }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1,
+                    rotateX: 0
+                  }}
+                  exit={{ 
+                    opacity: 0, 
+                    scale: 0.9,
+                    transition: { duration: 0.2 }
+                  }}
                   transition={{ 
                     duration: 0.5,
-                    delay: index * 0.05,
+                    delay: index * 0.04,
+                    ease: "backOut",
                     type: "spring",
                     stiffness: 100
                   }}
@@ -276,8 +307,16 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           : "opacity-100"
                       }`}
                     >
-                      <div className="w-full h-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-lg border-2 border-yellow-400 flex items-center justify-center">
-                        <span className="text-yellow-400 text-xl">🌙</span>
+                      {/* 카드 뒷면 이미지 */}
+                      <div className="w-full h-full rounded-lg overflow-hidden relative">
+                        <Image
+                          src="/images/cards/card-back.png"
+                          alt="Card Back"
+                          fill
+                          sizes="96px"
+                          className="object-cover rounded-lg"
+                          priority
+                        />
                       </div>
                     </div>
 
@@ -312,6 +351,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
               ))
               )}
               </AnimatePresence>
+              </div>
             </div>
 
             {/* 완료 버튼 */}
