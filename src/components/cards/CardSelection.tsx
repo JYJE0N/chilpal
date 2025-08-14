@@ -69,8 +69,8 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     
     await new Promise(resolve => setTimeout(resolve, 100));
     
-    // 스프레드 유형에 따라 카드 개수 결정
-    const cardCount = spreadType === 'one-card' ? 1 : 14;
+    // 스프레드 유형에 따라 카드 개수 결정 - 원카드도 여러 장 표시
+    const cardCount = spreadType === 'one-card' ? 10 : 14;
     const randomCards = drawRandomCards(cardCount);
     setAvailableCards(randomCards);
     setSelectedCards([]);
@@ -303,7 +303,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 {isShuffling 
                   ? "카드를 섞는 중..." 
                   : spreadType === 'one-card'
-                    ? "운명의 카드를 선택하세요"
+                    ? "10장 중에서 운명의 카드 1장을 선택하세요"
                     : "운명이 보여준 14장 중에서 3장을 선택하세요"
                 }
               </h3>
@@ -347,13 +347,13 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             <div className="relative min-h-[300px] md:min-h-[200px] px-4">
               <div className={`${
                 spreadType === 'one-card' 
-                  ? 'flex justify-center'
+                  ? 'grid grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-3 justify-items-center max-w-3xl mx-auto'
                   : 'grid grid-cols-4 md:grid-cols-7 lg:grid-cols-7 gap-3 justify-items-center'
               }`}>
               <AnimatePresence mode="sync">
               {isShuffling ? (
                 // 셔플 애니메이션 표시
-                Array.from({ length: spreadType === 'one-card' ? 1 : 14 }).map((_, index) => (
+                Array.from({ length: spreadType === 'one-card' ? 10 : 14 }).map((_, index) => (
                   <motion.div
                     key={`shuffle-${index}`}
                     layout
