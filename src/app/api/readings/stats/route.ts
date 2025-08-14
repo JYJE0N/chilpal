@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     await connectDB();
     
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionId = cookieStore.get('tarot-session')?.value;
     
     if (!sessionId) {

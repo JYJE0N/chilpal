@@ -7,8 +7,8 @@ import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
 
 // 세션 ID 생성 또는 조회
-function getOrCreateSession(request: NextRequest): string {
-  const cookieStore = cookies();
+async function getOrCreateSession(request: NextRequest): Promise<string> {
+  const cookieStore = await cookies();
   let sessionId = cookieStore.get('tarot-session')?.value;
   
   if (!sessionId) {
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   try {
     await connectDB();
     
-    const sessionId = getOrCreateSession(request);
+    const sessionId = await getOrCreateSession(request);
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
     
-    const sessionId = getOrCreateSession(request);
+    const sessionId = await getOrCreateSession(request);
     const body = await request.json();
     
     const { question, spreadType, cards, interpretation, questionType } = body;
