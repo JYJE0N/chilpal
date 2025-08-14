@@ -1,74 +1,65 @@
-// src/lib/mongodb.ts
+import mongoose from "mongoose";
 
-import mongoose from 'mongoose';
+const MONGODB_URI = process.env.MONGODB_URI!;
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/chilpal-tarot';
+if (!MONGODB_URI) {
+  throw new Error(
+    "Please define the MONGODB_URI environment variable inside .env.local"
+  );
+}
 
-interface MongooseConnection {
+// mongoose 캐시 타입 정의를 더 명확하게
+interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
 
-// Global is used here to maintain a cached connection across hot reloads
-// in development. This prevents connections growing exponentially
-// during API Route usage.
+// global 타입 선언
 declare global {
-  var mongoose: MongooseConnection | undefined;
+  var mongoose: MongooseCache | undefined;
 }
 
 let cached = global.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+  cached = global.mongoose = {
+    conn: null,
+    promise: null,
+  };
 }
 
-async function connectDB() {
-  // Skip connection during build
-  if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
-    console.warn('MongoDB URI not defined in production');
-    return null;
-  }
-  
-  if (!MONGODB_URI) {
-    console.warn('MongoDB URI not defined, using fallback');
-  }
-  
+async function dbConnect(): Promise<typeof mongoose> {
   if (cached!.conn) {
+    console.log("🔄 Using existing MongoDB connection");
     return cached!.conn;
   }
 
   if (!cached!.promise) {
     const opts = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
     };
 
-    cached!.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('✅ MongoDB connected successfully');
-      return mongoose;
-    }).catch((error) => {
-      console.error('MongoDB connection error:', error);
-      // Don't throw during build
-      if (process.env.NEXT_PHASE === 'phase-production-build') {
-        return null;
-      }
-      throw error;
-    });
+    cached!.promise = mongoose
+      .connect(MONGODB_URI, opts)
+      .then((mongoose) => {
+        console.log("✅ MongoDB connected successfully");
+        return mongoose;
+      })
+      .catch((error) => {
+        console.error("❌ MongoDB connection error:", error);
+        // 에러를 다시 throw하여 Promise<typeof mongoose> 타입 유지
+        throw error;
+      });
   }
 
   try {
     cached!.conn = await cached!.promise;
   } catch (e) {
     cached!.promise = null;
-    // Don't throw during build
-    if (process.env.NEXT_PHASE === 'phase-production-build') {
-      return null;
-    }
     throw e;
   }
 
   return cached!.conn;
 }
 
-export default connectDB;
+export default dbConnect;
