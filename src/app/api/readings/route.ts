@@ -7,7 +7,7 @@ import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
 
 // 세션 ID 생성 또는 조회
-async function getOrCreateSession(request: NextRequest): Promise<string> {
+async function getOrCreateSession(_request: NextRequest): Promise<string> {
   const cookieStore = await cookies();
   let sessionId = cookieStore.get('tarot-session')?.value;
   
@@ -19,7 +19,7 @@ async function getOrCreateSession(request: NextRequest): Promise<string> {
 }
 
 // GET - 리딩 히스토리 조회
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     await connectDB();
     
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     const spreadType = searchParams.get('spread');
     
     // 필터 조건 구성
-    const filter: any = { userSession: sessionId };
+    const filter: Record<string, unknown> = { userSession: sessionId };
     if (questionType && questionType !== 'all') {
       filter.questionType = questionType;
     }

@@ -19,13 +19,6 @@ interface TarotCard {
   description?: string;
 }
 
-interface DrawnCard extends TarotCard {
-  position: "upright" | "reversed";
-  is_reversed: boolean;
-  current_meaning: string;
-  current_interpretation: string;
-  current_keywords: string[];
-}
 
 // 카드 이미지 컴포넌트 (실제 이미지 + 플레이스홀더)
 interface CardImageProps {
@@ -39,7 +32,7 @@ function CardImage({
   card,
   isReversed = false,
   className = "",
-  size = "medium",
+  size: _size = "medium",
 }: CardImageProps) {
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
@@ -149,6 +142,7 @@ function CardImage({
         </div>
       )}
 
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={card.image_url}
         alt={card.name}

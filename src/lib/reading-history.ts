@@ -16,7 +16,7 @@ export interface ReadingStats {
   totalReadings: number;
   favoriteCards: { [cardId: number]: number };
   questionTypes: { [type: string]: number };
-  spreadTypes: { [type: string]: number;
+  spreadTypes: { [type: string]: number };
   lastReading: number;
 }
 

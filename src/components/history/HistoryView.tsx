@@ -45,12 +45,15 @@ export default function HistoryView() {
   const [stats, setStats] = useState<ReadingStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedReading, setSelectedReading] = useState<ReadingRecord | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage] = useState(1);
   const [filter, setFilter] = useState({ type: 'all', spread: 'all' });
 
   useEffect(() => {
-    loadReadings();
-    loadStats();
+    const fetchData = async () => {
+      await loadReadings();
+      await loadStats();
+    };
+    fetchData();
   }, [currentPage, filter]);
 
   const loadReadings = async () => {

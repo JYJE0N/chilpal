@@ -5,7 +5,6 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { TarotCard, DrawnCard } from "@/types/tarot";
 import { 
-  allTarotCards, 
   drawRandomCards, 
   drawCardWithPosition 
 } from "@/data/all-tarot-cards";
@@ -34,23 +33,6 @@ const getSuitColor = (suit: string) => {
   }
 };
 
-// 수트별 이모지
-const getSuitEmoji = (suit: string) => {
-  switch (suit) {
-    case "major":
-      return "✨";
-    case "cups":
-      return "💧";
-    case "pentacles":
-      return "💰";
-    case "swords":
-      return "⚔️";
-    case "wands":
-      return "🔥";
-    default:
-      return "✨";
-  }
-};
 
 
 interface CardSelectionProps {
@@ -623,7 +605,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                             ? `이 카드는 "${question}"에 대한 직접적인 답변을 제공합니다. ${card.current_interpretation}`
                             : generatePositionInterpretation(
                                 card, 
-                                ["past", "present", "future"][index] as any,
+                                ["past", "present", "future"][index] as "past" | "present" | "future",
                                 classifyQuestion(question)
                               )
                           }
