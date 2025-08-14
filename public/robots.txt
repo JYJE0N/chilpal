@@ -1,0 +1,45 @@
+# robots.txt for 칠팔 타로
+# https://chilpal-tarot.vercel.app
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow search engines to crawl all pages
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 2
+
+User-agent: NaverBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Yeti
+Allow: /
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Sitemap location
+Sitemap: https://chilpal-tarot.vercel.app/sitemap.xml

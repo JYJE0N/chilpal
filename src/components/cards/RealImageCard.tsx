@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 // 타입 정의
 interface TarotCard {
@@ -141,11 +142,14 @@ function CardImage({
         </div>
       )}
 
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={card.image_url}
         alt={card.name}
-        className="w-full h-full object-cover rounded-lg"
+        fill
+        sizes="(max-width: 640px) 96px, (max-width: 768px) 128px, 192px"
+        className="object-cover rounded-lg"
+        priority={false}
+        loading="lazy"
         onLoad={() => setImageLoading(false)}
         onError={() => {
           setImageError(true);

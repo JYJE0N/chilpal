@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { TarotCard, DrawnCard } from "@/types/tarot";
+import { CARD_BACK_BLUR_DATA_URL, getCardBlurDataUrl } from "@/lib/image-utils";
+import { useToast } from "@/components/ui/Toast";
+import { useAsync } from "@/hooks/useAsync";
 import { 
   drawRandomCards, 
   drawCardWithPosition 
@@ -50,6 +53,37 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     "spread-selection"
   );
   const [scrollProgress, setScrollProgress] = useState(0);
+  
+  // 토스트 및 비동기 처리
+  const { addToast } = useToast();
+  
+  // 리딩 저장 함수
+  const saveReadingAsync = async (readingData: any) => {
+    const response = await fetch('/api/readings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(readingData)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || '리딩 저장에 실패했습니다');
+    }
+    
+    return response.json();
+  };
+  
+  const { 
+    loading: isSaving, 
+    execute: saveReading 
+  } = useAsync(saveReadingAsync, {
+    showSuccessToast: true,
+    showErrorToast: true,
+    successMessage: '✨ 리딩이 히스토리에 저장되었습니다',
+    errorMessage: '💫 리딩 저장에 실패했습니다',
+  });
 
   // 스크롤 진행률 추적
   useEffect(() => {
@@ -119,10 +153,42 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
 
   // 리딩 시작 시에도 스크롤
   const startReading = () => {
-    if (!question.trim()) {
-      alert("질문을 입력해주세요!");
+    const trimmedQuestion = question.trim();
+    
+    if (!trimmedQuestion) {
+      addToast({
+        type: 'warning',
+        title: '질문을 입력해주세요',
+        message: '타로 카드에게 궁금한 것을 물어보세요',
+      });
       return;
     }
+    
+    if (trimmedQuestion.length < 5) {
+      addToast({
+        type: 'warning',
+        title: '질문이 너무 짧습니다',
+        message: '5글자 이상의 구체적인 질문을 입력해주세요',
+      });
+      return;
+    }
+    
+    if (trimmedQuestion.length > 200) {
+      addToast({
+        type: 'warning',
+        title: '질문이 너무 깁니다',
+        message: '200글자 이내로 간결하게 작성해주세요',
+      });
+      return;
+    }
+    
+    addToast({
+      type: 'info',
+      title: '카드를 섞고 있습니다',
+      message: '운명의 카드를 준비하는 중...',
+      duration: 2000,
+    });
+    
     shuffleCards();
     setPhase("selection");
     
@@ -137,36 +203,23 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
       onComplete(selectedCards);
     }
     
-    // MongoDB에 리딩 저장
-    try {
-      const interpretation = generateOverallInterpretation(
-        question,
-        selectedCards,
-        classifyQuestion(question)
-      );
-      
-      const readingData = {
-        question,
-        spreadType,
-        cards: selectedCards,
-        interpretation,
-        questionType: classifyQuestion(question)
-      };
-      
-      const response = await fetch('/api/readings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(readingData)
-      });
-      
-      if (response.ok) {
-        console.log('✅ 리딩이 히스토리에 저장되었습니다');
-      }
-    } catch (error) {
-      console.error('리딩 저장 실패:', error);
-    }
+    // 리딩 저장 (비동기 처리)
+    const interpretation = generateOverallInterpretation(
+      question,
+      selectedCards,
+      classifyQuestion(question)
+    );
+    
+    const readingData = {
+      question,
+      spreadType,
+      cards: selectedCards,
+      interpretation,
+      questionType: classifyQuestion(question)
+    };
+    
+    // 백그라운드에서 저장 (사용자는 즉시 결과 확인 가능)
+    saveReading(readingData);
     
     // 결과 영역이 보이도록 스크롤
     setTimeout(scrollToTop, 200);
@@ -392,8 +445,12 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                         src="/images/cards/card-back.png"
                         alt="Card Back"
                         fill
-                        sizes="96px"
+                        sizes="(max-width: 640px) 80px, 96px"
                         className="object-cover rounded-lg"
+                        priority={false}
+                        loading="lazy"
+                        placeholder="blur"
+                        blurDataURL={CARD_BACK_BLUR_DATA_URL}
                         priority
                       />
                     </div>
@@ -483,7 +540,11 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                         src={card.image_url}
                         alt={card.name}
                         fill
-                        sizes="96px"
+                        sizes="(max-width: 640px) 80px, 96px"
+                        priority={index < 3}
+                        loading={index < 3 ? "eager" : "lazy"}
+                        placeholder="blur"
+                        blurDataURL={getCardBlurDataUrl(card.suit)}
                         className={`object-cover rounded-lg border-2 ${getSuitColor(
                           card.suit
                         )}`}
@@ -579,7 +640,10 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           src={card.image_url}
                           alt={card.name}
                           fill
-                          sizes="128px"
+                          sizes="(max-width: 640px) 112px, 128px"
+                          priority={true}
+                          placeholder="blur"
+                          blurDataURL={getCardBlurDataUrl(card.suit)}
                           className={`object-cover rounded-lg border-2 ${getSuitColor(card.suit)} ${
                             card.is_reversed ? "rotate-180" : ""
                           }`}
