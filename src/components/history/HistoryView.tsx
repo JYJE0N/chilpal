@@ -124,7 +124,7 @@ export default function HistoryView() {
   };
 
   const getQuestionTypeLabel = (type: string) => {
-    const labels = {
+    const labels: Record<string, string> = {
       love: '💕 연애',
       career: '💼 직업',
       money: '💰 재물',

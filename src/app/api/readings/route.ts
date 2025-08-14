@@ -7,7 +7,7 @@ import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
 
 // 세션 ID 생성 또는 조회
-async function getOrCreateSession(_request: NextRequest): Promise<string> {
+async function getOrCreateSession(request: NextRequest): Promise<string> {
   const cookieStore = await cookies();
   let sessionId = cookieStore.get('tarot-session')?.value;
   

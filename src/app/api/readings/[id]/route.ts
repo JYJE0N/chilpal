@@ -10,7 +10,7 @@ type RouteContext = {
 };
 
 // GET - 특정 리딩 조회
-export async function GET(_request: NextRequest, { params }: RouteContext) {
+export async function GET(request: NextRequest, { params }: RouteContext) {
   try {
     await connectDB();
     
@@ -52,7 +52,7 @@ export async function GET(_request: NextRequest, { params }: RouteContext) {
 }
 
 // DELETE - 리딩 삭제
-export async function DELETE(_request: NextRequest, { params }: RouteContext) {
+export async function DELETE(request: NextRequest, { params }: RouteContext) {
   try {
     await connectDB();
     
