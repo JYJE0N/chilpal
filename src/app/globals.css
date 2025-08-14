@@ -145,4 +145,66 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* 글래스모피즘 스타일 */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-card-dark {
+    background: rgba(45, 25, 83, 0.2);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(186, 133, 196, 0.3);
+    border-radius: 16px;
+    box-shadow: 
+      0 8px 32px rgba(45, 25, 83, 0.2),
+      inset 0 1px 0 rgba(186, 133, 196, 0.1);
+  }
+
+  .glass-card-light {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    box-shadow: 
+      0 6px 24px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-button {
+    background: rgba(186, 133, 196, 0.3);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(186, 133, 196, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .glass-button:hover {
+    background: rgba(186, 133, 196, 0.4);
+    border-color: rgba(186, 133, 196, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 10px 25px rgba(186, 133, 196, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-input {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .glass-input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(186, 133, 196, 0.5);
+    box-shadow: 
+      0 0 0 3px rgba(186, 133, 196, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
 }
