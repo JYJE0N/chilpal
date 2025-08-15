@@ -53,7 +53,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
   const [selectedCards, setSelectedCards] = useState<DrawnCard[]>([]);
   const [revealedCards, setRevealedCards] = useState<Set<number>>(new Set());
   const [isShuffling, setIsShuffling] = useState(false);
-  const [spreadType, setSpreadType] = useState<SpreadType>("three-card");
+  const [spreadType, setSpreadType] = useState<SpreadType>("one-card");
   const [phase, setPhase] = useState<
     "spread-selection" | "question" | "selection" | "result"
   >("spread-selection");
@@ -162,7 +162,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     setQuestion("");
     setSelectedCards([]);
     setRevealedCards(new Set());
-    setSpreadType("three-card");
+    setSpreadType("one-card");
     setPhase("spread-selection");
 
     setTimeout(scrollToTop, 100);

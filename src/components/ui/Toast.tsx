@@ -144,7 +144,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
 // 토스트 컨테이너
 function ToastContainer({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: string) => void }) {
   return (
-    <div className="fixed top-4 right-4 z-50 space-y-2">
+    <div className="fixed top-28 right-4 z-[10000] space-y-2">
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => (
           <ToastItem
