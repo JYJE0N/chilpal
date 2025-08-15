@@ -2,6 +2,20 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* 삼성 브라우저 다크모드 강제 변환 방지 */
+:root {
+  color-scheme: light dark;
+  supported-color-schemes: light dark;
+}
+
+html {
+  color-scheme: normal !important;
+}
+
+html.color-scheme-normal {
+  filter: none !important;
+}
+
 :root {
   /* 신비로운 밤하늘 색상 팔레트 */
   --mystic-purple-dark: 45, 25, 83;    /* #2d1953 - 깊은 밤하늘 */
@@ -146,42 +160,72 @@ body {
     background-clip: text;
   }
 
-  /* 글래스모피즘 스타일 */
+  /* 글래스모피즘 스타일 - 모바일 성능 최적화 */
   .glass-card {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  @supports (backdrop-filter: blur(20px)) {
+    .glass-card {
+      backdrop-filter: blur(20px);
+    }
   }
 
   .glass-card-dark {
-    background: rgba(45, 25, 83, 0.2);
-    backdrop-filter: blur(20px);
+    background: rgba(45, 25, 83, 0.4);
     border: 1px solid rgba(186, 133, 196, 0.3);
     border-radius: 16px;
     box-shadow: 
       0 8px 32px rgba(45, 25, 83, 0.2),
       inset 0 1px 0 rgba(186, 133, 196, 0.1);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  @supports (backdrop-filter: blur(20px)) {
+    .glass-card-dark {
+      background: rgba(45, 25, 83, 0.2);
+      backdrop-filter: blur(20px);
+    }
   }
 
   .glass-card-light {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 12px;
     box-shadow: 
       0 6px 24px rgba(0, 0, 0, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  @supports (backdrop-filter: blur(15px)) {
+    .glass-card-light {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+    }
   }
 
   .glass-button {
-    background: rgba(186, 133, 196, 0.3);
-    backdrop-filter: blur(15px);
+    background: rgba(186, 133, 196, 0.4);
     border: 1px solid rgba(186, 133, 196, 0.4);
     transition: all 0.3s ease;
+    transform: translateZ(0);
+  }
+  
+  @supports (backdrop-filter: blur(15px)) {
+    .glass-button {
+      background: rgba(186, 133, 196, 0.3);
+      backdrop-filter: blur(15px);
+    }
   }
 
   .glass-button:hover {
@@ -194,10 +238,17 @@ body {
   }
 
   .glass-input {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
+    transform: translateZ(0);
+  }
+  
+  @supports (backdrop-filter: blur(10px)) {
+    .glass-input {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
   }
 
   .glass-input:focus {

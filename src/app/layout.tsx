@@ -84,9 +84,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className="color-scheme-normal">
+      <head>
+        <meta name="color-scheme" content="light dark" />
+        <meta name="supported-color-schemes" content="light dark" />
+        <meta name="theme-color" content="#1a1a2e" />
+        <meta name="msapplication-navbutton-color" content="#1a1a2e" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      </head>
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased pt-16`}
+        data-color-scheme="normal"
       >
         <ToastProvider>
           {children}

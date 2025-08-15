@@ -683,16 +683,16 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           </div>
                         )}
                       </div>
-                      <h5 className="font-bold text-purple-900 dark:text-purple-100 mb-3 text-lg">
+                      <h5 className="font-bold mb-3 text-lg" style={{ color: '#44298b !important' }}>
                         {card.name}
                       </h5>
-                      <p className="text-sm text-purple-700 dark:text-purple-200 mb-4 leading-relaxed text-justify tracking-normal">
+                      <p className="text-sm mb-4 leading-relaxed text-justify tracking-normal" style={{ color: '#6343b5 !important' }}>
                         {card.current_meaning}
                       </p>
 
                       {/* 위치별 상세 해석 */}
-                      <div className="bg-white/70 dark:bg-gray-800/70 p-4 rounded-lg mt-4 flex-grow border border-white/30 dark:border-gray-600/30">
-                        <p className="text-sm text-purple-900 dark:text-purple-100 leading-relaxed font-medium text-justify tracking-normal">
+                      <div className="p-4 rounded-lg mt-4 flex-grow border" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7) !important', borderColor: 'rgba(255, 255, 255, 0.3) !important' }}>
+                        <p className="text-sm leading-relaxed font-medium text-justify tracking-normal" style={{ color: '#44298b !important' }}>
                           {spreadType === "one-card"
                             ? `이 카드는 "${question}"에 대한 직접적인 답변을 제공합니다. ${card.current_interpretation}`
                             : generatePositionInterpretation(
@@ -713,7 +713,12 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           .map((keyword, idx) => (
                             <span
                               key={idx}
-                              className="text-xs bg-purple-600 dark:bg-purple-700 text-white px-3 py-1.5 rounded-full font-medium shadow-lg border border-purple-400/30 dark:border-purple-300/30"
+                              className="text-xs px-3 py-1.5 rounded-full font-medium shadow-lg border" 
+                              style={{ 
+                                background: 'linear-gradient(to right, #8b5cf6, #ec4899) !important', 
+                                color: '#ffffff !important',
+                                borderColor: 'rgba(168, 85, 247, 0.3) !important'
+                              }}
                             >
                               {keyword}
                             </span>
