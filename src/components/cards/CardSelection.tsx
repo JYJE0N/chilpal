@@ -63,6 +63,8 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
   >("spread-selection");
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showTopButton, setShowTopButton] = useState(false);
+  const [lastSavedReadingId, setLastSavedReadingId] = useState<string | null>(null);
+  const [isSavingReading, setIsSavingReading] = useState(false);
 
   // 당겨서 새로고침 기능
   const { isPulling, pullDistance, isRefreshing } = usePullToRefresh({
@@ -97,7 +99,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
   const { loading: isSaving, execute: saveReading } = useAsync(
     saveReadingAsync,
     {
-      showSuccessToast: true,
+      showSuccessToast: false,
       showErrorToast: true,
       successMessage: "✨ 리딩이 히스토리에 저장되었습니다",
       errorMessage: "💫 리딩 저장에 실패했습니다",
@@ -133,16 +135,22 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
-    // 스프레드에 따라 카드 개수 결정
+    // 스프레드에 따라 카드 개수 결정 (배수로 맞추기)
     const selectedSpread = SPREADS.find((s) => s.id === spreadType);
     const maxCards = selectedSpread?.cardCount || 1;
     let cardCount;
-    if (maxCards <= 3) {
-      cardCount = 14;
+    if (maxCards === 1) {
+      cardCount = 16; // 4열×4줄로 완전히 채우기
+    } else if (maxCards === 3) {
+      cardCount = 14; // 7열×2줄
+    } else if (maxCards === 4) {
+      cardCount = 12; // 4열×3줄 또는 6열×2줄
+    } else if (maxCards === 5) {
+      cardCount = 15; // 5열×3줄
     } else if (spreadType === "celtic-cross") {
-      cardCount = 30; // 켈틱 크로스는 30장 표시
+      cardCount = 30; // 6열×5줄
     } else {
-      cardCount = 20;
+      cardCount = 20; // 5열×4줄
     }
     const randomCards = drawRandomCards(cardCount);
 
@@ -172,9 +180,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
           setTimeout(() => {
             // updatedCards를 직접 사용하여 해석 생성
             setPhase("result");
-            if (onComplete) {
-              onComplete(updatedCards);
-            }
+            // 1카드는 여기서 직접 처리하므로 onComplete 호출하지 않음
 
             // 리딩 저장 (비동기 처리)
             const interpretation = generateSpreadInterpretation(
@@ -192,8 +198,8 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
               questionType: classifyQuestion(question),
             };
 
-            // 백그라운드에서 저장
-            saveReading(readingData);
+            // 1카드 전용 저장 (중복 방지)
+            saveReadingOnce(readingData);
 
             // 결과 영역이 보이도록 스크롤
             setTimeout(scrollToTop, 200);
@@ -213,6 +219,42 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     });
   };
 
+  // 중복 방지 리딩 저장 함수
+  const saveReadingOnce = async (readingData: any) => {
+    if (isSavingReading) {
+      console.log('이미 저장 중이므로 스킵');
+      return;
+    }
+
+    const readingHash = JSON.stringify({
+      question: readingData.question,
+      cards: readingData.cards.map((c: any) => ({ id: c.id, position: c.is_reversed })),
+      spreadType: readingData.spreadType
+    });
+
+    if (lastSavedReadingId === readingHash) {
+      console.log('동일한 리딩이므로 스킵');
+      return;
+    }
+
+    setIsSavingReading(true);
+    setLastSavedReadingId(readingHash);
+
+    try {
+      await saveReading(readingData);
+      addToast({
+        type: "success",
+        title: "저장 완료",
+        message: "✨ 리딩이 히스토리에 저장되었습니다",
+      });
+    } catch (error) {
+      console.error('리딩 저장 오류:', error);
+      setLastSavedReadingId(null); // 실패시 초기화
+    } finally {
+      setIsSavingReading(false);
+    }
+  };
+
   // 다시 시작
   const resetReading = () => {
     setQuestion("");
@@ -220,6 +262,8 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     setRevealedCards(new Set());
     setSpreadType("one-card");
     setPhase("spread-selection");
+    setLastSavedReadingId(null); // 저장 상태 초기화
+    setIsSavingReading(false);
 
     setTimeout(scrollToTop, 100);
   };
@@ -292,8 +336,12 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
       questionType: classifyQuestion(question),
     };
 
-    // 백그라운드에서 저장 (사용자는 즉시 결과 확인 가능)
-    saveReading(readingData);
+    // 1카드가 아닐 때만 저장 (1카드는 이미 handleCardClick에서 저장됨)
+    const selectedSpread = SPREADS.find((s) => s.id === spreadType);
+    const maxCards = selectedSpread?.cardCount || 1;
+    if (maxCards > 1) {
+      saveReadingOnce(readingData);
+    }
 
     // 결과 영역이 보이도록 스크롤
     setTimeout(scrollToTop, 200);
@@ -305,22 +353,64 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
       <AnimatePresence>
         {isPulling && (
           <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
+            initial={{ opacity: 0, y: -50, scale: 0.5 }}
+            animate={{ 
+              opacity: 1, 
+              y: pullDistance * 0.3, 
+              scale: 1 + (pullDistance / 200),
+            }}
+            exit={{ 
+              opacity: 0, 
+              y: -50, 
+              scale: 0.5,
+              transition: { duration: 0.3, ease: "easeOut" }
+            }}
+            transition={{ 
+              type: "spring",
+              stiffness: 300,
+              damping: 15
+            }}
             className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
           >
-            <div className={`glass-card-dark p-3 rounded-full flex items-center gap-2 ${isRefreshing ? 'text-green-400' : 'text-white/80'}`}>
+            <motion.div 
+              className={`glass-card-dark p-4 rounded-full flex items-center gap-3 ${isRefreshing ? 'text-green-400 bg-green-500/10' : 'text-white/80'}`}
+              animate={{
+                scale: isRefreshing ? [1, 1.1, 1] : 1,
+                boxShadow: isRefreshing 
+                  ? ["0 4px 20px rgba(34, 197, 94, 0.3)", "0 8px 40px rgba(34, 197, 94, 0.5)", "0 4px 20px rgba(34, 197, 94, 0.3)"]
+                  : `0 4px 20px rgba(168, 85, 247, ${Math.min(pullDistance / 100, 0.4)})`
+              }}
+              transition={{
+                duration: isRefreshing ? 1 : 0.3,
+                repeat: isRefreshing ? Infinity : 0,
+                ease: "easeInOut"
+              }}
+            >
               <motion.div
-                animate={{ rotate: isRefreshing ? 360 : 0 }}
-                transition={{ duration: 1, repeat: isRefreshing ? Infinity : 0, ease: "linear" }}
+                animate={{ 
+                  rotate: isRefreshing ? 360 : pullDistance * 2,
+                  scale: isRefreshing ? [1, 1.2, 1] : 1 + (pullDistance / 300)
+                }}
+                transition={{ 
+                  rotate: { duration: isRefreshing ? 1 : 0, repeat: isRefreshing ? Infinity : 0, ease: "linear" },
+                  scale: { duration: isRefreshing ? 1 : 0.2, repeat: isRefreshing ? Infinity : 0 }
+                }}
               >
-                <ArrowUp className={`w-4 h-4 ${isRefreshing ? 'rotate-180' : ''}`} />
+                <ArrowUp className={`w-5 h-5 ${isRefreshing ? 'text-green-400' : ''}`} />
               </motion.div>
-              <span className="text-sm">
-                {isRefreshing ? '새로고침 중...' : '당겨서 새로고침'}
-              </span>
-            </div>
+              <motion.span 
+                className="text-sm font-medium"
+                animate={{
+                  scale: isRefreshing ? [1, 1.05, 1] : 1
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: isRefreshing ? Infinity : 0
+                }}
+              >
+                {isRefreshing ? '🌀 새로고침 중...' : '⬇️ 당겨서 새로고침'}
+              </motion.span>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -335,7 +425,18 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
         />
       </div>
 
-      <div className="max-w-6xl mx-auto w-full">
+      <motion.div 
+        className="max-w-6xl mx-auto w-full"
+        animate={{
+          y: isPulling ? pullDistance * 0.1 : 0,
+          scale: isPulling ? 1 + (pullDistance / 1000) : 1
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 20
+        }}
+      >
         {/* 헤더 - 간소화된 여백 */}
         <header className="text-center mb-4">
           <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-2xl flex items-center justify-center gap-3">
@@ -436,12 +537,27 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 className="w-full p-3 text-lg text-white placeholder-purple-200 glass-input rounded-lg focus:outline-none mb-4"
                 onKeyPress={(e) => e.key === "Enter" && startReading()}
               />
-              <button
+              <motion.button
                 onClick={startReading}
-                className="px-8 py-3 glass-button text-white font-bold rounded-full transition-all transform hover:scale-105"
+                whileHover={{ 
+                  scale: 1.1,
+                  y: -3,
+                  boxShadow: "0 8px 25px rgba(168, 85, 247, 0.4)",
+                  transition: { 
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 10
+                  }
+                }}
+                whileTap={{ 
+                  scale: 0.95,
+                  y: 0,
+                  transition: { duration: 0.1 }
+                }}
+                className="px-8 py-3 glass-button text-white font-bold rounded-full transition-all"
               >
                 카드 뽑기 시작
-              </button>
+              </motion.button>
             </div>
           </div>
         )}
@@ -511,7 +627,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             </div>
 
             {/* 카드 그리드 */}
-            <div className="relative min-h-[300px] md:min-h-[200px] px-4 overflow-hidden">
+            <div className="relative min-h-[300px] md:min-h-[200px] px-8 py-4">
               <div
                 className={`${(() => {
                   const selectedSpread = SPREADS.find(
@@ -519,26 +635,32 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                   );
                   const maxCards = selectedSpread?.cardCount || 1;
 
-                  // 카드 수에 맞는 그리드 설정
+                  // 카드 수와 스프레드에 맞는 그리드 설정
                   if (maxCards === 1) {
-                    // 14장 → 7열×2줄 = 14장 완전히 채움
-                    return "grid grid-cols-7 gap-2 justify-items-center max-w-4xl mx-auto";
-                  } else if (maxCards <= 5) {
-                    // 14장 → 7열×2줄 = 14장 완전히 채움  
-                    return "grid grid-cols-7 gap-2 justify-items-center max-w-4xl mx-auto";
+                    // 14장 → 모바일 4열, 데스크톱 7열로 적절한 간격
+                    return "grid grid-cols-4 md:grid-cols-7 gap-3 md:gap-4 justify-items-center max-w-5xl mx-auto";
+                  } else if (maxCards === 3) {
+                    // 14장 → 모바일 4열, 데스크톱 7열
+                    return "grid grid-cols-4 md:grid-cols-7 gap-3 md:gap-4 justify-items-center max-w-5xl mx-auto";
+                  } else if (maxCards === 4) {
+                    // 12장 → 4열×3줄 = 12장 (4카드용으로 조정)
+                    return "grid grid-cols-4 md:grid-cols-6 gap-3 md:gap-4 justify-items-center max-w-4xl mx-auto";
+                  } else if (maxCards === 5) {
+                    // 15장 → 5열×3줄 = 15장
+                    return "grid grid-cols-5 md:grid-cols-5 gap-3 md:gap-4 justify-items-center max-w-4xl mx-auto";
                   } else if (spreadType === "celtic-cross") {
-                    // 30장 → 6열×5줄 = 30장 완전히 채움
-                    return "grid grid-cols-6 gap-1.5 justify-items-center max-w-3xl mx-auto";
+                    // 30장 → 6열×5줄 = 30장
+                    return "grid grid-cols-5 md:grid-cols-6 gap-2 md:gap-3 justify-items-center max-w-4xl mx-auto";
                   } else {
-                    // 20장 → 5열×4줄 = 20장 완전히 채움
-                    return "grid grid-cols-5 gap-2 justify-items-center max-w-3xl mx-auto";
+                    // 20장 → 5열×4줄 = 20장
+                    return "grid grid-cols-4 md:grid-cols-5 gap-3 md:gap-4 justify-items-center max-w-4xl mx-auto";
                   }
                 })()}`}
               >
-                <AnimatePresence mode="wait">
+                {/* 셔플 애니메이션 */}
+                <AnimatePresence>
                   {isShuffling
-                    ? // 셔플 애니메이션 표시
-                      Array.from({
+                    ? Array.from({
                         length: availableCards.length,
                       }).map((_, index) => (
                         <motion.div
@@ -590,7 +712,13 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           </div>
                         </motion.div>
                       ))
-                    : availableCards.map((card, index) => (
+                    : null}
+                </AnimatePresence>
+
+                {/* 일반 카드 애니메이션 */}
+                <AnimatePresence>
+                  {!isShuffling &&
+                    availableCards.map((card, index) => (
                         <motion.div
                           key={`card-${shuffleKey}-${card.id}`}
                           layout
@@ -625,11 +753,25 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                             stiffness: 100,
                           }}
                           whileHover={{
-                            scale: 1.03,
-                            y: -3,
-                            transition: { duration: 0.2 },
+                            scale: 1.08,
+                            y: -8,
+                            rotate: [0, -2, 2, 0],
+                            transition: { 
+                              duration: 0.3,
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 10
+                            },
                           }}
-                          whileTap={{ scale: 0.95 }}
+                          whileTap={{ 
+                            scale: 0.9,
+                            rotate: 5,
+                            transition: { 
+                              duration: 0.1,
+                              type: "spring",
+                              stiffness: 400 
+                            }
+                          }}
                           className={`relative cursor-pointer ${
                             selectedCards.some((sc) => sc.id === card.id)
                               ? "ring-2 ring-yellow-400 rounded-lg"
@@ -723,8 +865,20 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
               >
                 <motion.button
                   onClick={completeReading}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ 
+                    scale: 1.1,
+                    y: -5,
+                    boxShadow: "0 10px 30px rgba(251, 191, 36, 0.4)",
+                    transition: { 
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 10
+                    }
+                  }}
+                  whileTap={{ 
+                    scale: 0.9,
+                    transition: { duration: 0.1 }
+                  }}
                   className="px-8 py-4 glass-button text-white font-bold rounded-full transition-all text-lg"
                 >
                   리딩 결과 보기
@@ -733,12 +887,22 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             )}
 
             {/* 다시 섞기 버튼 */}
-            <div className="text-center">
+            <div className="flex justify-center mt-6">
               <motion.button
                 onClick={shuffleCards}
                 disabled={isShuffling}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={isShuffling ? {} : { 
+                  scale: 1.05,
+                  transition: { 
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 10
+                  }
+                }}
+                whileTap={isShuffling ? {} : { 
+                  scale: 0.95,
+                  transition: { duration: 0.1 }
+                }}
                 className="px-6 py-2 glass-button text-white rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isShuffling ? "🌀 섞는 중..." : "🔄 카드 다시 섞기"}
@@ -922,8 +1086,20 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 {/* 새 질문 버튼 */}
                 <motion.button
                   onClick={resetReading}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ 
+                    scale: 1.1,
+                    y: -3,
+                    boxShadow: "0 8px 25px rgba(147, 51, 234, 0.4)",
+                    transition: { 
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 10
+                    }
+                  }}
+                  whileTap={{ 
+                    scale: 0.95,
+                    transition: { duration: 0.1 }
+                  }}
                   className="px-8 py-3 glass-button text-white font-bold rounded-full transition-all"
                 >
                   새로운 질문하기
@@ -932,18 +1108,39 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* TOP 버튼 */}
       <AnimatePresence>
         {showTopButton && (
           <motion.button
             onClick={scrollToTop}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            initial={{ opacity: 0, y: 20, scale: 0 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0, 
+              scale: 1,
+              rotate: [0, 0, 360],
+              transition: {
+                rotate: { duration: 0.6, ease: "easeOut" }
+              }
+            }}
+            exit={{ opacity: 0, y: 20, scale: 0 }}
+            whileHover={{ 
+              scale: 1.2,
+              y: -5,
+              boxShadow: "0 10px 30px rgba(139, 69, 19, 0.3)",
+              transition: { 
+                type: "spring",
+                stiffness: 400,
+                damping: 10
+              }
+            }}
+            whileTap={{ 
+              scale: 0.8,
+              y: 0,
+              transition: { duration: 0.1 }
+            }}
             className="fixed bottom-6 right-6 w-12 h-12 glass-button text-white rounded-full flex items-center justify-center z-50 shadow-lg"
           >
             <ArrowUp className="w-5 h-5" />

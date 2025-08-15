@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // 토스트 타입 정의
@@ -71,7 +71,8 @@ const getToastColors = (type: ToastType) => {
 };
 
 // 개별 토스트 컴포넌트
-function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
+const ToastItem = React.forwardRef<HTMLDivElement, { toast: Toast; onRemove: (id: string) => void }>(
+  ({ toast, onRemove }, ref) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onRemove(toast.id);
@@ -82,6 +83,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, x: 300, scale: 0.9 }}
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, x: 300, scale: 0.9 }}
@@ -139,7 +141,10 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       />
     </motion.div>
   );
-}
+  }
+);
+
+ToastItem.displayName = 'ToastItem';
 
 // 토스트 컨테이너
 function ToastContainer({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: string) => void }) {

@@ -27,8 +27,9 @@ export const usePullToRefresh = ({
     const distance = currentY - startY;
 
     if (distance > 0) {
-      // 당기는 동작 감지
-      setPullDistance(Math.min(distance, threshold * 1.5));
+      // 당기는 동작 감지 - 더 부드러운 저항감
+      const resistance = Math.min(distance * 0.7, threshold * 2);
+      setPullDistance(resistance);
       setIsPulling(distance > threshold);
 
       // 새로고침 영역에서는 스크롤 방지
@@ -42,6 +43,10 @@ export const usePullToRefresh = ({
     if (disabled) return;
 
     if (isPulling && pullDistance > threshold) {
+      // 햅틱 피드백 (iOS/Android 지원)
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50); // 50ms 진동
+      }
       onRefresh();
     }
 
