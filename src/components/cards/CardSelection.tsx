@@ -504,9 +504,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                               fill
                               sizes="(max-width: 640px) 80px, 96px"
                               className="object-cover rounded-lg"
-                              loading="lazy"
-                              placeholder="blur"
-                              blurDataURL={CARD_BACK_BLUR_DATA_URL}
+                              priority
                             />
                           </div>
                         </motion.div>
