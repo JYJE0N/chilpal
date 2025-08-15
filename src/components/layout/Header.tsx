@@ -6,9 +6,9 @@ import { useState, useEffect } from "react";
 import { Sparkles, Home, BookOpen } from "lucide-react";
 
 const NAV_LINKS = [
-  { href: "/", label: "홈", icon: Home },
-  { href: "/reading", label: "타로 리딩", icon: Sparkles },
-  { href: "/history", label: "히스토리", icon: BookOpen },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/reading", label: "Reading", icon: Sparkles },
+  { href: "/history", label: "History", icon: BookOpen },
 ] as const;
 
 export default function Header() {
@@ -27,10 +27,10 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? "glass-nav-scrolled"
-          : "glass-nav"
+          ? "bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-xl"
+          : "bg-white/5 backdrop-blur-lg border-b border-white/10"
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 py-4">
@@ -41,10 +41,8 @@ export default function Header() {
             className="flex items-center space-x-3 hover:opacity-80 transition-all hover:scale-105"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <Sparkles className="w-5 h-5 text-pink-300 animate-pulse" />
-            <h1 className="text-xl font-bold mystic-text-gradient">
-              칠팔 타로
-            </h1>
+            <Sparkles className="w-5 h-5 text-blue-300 animate-pulse" />
+            <h1 className="text-xl font-bold text-white/90">TAROT 78</h1>
           </Link>
 
           {/* 데스크톱 네비게이션 */}
@@ -55,8 +53,8 @@ export default function Header() {
                 href={href}
                 className={`px-4 py-2 rounded-full transition-all ${
                   pathname === href
-                    ? "glass-button text-white"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
+                    ? "bg-white/20 text-white border border-white/30 backdrop-blur-md"
+                    : "text-white/80 hover:text-white hover:bg-white/10 hover:backdrop-blur-sm"
                 }`}
               >
                 {label}
@@ -96,7 +94,7 @@ export default function Header() {
 
         {/* 모바일 메뉴 */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pt-4 border-t border-white/10">
+          <nav className="md:hidden mt-4 pt-4 border-t border-white/20 bg-white/5 backdrop-blur-md rounded-lg">
             <div className="space-y-2">
               {NAV_LINKS.map(({ href, label, icon: Icon }) => (
                 <Link
@@ -104,8 +102,8 @@ export default function Header() {
                   href={href}
                   className={`block px-4 py-2 rounded-lg transition-all ${
                     pathname === href
-                      ? "glass-button text-white"
-                      : "text-purple-200 hover:text-white hover:bg-white/10"
+                      ? "bg-white/20 text-white border border-white/30"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

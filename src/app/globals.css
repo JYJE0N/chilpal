@@ -4,117 +4,55 @@
 
 /* 모바일 브라우저 호환성 */
 :root {
-  /* 삼성 브라우저 다크모드 차단 */
-  color-scheme: only light;
+  /* 기본 라이트 모드 */
+  color-scheme: light;
   
   /* 동적 뷰포트 높이 */
   --vh: 1vh;
 }
 
 :root {
-  /* 신비로운 밤하늘 색상 팔레트 */
-  --mystic-purple-dark: 45, 25, 83;    /* #2d1953 - 깊은 밤하늘 */
-  --mystic-purple: 68, 41, 139;        /* #44298b - 주요 퍼플 */
-  --mystic-purple-light: 99, 67, 181;  /* #6343b5 - 밝은 퍼플 */
-  --mystic-blue-dark: 46, 44, 107;     /* #2e2c6b - 어두운 블루 */
-  --mystic-blue: 71, 85, 162;          /* #4755a2 - 주요 블루 */
-  --mystic-blue-light: 109, 140, 207;  /* #6d8ccf - 밝은 블루 */
-  --mystic-pink: 186, 133, 196;        /* #ba85c4 - 신비한 핑크 */
-  --mystic-gold: 255, 215, 175;        /* #ffd7af - 신비한 골드 */
-  --starlight: 240, 230, 255;          /* #f0e6ff - 별빛 */
+  /* 몽환적 밤하늘 색상 팔레트 - 푸른색 강조 */
+  --night-deep: 10, 15, 40;           /* #0a0f28 - 깊은 밤 */
+  --night-blue: 30, 40, 95;           /* #1e285f - 진한 블루 */
+  --mystic-indigo: 55, 65, 140;       /* #37418c - 인디고 */
+  --mystic-blue: 80, 100, 180;        /* #5064b4 - 메인 블루 */
+  --mystic-purple: 120, 100, 200;     /* #7864c8 - 보라빛 블루 */
+  --mystic-lavender: 150, 130, 220;   /* #9682dc - 라벤더 */
+  --mystic-pink: 200, 150, 230;       /* #c896e6 - 연한 핑크 퍼플 */
+  --starlight: 230, 235, 255;         /* #e6ebff - 별빛 */
+  --moonlight: 255, 255, 255;         /* #ffffff - 달빛 */
   
   /* 그라데이션 색상 */
-  --bg-gradient-start: var(--mystic-purple-dark);
-  --bg-gradient-middle: var(--mystic-blue-dark);
-  --bg-gradient-end: var(--mystic-purple);
+  --bg-gradient-start: var(--night-deep);
+  --bg-gradient-middle: var(--night-blue);
+  --bg-gradient-end: var(--mystic-indigo);
   
   /* 텍스트 색상 */
   --text-primary: var(--starlight);
-  --text-secondary: var(--mystic-pink);
-  --text-accent: var(--mystic-gold);
+  --text-secondary: var(--mystic-lavender);
+  --text-accent: var(--mystic-pink);
 }
 
-/* 모바일 브라우저 주소창 대응 */
+/* 기본 배경색 설정 */
 html {
-  /* 삼성 브라우저 강제 다크모드 완전 차단 */
-  background-color: rgb(45, 25, 83) !important;
-  filter: none !important;
-  -webkit-filter: none !important;
-  color-scheme: only light !important;
-  forced-color-adjust: none !important;
-}
-
-body {
-  /* body도 동일하게 설정 */
-  background-color: rgb(45, 25, 83) !important;
-  filter: none !important;
-  -webkit-filter: none !important;
-  color-scheme: only light !important;
-  forced-color-adjust: none !important;
-}
-
-html *, body *, * {
-  /* 모든 요소에 필터 및 다크모드 차단 */
-  filter: none !important;
-  -webkit-filter: none !important;
-  color-scheme: only light !important;
-  forced-color-adjust: none !important;
-}
-
-/* 삼성 인터넷 브라우저 특정 대응 */
-@supports (-webkit-appearance: none) {
-  html, body {
-    filter: none !important;
-    -webkit-filter: none !important;
-    color-scheme: only light !important;
-  }
-}
-
-/* 삼성 브라우저 완전 차단 */
-html[data-color-scheme="light"],
-html[data-theme="light"] {
-  background-color: rgb(45, 25, 83) !important;
-  color-scheme: only light !important;
-  filter: none !important;
-  -webkit-filter: none !important;
-}
-
-/* 더 구체적인 삼성 브라우저 타겟팅 */
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-  @supports (-webkit-touch-callout: none) {
-    html, body, * {
-      filter: none !important;
-      -webkit-filter: none !important;
-      color-scheme: only light !important;
-      forced-color-adjust: none !important;
-      background-color: inherit !important;
-    }
-    
-    html {
-      background-color: rgb(45, 25, 83) !important;
-    }
-  }
-}
-
-/* 웹킷 기반 브라우저 대응 */
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-  html, body, * {
-    filter: none !important;
-    -webkit-filter: none !important;
-    color-scheme: only light !important;
-    forced-color-adjust: none !important;
-  }
+  background-color: rgb(10, 15, 40);
+  color-scheme: dark;
 }
 
 body {
   color: rgb(var(--text-primary));
-  background: linear-gradient(
-    135deg,
-    rgb(var(--bg-gradient-start)) 0%,
-    rgb(var(--bg-gradient-middle)) 35%,
-    rgb(var(--mystic-blue)) 70%,
-    rgb(var(--bg-gradient-end)) 100%
-  );
+  background: 
+    radial-gradient(ellipse 800px 400px at 20% 30%, rgba(120, 100, 200, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 600px 300px at 80% 70%, rgba(80, 100, 180, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 400px 600px at 60% 10%, rgba(150, 130, 220, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 500px 200px at 10% 80%, rgba(200, 150, 230, 0.04) 0%, transparent 50%),
+    linear-gradient(
+      180deg,
+      rgb(var(--bg-gradient-start)) 0%,
+      rgb(var(--bg-gradient-middle)) 50%,
+      rgb(var(--bg-gradient-end)) 100%
+    );
   /* 모바일 브라우저 주소창 대응 */
   min-height: 100vh;
   min-height: calc(var(--vh, 1vh) * 100);
@@ -124,12 +62,6 @@ body {
   /* 모바일 스크롤 최적화 */
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
-  
-  /* 하드웨어 가속 및 렌더링 최적화 */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   
   /* 모바일에서 background-attachment: fixed 제거 */
   background-attachment: scroll;
@@ -144,23 +76,85 @@ body {
 
 /* 모바일 스크롤 블러 잔상 방지 */
 @media (max-width: 767px) {
+  /* 모바일에서 블러 효과만 제거 (position은 유지) */
   * {
-    /* 모든 요소에서 블러 효과 완전 제거 */
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    filter: none !important;
-    -webkit-filter: none !important;
   }
   
-  /* 모바일에서 스크롤 성능 최적화 */
-  *,
-  *::before,
-  *::after {
-    will-change: auto !important;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+  /* 모바일에서 스크롤 성능 최적화 - transform 제거 */
+  /* transform은 fixed positioning을 깨뜨리므로 제거 */
+}
+
+/* 별빛 효과 - 수량 감소 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(1px 1px at 80px 40px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 250px 80px, rgba(230, 235, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 450px 120px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 150px 200px, rgba(200, 220, 255, 0.5), transparent);
+  background-repeat: repeat;
+  background-size: 600px 300px;
+  animation: twinkle 8s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+/* 별똥별 효과 - 사선으로 떨어짐 */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(
+      90deg, 
+      transparent 0%, 
+      transparent 40%, 
+      rgba(255, 255, 255, 0.8) 50%, 
+      rgba(200, 150, 230, 0.6) 60%, 
+      rgba(150, 100, 200, 0.3) 80%, 
+      transparent 100%
+    );
+  background-size: 150px 3px;
+  background-repeat: no-repeat;
+  transform: rotate(45deg);
+  animation: falling-star 10s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes falling-star {
+  0% { 
+    background-position: -200px 0;
+    opacity: 0;
+  }
+  8% { 
+    opacity: 1; 
+  }
+  20% { 
+    background-position: calc(100% + 200px) 0;
+    opacity: 1;
+  }
+  25% { 
+    opacity: 0;
+  }
+  100% { 
+    background-position: calc(100% + 200px) 0;
+    opacity: 0;
   }
 }
 
@@ -270,7 +264,7 @@ body {
     background: linear-gradient(
       135deg,
       rgb(var(--starlight)) 0%,
-      rgb(var(--mystic-gold)) 50%,
+      rgb(var(--mystic-lavender)) 50%,
       rgb(var(--mystic-pink)) 100%
     );
     -webkit-background-clip: text;
@@ -278,128 +272,58 @@ body {
     background-clip: text;
   }
 
-  /* 글래스모피즘 스타일 - 블러 효과 제거 */
+  /* 글래스모피즘 스타일 */
   .glass-card {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 16px;
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    /* 하드웨어 가속 */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-
-  .glass-card-dark {
-    background: rgba(45, 25, 83, 0.5);
-    border: 1px solid rgba(186, 133, 196, 0.35);
-    border-radius: 16px;
-    box-shadow: 
-      0 8px 32px rgba(45, 25, 83, 0.25),
-      inset 0 1px 0 rgba(186, 133, 196, 0.15);
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+      0 8px 32px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .glass-card-light {
-    background: rgba(255, 255, 255, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     box-shadow: 
-      0 6px 24px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+      0 6px 24px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
   .glass-button {
-    background: rgba(186, 133, 196, 0.35);
-    border: 1px solid rgba(186, 133, 196, 0.45);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
   }
 
   .glass-button:hover {
-    background: rgba(186, 133, 196, 0.4);
-    border-color: rgba(186, 133, 196, 0.6);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
     box-shadow: 
-      0 10px 25px rgba(186, 133, 196, 0.3),
+      0 10px 30px rgba(0, 0, 0, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   .glass-input {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
   }
 
   .glass-input:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(186, 133, 196, 0.5);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(150, 130, 220, 0.5);
     box-shadow: 
-      0 0 0 3px rgba(186, 133, 196, 0.1),
+      0 0 0 3px rgba(150, 130, 220, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
-  /* 네비게이션 전용 글래스모피즘 */
-  .glass-nav {
-    background: rgba(45, 25, 83, 0.95);
-    border-bottom: 1px solid rgba(186, 133, 196, 0.2);
-    transition: all 0.3s ease;
-    /* fixed 위치 강제 */
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 50 !important;
-    /* 모바일 성능 최적화 */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-
-  .glass-nav-scrolled {
-    background: rgba(45, 25, 83, 0.98);
-    border-bottom: 1px solid rgba(186, 133, 196, 0.4);
-    box-shadow: 
-      0 4px 16px rgba(45, 25, 83, 0.3),
-      inset 0 1px 0 rgba(186, 133, 196, 0.15);
-  }
-
-  /* 데스크톱에서만 네비게이션 블러 효과 */
-  @media (min-width: 768px) and (hover: hover) {
-    .glass-nav {
-      background: rgba(45, 25, 83, 0.1);
-      backdrop-filter: blur(8px);
-      /* fixed 위치 강제 */
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      z-index: 50 !important;
-    }
-
-    .glass-nav-scrolled {
-      background: rgba(45, 25, 83, 0.3);
-      backdrop-filter: blur(20px);
-    }
-  }
+  /* glass-nav 클래스 제거 - Header에서 직접 Tailwind 사용 */
 
   /* 네비게이션 링크 호버 효과 */
   .nav-link-hover {
@@ -424,4 +348,6 @@ body {
       0 4px 12px rgba(186, 133, 196, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
+
+  /* glass-footer 클래스 제거 - Footer에서 직접 Tailwind 사용 */
 }

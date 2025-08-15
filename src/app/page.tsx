@@ -1,8 +1,7 @@
 // src/app/page.tsx
-import MainLayout from "@/components/layout/MainLayout";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Moon, Sparkles, Dot, Star } from "lucide-react";
+import { Moon, Sparkles, Star } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "칠팔 타로 - 78장 완전한 타로 카드 리딩 | 무료 온라인 타로점",
@@ -17,38 +16,37 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <MainLayout>
-      <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
-        <div className="text-center space-y-8">
-          <div className="space-y-6">
-            <h1 className="text-7xl font-bold mystic-text-gradient drop-shadow-2xl flex items-center justify-center gap-6">
-              <div className="flex items-center gap-2">
-                <Moon className="w-12 h-12 text-yellow-300 animate-pulse" />
-              </div>
-              칠팔 타로
-              <Star className="w-12 h-12 text-white-300 animate-pulse" />
-            </h1>
-            <div className="space-y-3">
-              <p className="text-2xl font-semibold text-white/90 drop-shadow-lg">
-                신비로운 밤하늘이 전하는 메시지
-              </p>
-              <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
-                78장의 완전한 타로 덱으로 당신의 운명을 확인해보세요.
-                <br />
-                과거, 현재, 미래의 메시지가 별빛과 함께 기다리고 있습니다.
-              </p>
+    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
+      <div className="text-center space-y-8">
+        <div className="space-y-6">
+          <h1 className="text-7xl font-bold text-white drop-shadow-2xl flex items-center justify-center gap-6">
+            <div className="flex items-center gap-2">
+              <Moon className="w-12 h-12 text-blue-300 animate-pulse" />
             </div>
-          </div>
-
-          <div className="max-w-md mx-auto">
-            <Link href="/reading">
-              <button className="w-full px-8 py-4 glass-button text-white font-bold rounded-full text-lg transition-all transform hover:scale-105 flex items-center justify-center gap-3">
-                운명의 카드 뽑기
-              </button>
-            </Link>
+            칠팔 타로
+            <Star className="w-12 h-12 text-blue-200 animate-pulse" />
+          </h1>
+          <div className="space-y-3">
+            <p className="text-2xl font-semibold text-white/90 drop-shadow-lg">
+              78장 카드가 전하는 메시지
+            </p>
+            <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
+              알 수 없는 미래에 대한 궁금증을
+              <br />
+              카드를 통해 확인해보세요
+            </p>
           </div>
         </div>
+
+        <div className="max-w-md mx-auto">
+          <Link href="/reading">
+            <button className="w-full px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-full text-lg transition-all transform hover:scale-105 hover:bg-white/15 hover:border-white/30 shadow-xl flex items-center justify-center gap-3">
+              <Sparkles className="w-5 h-5 text-blue-300" />
+              타로 보기
+            </button>
+          </Link>
+        </div>
       </div>
-    </MainLayout>
+    </div>
   );
 }

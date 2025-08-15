@@ -1,5 +1,4 @@
 // src/app/reading/page.tsx
-import MainLayout from "@/components/layout/MainLayout";
 import CardSelection from "@/components/cards/CardSelection";
 import type { Metadata } from "next";
 
@@ -14,9 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function ReadingPage() {
-  return (
-    <MainLayout>
-      <CardSelection />
-    </MainLayout>
-  );
+  return <CardSelection />;
 }

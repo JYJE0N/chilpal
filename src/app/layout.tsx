@@ -3,6 +3,7 @@ import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
 import MobileViewportProvider from "@/components/providers/MobileViewportProvider";
+import MainLayout from "@/components/layout/MainLayout";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -87,98 +88,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* 강화된 삼성 브라우저 다크모드 차단 */}
-        <meta name="color-scheme" content="only light" />
-        <meta name="supported-color-schemes" content="light" />
-        <meta name="prefers-color-scheme" content="light" />
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            /* 삼성 브라우저 강제 다크모드 완전 차단 */
-            :root { color-scheme: only light !important; }
-            html { 
-              background-color: rgb(45, 25, 83) !important;
-              filter: none !important;
-              -webkit-filter: none !important;
-              color-scheme: only light !important;
-            }
-            html *, body *, * {
-              filter: none !important;
-              -webkit-filter: none !important;
-              color-scheme: only light !important;
-            }
-            /* 삼성 브라우저 특정 스타일 */
-            @media screen and (-webkit-min-device-pixel-ratio: 0) {
-              html, body { 
-                filter: none !important;
-                -webkit-filter: none !important;
-              }
-            }
-          `
-        }} />
-        {/* 삼성 브라우저 완전 차단 스크립트 */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              // 삼성 인터넷 브라우저 감지
-              const isSamsungBrowser = /SamsungBrowser/i.test(navigator.userAgent);
-              
-              // 다크모드 완전 차단 함수
-              function forceLightMode() {
-                const elements = [document.documentElement, document.body];
-                elements.forEach(el => {
-                  if (el) {
-                    el.style.setProperty('color-scheme', 'only light', 'important');
-                    el.style.setProperty('filter', 'none', 'important');
-                    el.style.setProperty('-webkit-filter', 'none', 'important');
-                    el.style.setProperty('forced-color-adjust', 'none', 'important');
-                    el.style.setProperty('background-color', 'rgb(45, 25, 83)', 'important');
-                    
-                    // 삼성 브라우저 전용 추가 설정
-                    if (isSamsungBrowser) {
-                      el.setAttribute('data-color-scheme', 'light');
-                      el.setAttribute('data-theme', 'light');
-                      el.style.setProperty('-webkit-color-scheme', 'only light', 'important');
-                      el.style.setProperty('color-scheme', 'light only', 'important');
-                    }
-                  }
-                });
-                
-                // 모든 자식 요소에도 적용 (삼성 브라우저 전용)
-                if (isSamsungBrowser) {
-                  document.querySelectorAll('*').forEach(el => {
-                    el.style.setProperty('filter', 'none', 'important');
-                    el.style.setProperty('-webkit-filter', 'none', 'important');
-                    el.style.setProperty('color-scheme', 'only light', 'important');
-                  });
-                }
-              }
-              
-              // 즉시 실행
-              forceLightMode();
-              
-              // DOM 로드 후 재실행
-              if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', forceLightMode);
-              } else {
-                forceLightMode();
-              }
-              
-              // 삼성 브라우저에서는 더 자주 체크
-              const interval = isSamsungBrowser ? 500 : 2000;
-              setInterval(forceLightMode, interval);
-              
-              // MutationObserver로 DOM 변경 감지
-              if (isSamsungBrowser && window.MutationObserver) {
-                const observer = new MutationObserver(forceLightMode);
-                observer.observe(document.documentElement, {
-                  attributes: true,
-                  attributeFilter: ['style', 'class'],
-                  subtree: true
-                });
-              }
-            })();
-          `
-        }} />
+        {/* 기본 다크모드 차단 - 최소한의 호환성 */}
+        <meta name="color-scheme" content="light" />
         {/* 모바일 브라우저 주소창 대응 */}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, minimum-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#2d1953" />
@@ -192,7 +103,9 @@ export default function RootLayout({
       >
         <MobileViewportProvider />
         <ToastProvider>
-          {children}
+          <MainLayout>
+            {children}
+          </MainLayout>
         </ToastProvider>
       </body>
     </html>

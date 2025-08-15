@@ -258,15 +258,15 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
       <div className="max-w-6xl mx-auto">
         {/* 헤더 */}
         <header className="text-center mb-8">
-          <h1 className="text-5xl font-bold mystic-text-gradient mb-4 drop-shadow-2xl flex items-center justify-center gap-4">
+          <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-2xl flex items-center justify-center gap-4">
             <div className="flex items-center gap-1">
-              <Moon className="w-10 h-10 text-yellow-300" />
+              <Moon className="w-10 h-10 text-blue-300" />
             </div>
-            칠팔 타로 리딩
-            <Moon className="w-10 h-10 text-white-300 animate-pulse" />
+            타로 리딩
+            <Moon className="w-10 h-10 text-blue-200 animate-pulse" />
           </h1>
           <p className="text-white/90 text-xl drop-shadow-lg">
-            신비로운 별빛 아래에서 운명의 카드를 선택하세요
+            78장으로 알아보는 미래
           </p>
         </header>
 
@@ -276,13 +276,13 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             <h2 className="text-3xl font-semibold text-white mb-6">
               타로 스프레드 선택
             </h2>
-            <p className="text-purple-200 mb-8">
+            <p className="text-white/80 mb-8">
               질문의 성격에 맞는 리딩 방식을 선택하세요
             </p>
 
             {/* 간단한 스프레드 */}
             <div className="mb-8">
-              <h3 className="text-xl text-white mb-6">🌱 간단한 리딩</h3>
+              <h3 className="text-xl text-white mb-6">심플 리딩</h3>
               <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto">
                 {SPREADS.filter((s) => s.category === "simple").map(
                   (spread) => (
@@ -302,7 +302,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
 
             {/* 중급 스프레드 */}
             <div className="mb-8">
-              <h3 className="text-xl text-white mb-6">🌙 상세 리딩</h3>
+              <h3 className="text-xl text-white mb-6">상세 리딩</h3>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
                 {SPREADS.filter((s) => s.category === "intermediate").map(
                   (spread) => (
@@ -322,7 +322,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
 
             {/* 고급 스프레드 */}
             <div>
-              <h3 className="text-xl text-white mb-6">✨ 전문 리딩</h3>
+              <h3 className="text-xl text-white mb-6">전문 리딩</h3>
               <div className="grid md:grid-cols-1 gap-4 max-w-2xl mx-auto">
                 {SPREADS.filter((s) => s.category === "advanced").map(
                   (spread) => (
@@ -374,7 +374,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
             {/* 질문 표시 */}
             <div className="glass-card-dark p-6 text-center">
               <h3 className="text-xl text-white mb-2">🔮 당신의 질문</h3>
-              <p className="text-purple-200 text-lg font-medium">
+              <p className="text-white/80 text-lg font-medium">
                 {`"${question}"`}
               </p>
             </div>
@@ -425,7 +425,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                   return (
                     <p className="text-yellow-200 mb-6">
                       {selectedCards.length === 0
-                        ? "마음이 이끌리는 카드를 선택하세요"
+                        ? "마음이 이끄는 카드를 선택하세요"
                         : "🎆 카드가 선택되었습니다! 잠시만 기다려주세요..."}
                     </p>
                   );
@@ -678,11 +678,11 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
           <div className="space-y-8">
             <div className="glass-card-dark p-8">
               <h2 className="text-3xl font-bold text-white mb-4 text-center flex items-center justify-center gap-3">
-                <Sparkles className="w-8 h-8 text-yellow-300" />
+                <Sparkles className="w-8 h-8 text-blue-300" />
                 리딩 완료!
-                <Sparkles className="w-8 h-8 text-yellow-300" />
+                <Sparkles className="w-8 h-8 text-blue-300" />
               </h2>
-              <p className="text-purple-200 mb-8 text-center">
+              <p className="text-white/80 mb-8 text-center">
                 {`"${question}"에 대한 답이 여기 있습니다.`}
               </p>
 
@@ -692,9 +692,11 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                   spreadType === "one-card"
                     ? "flex justify-center"
                     : (() => {
-                        const selectedSpread = SPREADS.find(s => s.id === spreadType);
+                        const selectedSpread = SPREADS.find(
+                          (s) => s.id === spreadType
+                        );
                         const cardCount = selectedSpread?.cardCount || 3;
-                        
+
                         if (cardCount >= 10) {
                           // 켈틱크로스 등 많은 카드
                           return "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6 max-w-7xl mx-auto px-4";
@@ -722,8 +724,13 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                         {spreadType === "one-card"
                           ? "운명의 카드"
                           : (() => {
-                              const selectedSpread = SPREADS.find(s => s.id === spreadType);
-                              return selectedSpread?.positions[index]?.name || `${index + 1}번째 카드`;
+                              const selectedSpread = SPREADS.find(
+                                (s) => s.id === spreadType
+                              );
+                              return (
+                                selectedSpread?.positions[index]?.name ||
+                                `${index + 1}번째 카드`
+                              );
                             })()}
                       </h4>
                       {/* 카드 이미지 */}
