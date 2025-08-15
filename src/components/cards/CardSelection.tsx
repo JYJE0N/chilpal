@@ -691,7 +691,21 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 className={`mb-12 ${
                   spreadType === "one-card"
                     ? "flex justify-center"
-                    : "grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+                    : (() => {
+                        const selectedSpread = SPREADS.find(s => s.id === spreadType);
+                        const cardCount = selectedSpread?.cardCount || 3;
+                        
+                        if (cardCount >= 10) {
+                          // 켈틱크로스 등 많은 카드
+                          return "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6 max-w-7xl mx-auto px-4";
+                        } else if (cardCount >= 6) {
+                          // 관계 스프레드 등 중간 개수
+                          return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-6xl mx-auto px-4";
+                        } else {
+                          // 3-5카드
+                          return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto px-4";
+                        }
+                      })()
                 }`}
               >
                 {selectedCards.map((card, index) => (
@@ -702,14 +716,18 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                     transition={{ delay: index * 0.2 }}
                     className="text-center w-full max-w-sm mx-auto"
                   >
-                    <h4 className="text-white text-xl font-semibold mb-4 drop-shadow-lg">
-                      {spreadType === "one-card"
-                        ? "운명의 카드"
-                        : ["과거", "현재", "미래"][index]}
-                    </h4>
-                    <div className="glass-card-light p-6 h-full min-h-[480px] flex flex-col shadow-xl">
+                    <div className="glass-card-light p-3 md:p-5 h-full min-h-[450px] md:min-h-[500px] flex flex-col shadow-xl">
+                      {/* 서브타이틀 */}
+                      <h4 className="text-white text-lg font-semibold mb-4 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg px-3 py-2 border border-white/10">
+                        {spreadType === "one-card"
+                          ? "운명의 카드"
+                          : (() => {
+                              const selectedSpread = SPREADS.find(s => s.id === spreadType);
+                              return selectedSpread?.positions[index]?.name || `${index + 1}번째 카드`;
+                            })()}
+                      </h4>
                       {/* 카드 이미지 */}
-                      <div className="relative w-36 h-52 mx-auto mb-4 flex-shrink-0">
+                      <div className="relative w-36 h-52 mx-auto mb-3 flex-shrink-0">
                         <Image
                           src={card.image_url}
                           alt={card.name}
@@ -728,15 +746,15 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           </div>
                         )}
                       </div>
-                      <h5 className="font-bold text-pink-300 mb-3 text-lg text-center">
+                      <h5 className="font-bold text-pink-300 mb-2 text-lg text-center">
                         {card.name}
                       </h5>
-                      <p className="text-sm text-white-700 mb-4 leading-relaxed text-center tracking-normal">
+                      <p className="text-sm text-white-700 mb-3 leading-relaxed text-center tracking-normal">
                         {card.current_meaning}
                       </p>
 
                       {/* 위치별 상세 해석 */}
-                      <div className="bg-white/70 p-4 rounded-lg mt-4 flex-grow border border-white/30">
+                      <div className="bg-white/70 p-3 rounded-lg mt-3 flex-grow border border-white/30">
                         <p className="text-sm text-gray-800 leading-relaxed font-medium text-justify tracking-normal">
                           {spreadType === "one-card"
                             ? `이 카드는 "${question}"에 대한 직접적인 답변을 제공합니다. ${card.current_interpretation}`
@@ -753,13 +771,13 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                       </div>
 
                       {/* 키워드 */}
-                      <div className="flex flex-wrap gap-2 justify-center mt-4 flex-shrink-0">
+                      <div className="flex flex-wrap gap-2 justify-center mt-3 flex-shrink-0 min-h-[50px] items-start p-1">
                         {card.current_keywords
                           .slice(0, 3)
                           .map((keyword, idx) => (
                             <span
                               key={idx}
-                              className="text-xs bg-purple-700 text-white-300 px-3 py-1.5 rounded-full font-medium shadow-lg border border-white/20"
+                              className="text-xs bg-purple-700 text-white px-3 py-1.5 rounded-full font-medium shadow-lg border border-purple-500/50 break-words max-w-[120px] text-center leading-tight"
                             >
                               {keyword}
                             </span>
