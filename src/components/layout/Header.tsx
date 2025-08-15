@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Disc, Sparkles, Home, BookOpen, Dot } from "lucide-react";
+import { Sparkles, Home, BookOpen } from "lucide-react";
+
+const NAV_LINKS = [
+  { href: "/", label: "홈", icon: Home },
+  { href: "/reading", label: "타로 리딩", icon: Sparkles },
+  { href: "/history", label: "히스토리", icon: BookOpen },
+] as const;
 
 export default function Header() {
   const pathname = usePathname();
@@ -35,9 +41,7 @@ export default function Header() {
             className="flex items-center space-x-3 hover:opacity-80 transition-all hover:scale-105"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <div className="flex items-center gap-0.5">
-              <Sparkles className="w-5 h-5 text-pink-300 animate-pulse" />
-            </div>
+            <Sparkles className="w-5 h-5 text-pink-300 animate-pulse" />
             <h1 className="text-xl font-bold mystic-text-gradient">
               칠팔 타로
             </h1>
@@ -45,36 +49,19 @@ export default function Header() {
 
           {/* 데스크톱 네비게이션 */}
           <nav className="hidden md:flex space-x-6">
-            <Link
-              href="/"
-              className={`px-4 py-2 rounded-full transition-all ${
-                pathname === "/"
-                  ? "glass-button text-white"
-                  : "text-white/80 hover:text-white hover:bg-white/10"
-              }`}
-            >
-              홈
-            </Link>
-            <Link
-              href="/reading"
-              className={`px-4 py-2 rounded-full transition-all ${
-                pathname === "/reading"
-                  ? "glass-button text-white"
-                  : "text-white/80 hover:text-white hover:bg-white/10"
-              }`}
-            >
-              타로 리딩
-            </Link>
-            <Link
-              href="/history"
-              className={`px-4 py-2 rounded-full transition-all ${
-                pathname === "/history"
-                  ? "glass-button text-white"
-                  : "text-white/80 hover:text-white hover:bg-white/10"
-              }`}
-            >
-              히스토리
-            </Link>
+            {NAV_LINKS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`px-4 py-2 rounded-full transition-all ${
+                  pathname === href
+                    ? "glass-button text-white"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
 
           {/* 모바일 메뉴 버튼 */}
@@ -111,41 +98,21 @@ export default function Header() {
         {isMobileMenuOpen && (
           <nav className="md:hidden mt-4 pt-4 border-t border-white/10">
             <div className="space-y-2">
-              <Link
-                href="/"
-                className={`block px-4 py-2 rounded-lg transition-all ${
-                  pathname === "/"
-                    ? "glass-button text-white"
-                    : "text-purple-200 hover:text-white hover:bg-white/10"
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Home className="inline w-4 h-4 mr-2" />홈
-              </Link>
-              <Link
-                href="/reading"
-                className={`block px-4 py-2 rounded-lg transition-all ${
-                  pathname === "/reading"
-                    ? "glass-button text-white"
-                    : "text-purple-200 hover:text-white hover:bg-white/10"
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Sparkles className="inline w-4 h-4 mr-2" />
-                타로 리딩
-              </Link>
-              <Link
-                href="/history"
-                className={`block px-4 py-2 rounded-lg transition-all ${
-                  pathname === "/history"
-                    ? "glass-button text-white"
-                    : "text-purple-200 hover:text-white hover:bg-white/10"
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <BookOpen className="inline w-4 h-4 mr-2" />
-                히스토리
-              </Link>
+              {NAV_LINKS.map(({ href, label, icon: Icon }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`block px-4 py-2 rounded-lg transition-all ${
+                    pathname === href
+                      ? "glass-button text-white"
+                      : "text-purple-200 hover:text-white hover:bg-white/10"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Icon className="inline w-4 h-4 mr-2" />
+                  {label}
+                </Link>
+              ))}
             </div>
           </nav>
         )}

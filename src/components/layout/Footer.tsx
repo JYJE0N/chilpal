@@ -1,9 +1,7 @@
 import Link from "next/link";
 import {
-  Dot,
   Sparkles,
   Home,
-  BookOpen,
   RotateCcw,
   Zap,
   Heart,
@@ -14,7 +12,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="glass-nav border-t border-white/20 mt-auto">
+    <footer className="glass-nav border-t border-white/20">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid md:grid-cols-3 gap-8">
           {/* 로고 & 설명 */}
@@ -39,33 +37,21 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">메뉴</h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/"
-                  className="text-purple-200 hover:text-white transition-colors flex items-center space-x-2"
-                >
-                  <Home className="w-3 h-3" />
-                  <span>홈</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/reading"
-                  className="text-purple-200 hover:text-white transition-colors flex items-center space-x-2"
-                >
-                  <Sparkles className="w-3 h-3" />
-                  <span>타로 리딩</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/history"
-                  className="text-purple-200 hover:text-white transition-colors flex items-center space-x-2"
-                >
-                  <History className="w-3 h-3" />
-                  <span>히스토리</span>
-                </Link>
-              </li>
+              {[
+                { href: "/", label: "홈", icon: Home },
+                { href: "/reading", label: "타로 리딩", icon: Sparkles },
+                { href: "/history", label: "히스토리", icon: History },
+              ].map(({ href, label, icon: Icon }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-purple-200 hover:text-white transition-colors flex items-center space-x-2"
+                  >
+                    <Icon className="w-3 h-3" />
+                    <span>{label}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -73,22 +59,17 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">프로젝트 정보</h4>
             <ul className="space-y-2 text-sm text-purple-200">
-              <li className="flex items-center space-x-2">
-                <Crown className="w-3 h-3 text-yellow-400" />
-                <span>메이저 아르카나 22장</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <Grid3X3 className="w-3 h-3 text-purple-400" />
-                <span>마이너 아르카나 56장</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <RotateCcw className="w-3 h-3" />
-                <span>정/역방향 해석 지원</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <Zap className="w-3 h-3" />
-                <span>Next.js + TypeScript</span>
-              </li>
+              {[
+                { icon: Crown, color: "text-yellow-400", text: "메이저 아르카나 22장" },
+                { icon: Grid3X3, color: "text-purple-400", text: "마이너 아르카나 56장" },
+                { icon: RotateCcw, color: "", text: "정/역방향 해석 지원" },
+                { icon: Zap, color: "", text: "Next.js + TypeScript" },
+              ].map(({ icon: Icon, color, text }, index) => (
+                <li key={index} className="flex items-center space-x-2">
+                  <Icon className={`w-3 h-3 ${color}`} />
+                  <span>{text}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
