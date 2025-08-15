@@ -277,7 +277,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 }}
                 whileHover={{ scale: 1.02, y: -5 }}
                 whileTap={{ scale: 0.98 }}
-                className="glass-card-light p-6 cursor-pointer border-2 border-yellow-400/30 hover:border-yellow-400/60 transition-all hover:backdrop-blur-xl"
+                className="glass-card-light p-6 cursor-pointer border-2 border-yellow-400/30 hover:border-yellow-400/60 transition-all hover:bg-yellow-500/10"
               >
                 <div className="mb-4">
                   <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center">
@@ -309,7 +309,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 }}
                 whileHover={{ scale: 1.02, y: -5 }}
                 whileTap={{ scale: 0.98 }}
-                className="glass-card-light p-6 cursor-pointer border-2 border-purple-400/30 hover:border-purple-400/60 transition-all hover:backdrop-blur-xl"
+                className="glass-card-light p-6 cursor-pointer border-2 border-purple-400/30 hover:border-purple-400/60 transition-all hover:bg-purple-500/10"
               >
                 <div className="mb-4">
                   <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center">
@@ -691,7 +691,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                       </p>
 
                       {/* 위치별 상세 해석 */}
-                      <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg mt-4 flex-grow backdrop-blur-sm border border-white/30 dark:border-gray-600/30">
+                      <div className="bg-white/70 dark:bg-gray-800/70 p-4 rounded-lg mt-4 flex-grow border border-white/30 dark:border-gray-600/30">
                         <p className="text-sm text-purple-900 dark:text-purple-100 leading-relaxed font-medium text-justify tracking-normal">
                           {spreadType === "one-card"
                             ? `이 카드는 "${question}"에 대한 직접적인 답변을 제공합니다. ${card.current_interpretation}`
@@ -713,7 +713,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           .map((keyword, idx) => (
                             <span
                               key={idx}
-                              className="text-xs bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-600 dark:to-pink-600 text-white px-3 py-1.5 rounded-full font-medium backdrop-blur-sm shadow-lg border border-purple-400/30 dark:border-purple-300/30"
+                              className="text-xs bg-purple-600 dark:bg-purple-700 text-white px-3 py-1.5 rounded-full font-medium shadow-lg border border-purple-400/30 dark:border-purple-300/30"
                             >
                               {keyword}
                             </span>
