@@ -7,7 +7,6 @@ import Link from "next/link";
 import {
   BookOpen,
   Sparkles,
-  Dot,
   Heart,
   Briefcase,
   DollarSign,
@@ -185,7 +184,7 @@ export default function HistoryView() {
         <header className="text-center mb-12">
           <h1 className="text-5xl font-bold mystic-text-gradient mb-4 drop-shadow-2xl flex items-center justify-center gap-4">
             <BookOpen className="w-10 h-10 text-purple-300" />
-            타로 히스토리
+            히스토리
             <BookOpen className="w-10 h-10 text-purple-300" />
           </h1>
           <p className="text-white/90 text-xl drop-shadow-lg">
@@ -271,44 +270,38 @@ export default function HistoryView() {
 
         {/* 필터 */}
         <div className="glass-card-dark p-6 mb-8">
-          <div className="flex flex-wrap gap-4 items-center">
-            <div>
-              <label className="text-white text-sm mr-2">질문 유형:</label>
-              <select
-                value={filter.type}
-                onChange={(e) =>
-                  setFilter((prev) => ({ ...prev, type: e.target.value }))
-                }
-                className="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-white/40 hover:bg-white/20 transition-all"
-              >
-                <option value="all">전체</option>
-                <option value="love">연애</option>
-                <option value="career">직업</option>
-                <option value="money">재물</option>
-                <option value="health">건강</option>
-                <option value="general">일반</option>
-              </select>
-            </div>
+          <div className="flex flex-wrap gap-4 items-center justify-center md:justify-start">
+            <select
+              value={filter.type}
+              onChange={(e) =>
+                setFilter((prev) => ({ ...prev, type: e.target.value }))
+              }
+              className="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-white/40 hover:bg-white/20 transition-all"
+            >
+              <option value="all">유형</option>
+              <option value="love">연애</option>
+              <option value="career">직업</option>
+              <option value="money">재물</option>
+              <option value="health">건강</option>
+              <option value="general">일반</option>
+            </select>
 
-            <div>
-              <label className="text-white text-sm mr-2">스프레드:</label>
-              <select
-                value={filter.spread}
-                onChange={(e) =>
-                  setFilter((prev) => ({ ...prev, spread: e.target.value }))
-                }
-                className="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-white/40 hover:bg-white/20 transition-all"
-              >
-                <option value="all">전체</option>
-                <option value="one-card">원카드</option>
-                <option value="three-card">3카드</option>
-                <option value="celtic-cross">켈틱크로스</option>
-                <option value="relationship">관계</option>
-                <option value="love-spread">연애</option>
-                <option value="career-path">경력</option>
-                <option value="yes-no">결정도움</option>
-              </select>
-            </div>
+            <select
+              value={filter.spread}
+              onChange={(e) =>
+                setFilter((prev) => ({ ...prev, spread: e.target.value }))
+              }
+              className="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-white/40 hover:bg-white/20 transition-all"
+            >
+              <option value="all">타입</option>
+              <option value="one-card">원카드</option>
+              <option value="three-card">3카드</option>
+              <option value="celtic-cross">켈틱크로스</option>
+              <option value="relationship">관계</option>
+              <option value="love-spread">연애</option>
+              <option value="career-path">경력</option>
+              <option value="yes-no">결정도움</option>
+            </select>
           </div>
         </div>
 
@@ -370,22 +363,26 @@ export default function HistoryView() {
                 </div>
 
                 <div className="flex gap-2">
-                  {reading.cards.slice(0, 3).map((card, idx) => (
-                    <div
-                      key={idx}
-                      className="relative w-8 h-12"
-                    >
-                      <Image
-                        src={card.image_url}
-                        alt={card.name}
-                        fill
-                        className={`object-cover rounded border ${
-                          card.is_reversed ? "rotate-180" : ""
-                        }`}
-                        sizes="32px"
-                      />
-                    </div>
-                  ))}
+                  {reading.cards?.slice(0, 3).map((card, idx) => {
+                    if (!card || !card.name) return null;
+
+                    return (
+                      <div
+                        key={idx}
+                        className="relative w-8 h-12"
+                      >
+                        <Image
+                          src={card.image_url || "/images/cards/card-back.png"}
+                          alt={card.name}
+                          fill
+                          className={`object-cover rounded border ${
+                            card.is_reversed ? "rotate-180" : ""
+                          }`}
+                          sizes="32px"
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
               </motion.div>
             ))}
@@ -406,11 +403,11 @@ export default function HistoryView() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-white backdrop-blur-xl border border-gray-200 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
+                className="bg-white backdrop-blur-xl border border-gray-200 rounded-2xl max-w-2xl w-full mx-2 md:mx-0 max-h-[90vh] overflow-hidden shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* 헤더 - 고정 */}
-                <div className="p-6 border-b border-gray-200/50">
+                <div className="p-4 md:p-6 border-b border-gray-200/50">
                   <div className="flex justify-between items-start">
                     <h2 className="text-xl font-bold text-gray-800 pr-4">
                       {selectedReading.question}
@@ -435,44 +432,52 @@ export default function HistoryView() {
 
                 {/* 컨텐츠 - 스크롤 가능 */}
                 <div className="overflow-y-auto max-h-[calc(90vh-200px)] custom-scrollbar">
-                  <div className="space-y-6 p-6">
+                  <div className="space-y-6 p-4 md:p-6">
                     {/* 카드 섹션 */}
                     <div className="space-y-4">
-                      {selectedReading.cards.map((card, idx) => (
-                        <div
-                          key={idx}
-                          className="flex gap-4 p-5 bg-gray-50/70 rounded-xl border border-gray-200/50 hover:bg-gray-50/90 transition-all"
-                        >
-                          <div className="relative w-16 h-24 flex-shrink-0">
-                            <Image
-                              src={card.image_url}
-                              alt={card.name}
-                              fill
-                              className={`object-cover rounded-lg shadow-sm ${
-                                card.is_reversed ? "rotate-180" : ""
-                              }`}
-                              sizes="64px"
-                            />
+                      {selectedReading.cards?.map((card, idx) => {
+                        if (!card || !card.name) return null;
+
+                        return (
+                          <div
+                            key={idx}
+                            className="flex gap-4 p-5 bg-white rounded-xl border border-gray-200/50 hover:bg-gray-50/30 transition-all"
+                          >
+                            <div className="relative w-16 h-24 flex-shrink-0">
+                              <Image
+                                src={
+                                  card.image_url ||
+                                  "/images/cards/card-back.png"
+                                }
+                                alt={card.name}
+                                fill
+                                className={`object-cover rounded-lg shadow-sm ${
+                                  card.is_reversed ? "rotate-180" : ""
+                                }`}
+                                sizes="64px"
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                                {card.name}
+                                {card.is_reversed && (
+                                  <span className="text-purple-600 text-xs bg-purple-50 px-2 py-1 rounded-full">
+                                    역방향
+                                  </span>
+                                )}
+                              </h4>
+                              <p className="text-sm text-gray-700 leading-relaxed">
+                                {card.current_meaning ||
+                                  "해석 정보가 없습니다."}
+                              </p>
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
-                              {card.name}
-                              {card.is_reversed && (
-                                <span className="text-purple-600 text-xs bg-purple-50 px-2 py-1 rounded-full">
-                                  역방향
-                                </span>
-                              )}
-                            </h4>
-                            <p className="text-sm text-gray-700 leading-relaxed">
-                              {card.current_meaning}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
 
                     {/* 종합 해석 */}
-                    <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-200/30 p-6 rounded-xl">
+                    <div className="bg-white border border-gray-200/50 p-6 rounded-xl">
                       <h4 className="font-semibold text-gray-800 mb-4 text-lg flex items-center gap-2">
                         <Brain className="w-5 h-5 text-purple-600" />
                         <span>종합 해석</span>
@@ -484,7 +489,7 @@ export default function HistoryView() {
                   </div>
 
                   {/* 하단 버튼 - 고정 */}
-                  <div className="p-6 border-t border-gray-200/50 bg-white/50 backdrop-blur-sm">
+                  <div className="p-4 md:p-6 border-t border-gray-200/50 bg-white/50 backdrop-blur-sm">
                     <div className="flex justify-end gap-3">
                       <button
                         onClick={() => deleteReading(selectedReading._id)}

@@ -29,8 +29,8 @@ export default function Header() {
     <header
       className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 ${
         isScrolled
-          ? "bg-black/50 backdrop-blur-xl border-b border-white/20 shadow-xl"
-          : "bg-black/30 backdrop-blur-lg border-b border-white/10"
+          ? "bg-black/70 backdrop-blur-xl border-b border-white/20 shadow-xl supports-[backdrop-filter]:bg-black/50"
+          : "bg-black/50 backdrop-blur-lg border-b border-white/10 supports-[backdrop-filter]:bg-black/30"
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 py-4">
@@ -100,7 +100,7 @@ export default function Header() {
 
         {/* 모바일 메뉴 */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pt-4 border-t border-white/20 bg-black/40 backdrop-blur-md rounded-lg shadow-lg">
+          <nav className="md:hidden mt-4 pt-4 border-t border-white/20 bg-gray-900 backdrop-blur-md rounded-lg shadow-lg supports-[backdrop-filter]:bg-gray-900/95">
             <div className="space-y-1">
               {NAV_LINKS.map(({ href, label, icon: Icon }) => (
                 <Link
