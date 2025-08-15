@@ -800,13 +800,13 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="glass-card-dark p-8 mb-8 max-w-4xl mx-auto"
+                className="glass-card-dark p-6 md:p-8 mb-8 max-w-6xl mx-auto"
               >
                 <h3 className="text-2xl font-bold text-white mb-6 flex items-center justify-center gap-3">
                   <BookAIcon className="w-6 h-6 text-purple-300" />
                   종합 해석
                 </h3>
-                <div className="text-purple-100 text-base leading-relaxed whitespace-pre-line px-4 text-justify tracking-normal">
+                <div className="text-purple-100 text-base leading-relaxed whitespace-pre-line px-2 md:px-4 text-justify tracking-normal">
                   {generateOverallInterpretation(
                     question,
                     selectedCards,

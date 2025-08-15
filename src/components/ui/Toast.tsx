@@ -87,7 +87,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       exit={{ opacity: 0, x: 300, scale: 0.9 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={`
-        relative max-w-sm w-full bg-gray-800 backdrop-blur-lg rounded-lg p-4 shadow-2xl border-l-4 supports-[backdrop-filter]:bg-gray-800/95
+        relative max-w-sm w-full bg-gray-800/95 backdrop-blur-lg mobile-toast-blur rounded-lg p-4 shadow-2xl border-l-4
         ${getToastColors(toast.type)}
       `}
     >

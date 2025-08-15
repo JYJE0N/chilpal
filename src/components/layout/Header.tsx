@@ -15,23 +15,48 @@ export default function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      
+      // 기본 스크롤 상태
+      setIsScrolled(currentScrollY > 20);
+      
+      // 모바일에서 스크롤 방향에 따른 헤더 표시/숨김
+      if (window.innerWidth < 768) { // md breakpoint
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // 아래로 스크롤 시 헤더 숨김
+          setIsHeaderVisible(false);
+          setIsMobileMenuOpen(false); // 메뉴도 닫기
+        } else {
+          // 위로 스크롤 시 헤더 표시
+          setIsHeaderVisible(true);
+        }
+      } else {
+        // 데스크톱에서는 항상 표시
+        setIsHeaderVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 backdrop-blur-xl mobile-header-blur ${
         isScrolled
-          ? "bg-black/70 backdrop-blur-xl border-b border-white/20 shadow-xl supports-[backdrop-filter]:bg-black/50"
-          : "bg-black/50 backdrop-blur-lg border-b border-white/10 supports-[backdrop-filter]:bg-black/30"
+          ? "bg-black/60 border-b border-white/20 shadow-xl"
+          : "bg-black/40 border-b border-white/10"
       }`}
+      style={{
+        transform: `translate3d(0, ${isHeaderVisible ? '0' : '-100%'}, 0)`
+      }}
     >
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
@@ -100,7 +125,7 @@ export default function Header() {
 
         {/* 모바일 메뉴 */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pt-4 border-t border-white/20 bg-gray-900 backdrop-blur-md rounded-lg shadow-lg supports-[backdrop-filter]:bg-gray-900/95">
+          <nav className="md:hidden mt-4 pt-4 border-t border-white/20 bg-gray-900/90 backdrop-blur-md mobile-menu-blur rounded-lg shadow-lg">
             <div className="space-y-1">
               {NAV_LINKS.map(({ href, label, icon: Icon }) => (
                 <Link
