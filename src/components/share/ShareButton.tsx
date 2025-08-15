@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Share2, Twitter, Facebook, Link2, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { designTokens } from "@/styles/design-tokens";
+import { useKakao } from "@/hooks/useKakao";
 
 interface ShareButtonProps {
   title: string;
@@ -21,6 +22,7 @@ export default function ShareButton({
 }: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { isLoaded: isKakaoLoaded, Kakao } = useKakao();
 
   // 공유 URL 생성
   const shareUrl = encodeURIComponent(url);
@@ -33,8 +35,8 @@ export default function ShareButton({
     twitter: `https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}&hashtags=${hashtags.join(',')}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
     kakao: () => {
-      if (typeof window !== 'undefined' && window.Kakao) {
-        window.Kakao.Share.sendDefault({
+      if (isKakaoLoaded && Kakao) {
+        Kakao.Share.sendDefault({
           objectType: 'feed',
           content: {
             title: title,
@@ -157,7 +159,8 @@ export default function ShareButton({
                 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                className={`p-2 rounded-lg hover:bg-white/10 transition-colors ${!isKakaoLoaded ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={!isKakaoLoaded}
               >
                 <div className="w-5 h-5 bg-yellow-400 rounded flex items-center justify-center text-xs font-bold text-black">
                   K
@@ -207,9 +210,3 @@ export default function ShareButton({
   );
 }
 
-// 카카오 SDK 타입 선언
-declare global {
-  interface Window {
-    Kakao: any;
-  }
-}
