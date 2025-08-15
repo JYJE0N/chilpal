@@ -232,33 +232,47 @@ function generateYesNoInterpretation(
   cards: DrawnCard[],
   question: string
 ): string {
-  const [positiveReason, answer, negativeReason] = cards;
-  
-  // 답변 결정 로직
-  const isYes = determineYesNo(answer);
-  const strength = calculateAnswerStrength(cards);
+  const currentSituation = cards[0];
+  const choiceResult = cards[1];
+  const considerPoint = cards[2];
+  const bestPath = cards[3];
 
-  let interpretation = `🎯 예/아니오 리딩 - "${question}"\n\n`;
+  if (!currentSituation || !bestPath) {
+    return generateBasicInterpretation(cards.filter(card => card), question);
+  }
 
-  interpretation += `📊 답변: ${isYes ? '✅ 예 (YES)' : '❌ 아니오 (NO)'}\n`;
-  interpretation += `강도: ${strength}\n\n`;
+  let interpretation = `🎯 결정 도움 리딩 - "${question}"\n\n`;
 
-  interpretation += `💚 긍정적 측면\n`;
-  interpretation += `${positiveReason.name}는 ${positiveReason.current_keywords.join(', ')}의 긍정적 요소를 보여줍니다.\n`;
-  interpretation += `${positiveReason.current_meaning}\n\n`;
+  interpretation += `📍 현재 상황\n`;
+  interpretation += `${currentSituation.name}가 보여주는 것처럼, 지금 당신은 ${currentSituation.current_keywords?.join(', ') || '복합적인'} 상황에 있습니다.\n`;
+  interpretation += `${currentSituation.current_meaning}\n\n`;
 
-  interpretation += `🎯 핵심 답변\n`;
-  interpretation += `${answer.name}가 중심 카드로 나타났습니다.\n`;
-  interpretation += `${answer.current_meaning}\n\n`;
+  if (choiceResult) {
+    interpretation += `🔮 선택의 결과\n`;
+    interpretation += `${choiceResult.name}는 이 결정이 ${choiceResult.current_keywords?.join(', ') || '다양한 변화'}를 가져올 것을 암시합니다.\n`;
+    interpretation += `${choiceResult.current_meaning}\n\n`;
+  }
 
-  interpretation += `💔 부정적 측면\n`;
-  interpretation += `${negativeReason.name}는 ${negativeReason.current_keywords.join(', ')}의 주의할 점을 알려줍니다.\n`;
-  interpretation += `${negativeReason.current_meaning}\n\n`;
+  if (considerPoint) {
+    interpretation += `⚠️ 고려해야 할 점\n`;
+    interpretation += `${considerPoint.name}가 알려주는 것처럼, ${considerPoint.current_keywords?.join(', ') || '신중한 접근'}을 놓치지 말아야 합니다.\n`;
+    interpretation += `${considerPoint.current_meaning}\n\n`;
+  }
 
+  interpretation += `✨ 최선의 길\n`;
+  interpretation += `${bestPath.name}가 당신에게 가장 좋은 방향을 제시합니다.\n`;
+  interpretation += `${bestPath.current_meaning}\n\n`;
+
+  // 종합적인 조언
   interpretation += `💡 종합 조언\n`;
-  interpretation += isYes 
-    ? `답은 "예"입니다. 하지만 ${negativeReason.current_keywords[0]}에 주의하면서 진행하세요.`
-    : `답은 "아니오"입니다. ${positiveReason.current_keywords[0]}의 장점이 있지만, 지금은 때가 아닙니다.`;
+  interpretation += `현재 상황을 고려할 때, ${bestPath.current_keywords?.join(', ') || '신중함과 지혜'}의 접근이 필요합니다. `;
+  
+  if (choiceResult && considerPoint) {
+    interpretation += `${choiceResult.current_keywords?.[0] || '긍정적 변화'}의 가능성이 있지만, `;
+    interpretation += `${considerPoint.current_keywords?.[0] || '주의할 점'}을 간과하지 마세요. `;
+  }
+  
+  interpretation += `당신의 직감을 믿되, 신중하게 결정하시기 바랍니다.`;
 
   return interpretation;
 }

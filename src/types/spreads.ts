@@ -129,16 +129,17 @@ export const SPREADS: SpreadDefinition[] = [
   },
   {
     id: 'yes-no',
-    name: '예/아니오',
-    description: '명확한 답변이 필요한 질문에 특화',
-    cardCount: 3,
+    name: '결정 도움',
+    description: '어려운 선택을 위한 명확한 가이드',
+    cardCount: 4,
     category: 'simple',
-    estimatedTime: '2-3분',
-    recommendedFor: ['결정이 필요한 상황', '선택의 기로', '명확한 답변'],
+    estimatedTime: '5-7분',
+    recommendedFor: ['중요한 결정', '선택의 고민', '방향성 확인'],
     positions: [
-      { id: 1, name: '예의 이유', description: '긍정적인 측면', x: 25, y: 50 },
-      { id: 2, name: '답변', description: '최종 답변', x: 50, y: 50 },
-      { id: 3, name: '아니오의 이유', description: '부정적인 측면', x: 75, y: 50 }
+      { id: 1, name: '현재 상황', description: '지금 당신이 처한 상황', x: 25, y: 30 },
+      { id: 2, name: '선택의 결과', description: '이 결정이 가져올 결과', x: 75, y: 30 },
+      { id: 3, name: '고려할 점', description: '놓치지 말아야 할 중요한 요소', x: 25, y: 70 },
+      { id: 4, name: '최선의 길', description: '당신에게 가장 좋은 방향', x: 75, y: 70 }
     ]
   }
 ];
@@ -339,19 +340,24 @@ export const INTERPRETATION_GUIDES: Record<SpreadType, InterpretationGuide> = {
     spreadType: 'yes-no',
     positionMeanings: {
       1: {
-        focus: '긍정 요인',
-        questions: ['왜 "예"라고 해야 하는가?'],
-        relationToOthers: [2]
+        focus: '현재 상황 파악',
+        questions: ['지금 내가 처한 상황은 무엇인가?', '어떤 배경에서 이 결정을 내려야 하는가?'],
+        relationToOthers: [2, 3]
       },
       2: {
-        focus: '최종 답변',
-        questions: ['답은 무엇인가?'],
-        relationToOthers: [1, 3]
+        focus: '결정의 결과',
+        questions: ['이 선택을 하면 어떤 일이 일어날까?', '기대할 수 있는 결과는?'],
+        relationToOthers: [1, 4]
       },
       3: {
-        focus: '부정 요인',
-        questions: ['왜 "아니오"라고 해야 하는가?'],
-        relationToOthers: [2]
+        focus: '주의할 점',
+        questions: ['어떤 점을 조심해야 하는가?', '놓치면 안 되는 요소는?'],
+        relationToOthers: [1, 4]
+      },
+      4: {
+        focus: '최선의 방향',
+        questions: ['어떤 길이 나에게 가장 좋을까?', '현명한 선택은 무엇인가?'],
+        relationToOthers: [2, 3]
       }
     }
   }

@@ -35,7 +35,7 @@ const getSpreadIcon = (spreadId: string) => {
     case 'career-path':
       return <Briefcase className="w-6 h-6 text-white" />;
     case 'yes-no':
-      return <HelpCircle className="w-6 h-6 text-white" />;
+      return <Target className="w-6 h-6 text-white" />;
     default:
       return <Target className="w-6 h-6 text-white" />;
   }
