@@ -96,6 +96,16 @@ export default function RootLayout({
         <meta name="msapplication-navbutton-color" content="#2d1953" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        
+        {/* 카카오 SDK */}
+        <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
+              Kakao.init('${process.env.NEXT_PUBLIC_KAKAO_APP_KEY || 'your-kakao-app-key'}');
+            }
+          `
+        }} />
       </head>
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}

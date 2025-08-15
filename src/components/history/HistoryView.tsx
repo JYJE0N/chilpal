@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import ShareButton from "@/components/share/ShareButton";
 import {
   BookOpen,
   Sparkles,
@@ -490,19 +491,29 @@ export default function HistoryView() {
 
                   {/* 하단 버튼 - 고정 */}
                   <div className="p-4 md:p-6 border-t border-gray-200/50 bg-white/50 backdrop-blur-sm">
-                    <div className="flex justify-end gap-3">
-                      <button
-                        onClick={() => deleteReading(selectedReading._id)}
-                        className="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all font-medium text-sm"
-                      >
-                        삭제
-                      </button>
-                      <button
-                        onClick={() => setSelectedReading(null)}
-                        className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition-all font-medium text-sm"
-                      >
-                        닫기
-                      </button>
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                      {/* 공유 버튼 */}
+                      <ShareButton
+                        title={`칠팔 타로 - ${selectedReading.question}`}
+                        text={`"${selectedReading.question}"에 대한 과거 타로 리딩 결과입니다.`}
+                        hashtags={['타로', '타로기록', '운세', '칠팔타로']}
+                      />
+                      
+                      {/* 액션 버튼들 */}
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => deleteReading(selectedReading._id)}
+                          className="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                          삭제
+                        </button>
+                        <button
+                          onClick={() => setSelectedReading(null)}
+                          className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                          닫기
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

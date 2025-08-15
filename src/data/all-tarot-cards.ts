@@ -46,11 +46,11 @@ export const drawCardWithPosition = (card: TarotCard): DrawnCard => {
       ? card.reversed_meaning || card.upright_meaning
       : card.upright_meaning,
     current_interpretation: isReversed
-      ? card.reversed_interpretation || card.upright_interpretation
-      : card.upright_interpretation,
+      ? card.reversed_interpretation || card.upright_interpretation || ''
+      : card.upright_interpretation || '',
     current_keywords: isReversed
-      ? card.reversed_keywords || card.upright_keywords
-      : card.upright_keywords,
+      ? card.reversed_keywords || card.upright_keywords || []
+      : card.upright_keywords || [],
   };
 };
 

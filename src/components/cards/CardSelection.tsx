@@ -8,6 +8,7 @@ import { SpreadType, SPREADS } from "@/types/spreads";
 import { CARD_BACK_BLUR_DATA_URL, getCardBlurDataUrl } from "@/lib/image-utils";
 import { useToast } from "@/components/ui/Toast";
 import { useAsync } from "@/hooks/useAsync";
+import ShareButton from "@/components/share/ShareButton";
 import {
   Moon,
   Sparkles,
@@ -138,14 +139,46 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
 
     setTimeout(() => {
       const drawnCard = drawCardWithPosition(card);
-      setSelectedCards((prev) => [...prev, drawnCard]);
+      setSelectedCards((prev) => {
+        const updatedCards = [...prev, drawnCard];
+        
+        // 1카드 스프레드는 즉시 결과 표시
+        const selectedSpread = SPREADS.find((s) => s.id === spreadType);
+        const maxCards = selectedSpread?.cardCount || 1;
+        if (maxCards === 1 && updatedCards.length === 1) {
+          setTimeout(() => {
+            // updatedCards를 직접 사용하여 해석 생성
+            setPhase("result");
+            if (onComplete) {
+              onComplete(updatedCards);
+            }
 
-      // 1카드 스프레드는 즉시 결과 표시
-      const selectedSpread = SPREADS.find((s) => s.id === spreadType);
-      const maxCards = selectedSpread?.cardCount || 1;
-      if (maxCards === 1) {
-        setTimeout(() => completeReading(), 1000);
-      }
+            // 리딩 저장 (비동기 처리)
+            const interpretation = generateSpreadInterpretation(
+              spreadType,
+              updatedCards,
+              question,
+              classifyQuestion(question)
+            );
+
+            const readingData = {
+              question,
+              spreadType,
+              cards: updatedCards,
+              interpretation,
+              questionType: classifyQuestion(question),
+            };
+
+            // 백그라운드에서 저장
+            saveReading(readingData);
+
+            // 결과 영역이 보이도록 스크롤
+            setTimeout(scrollToTop, 200);
+          }, 1000);
+        }
+        
+        return updatedCards;
+      });
     }, 500);
   };
 
@@ -834,12 +867,21 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                 )}
               </motion.div>
 
-              <div className="text-center mt-8">
+              {/* 공유 및 액션 버튼 */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+                {/* 공유 버튼 */}
+                <ShareButton
+                  title={`칠팔 타로 - ${question}`}
+                  text={`"${question}"에 대한 타로 리딩 결과를 확인했습니다!`}
+                  hashtags={['타로', '타로카드', '운세', '칠팔타로']}
+                />
+                
+                {/* 새 질문 버튼 */}
                 <motion.button
                   onClick={resetReading}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-10 py-4 glass-button text-white font-bold rounded-full transition-all text-lg"
+                  className="px-8 py-3 glass-button text-white font-bold rounded-full transition-all"
                 >
                   새로운 질문하기
                 </motion.button>

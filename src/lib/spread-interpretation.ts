@@ -8,6 +8,11 @@ export function generateSpreadInterpretation(
   question: string,
   questionType: string
 ): string {
+  // 카드 배열이 비어있는 경우 처리
+  if (!cards || cards.length === 0) {
+    return `🔮 타로 리딩 - "${question}"\n\n카드를 선택해주세요.`;
+  }
+  
   const guide = INTERPRETATION_GUIDES[spreadType];
   
   switch (spreadType) {
@@ -305,16 +310,23 @@ function generateThreeCardInterpretation(
 
 // 1카드 해석 (기존)
 function generateOneCardInterpretation(
-  card: DrawnCard,
+  card: DrawnCard | undefined,
   question: string,
   questionType: string
 ): string {
+  // 카드가 없을 경우 기본 메시지 반환
+  if (!card) {
+    return `🎴 원카드 리딩 - "${question}"\n\n카드를 선택해주세요.`;
+  }
+  
   let interpretation = `🎴 원카드 리딩 - "${question}"\n\n`;
   
   interpretation += `${card.name}${card.is_reversed ? ' (역방향)' : ''}\n\n`;
-  interpretation += `${card.current_meaning}\n\n`;
+  interpretation += `${card.current_meaning || '해석을 준비중입니다.'}\n\n`;
   
-  interpretation += `💡 핵심 키워드: ${card.current_keywords.join(', ')}\n\n`;
+  if (card.current_keywords && card.current_keywords.length > 0) {
+    interpretation += `💡 핵심 키워드: ${card.current_keywords.join(', ')}\n\n`;
+  }
   
   interpretation += `✨ 조언: `;
   interpretation += getCardAdvice(card, questionType);
@@ -366,13 +378,13 @@ function getOverallTheme(cards: DrawnCard[]): string {
 
 function generateRelationshipAdvice(cards: DrawnCard[]): string {
   const hasConflict = cards.some(c => 
-    c.current_keywords.some(k => 
+    c.current_keywords?.some(k => 
       k.includes('갈등') || k.includes('도전') || k.includes('어려움')
     )
   );
   
   const hasLove = cards.some(c => 
-    c.current_keywords.some(k => 
+    c.current_keywords?.some(k => 
       k.includes('사랑') || k.includes('연결') || k.includes('조화')
     )
   );
@@ -389,7 +401,7 @@ function generateRelationshipAdvice(cards: DrawnCard[]): string {
 }
 
 function generateObstacleAdvice(obstacle: DrawnCard): string {
-  const keywords = obstacle.current_keywords;
+  const keywords = obstacle.current_keywords || [];
   
   if (keywords.some(k => k.includes('두려움'))) {
     return '두려움을 극복할 용기';
@@ -420,7 +432,7 @@ function getLoveAdvice(cards: DrawnCard[]): string {
 }
 
 function getCareerAdvice(cards: DrawnCard[]): string {
-  const themes = cards.flatMap(c => c.current_keywords);
+  const themes = cards.flatMap(c => c.current_keywords || []);
   
   if (themes.some(t => t.includes('성공') || t.includes('성취'))) {
     return '목표 달성의 기회가 다가오고 있으니 집중력을 유지하는 것';
@@ -433,7 +445,10 @@ function getCareerAdvice(cards: DrawnCard[]): string {
   return '현재 위치에서 최선을 다하며 기회를 준비하는 것';
 }
 
-function determineYesNo(card: DrawnCard): boolean {
+function determineYesNo(card: DrawnCard | undefined): boolean {
+  // 카드가 없으면 중립
+  if (!card) return false;
+  
   // 긍정적인 카드들
   const positiveCards = [
     'The Sun', 'The Star', 'The World', 'Ten of Cups', 
@@ -458,12 +473,13 @@ function determineYesNo(card: DrawnCard): boolean {
   }
   
   // 중립 카드는 키워드로 판단
-  const positiveKeywords = card.current_keywords.filter(k => 
+  const keywords = card.current_keywords || [];
+  const positiveKeywords = keywords.filter(k => 
     k.includes('성공') || k.includes('기회') || k.includes('성장') || 
     k.includes('사랑') || k.includes('행복')
   ).length;
   
-  const negativeKeywords = card.current_keywords.filter(k => 
+  const negativeKeywords = keywords.filter(k => 
     k.includes('도전') || k.includes('어려움') || k.includes('종료') || 
     k.includes('갈등') || k.includes('두려움')
   ).length;
@@ -487,8 +503,13 @@ function calculateAnswerStrength(cards: DrawnCard[]): string {
   return '⚠️⚠️ 매우 약함';
 }
 
-function getCardAdvice(card: DrawnCard, questionType: string): string {
-  const cardName = card.name.toLowerCase();
+function getCardAdvice(card: DrawnCard | undefined, questionType: string): string {
+  // 카드가 없는 경우 기본 조언 반환
+  if (!card) {
+    return '카드를 통해 답을 찾아보세요.';
+  }
+  
+  const cardName = card.name?.toLowerCase() || '';
   const isReversed = card.is_reversed;
   
   // 질문 유형별 조언
