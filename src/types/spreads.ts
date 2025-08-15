@@ -38,7 +38,7 @@ export const SPREADS: SpreadDefinition[] = [
     cardCount: 1,
     category: "simple",
     estimatedTime: "1분",
-    recommendedFor: ["오늘의 운세", "간단한 예/아니오 질문", "즉각적인 조언"],
+    recommendedFor: ["오늘의 운세", "Yes or No", "간단명료"],
     positions: [
       { id: 1, name: "답변", description: "질문에 대한 직접적인 답변" },
     ],
@@ -50,7 +50,7 @@ export const SPREADS: SpreadDefinition[] = [
     cardCount: 3,
     category: "simple",
     estimatedTime: "3-5분",
-    recommendedFor: ["상황의 전개 과정", "원인과 결과", "시간적 흐름"],
+    recommendedFor: ["과정", "원인과 결과", "시간적 흐름"],
     positions: [
       {
         id: 1,
@@ -72,15 +72,11 @@ export const SPREADS: SpreadDefinition[] = [
   {
     id: "celtic-cross",
     name: "켈틱 크로스",
-    description: "가장 전통적이고 종합적인 스프레드",
+    description: "전통적이고 종합적인 스프레드",
     cardCount: 10,
     category: "advanced",
     estimatedTime: "15-20분",
-    recommendedFor: [
-      "복잡한 상황 분석",
-      "인생의 중요한 결정",
-      "깊이 있는 통찰",
-    ],
+    recommendedFor: ["복잡한 고민", "중요한 결정", "깊은 통찰"],
     positions: [
       {
         id: 1,
@@ -91,7 +87,7 @@ export const SPREADS: SpreadDefinition[] = [
       },
       {
         id: 2,
-        name: "도전/십자가",
+        name: "도전 과제",
         description: "극복해야 할 도전이나 영향",
         x: 50,
         y: 50,
@@ -150,8 +146,8 @@ export const SPREADS: SpreadDefinition[] = [
   },
   {
     id: "relationship",
-    name: "관계 스프레드",
-    description: "두 사람 사이의 관계와 역학을 탐구",
+    name: "관계",
+    description: "사람 사이의 관계와 역학을 탐구",
     cardCount: 6,
     category: "intermediate",
     estimatedTime: "10-12분",
@@ -203,12 +199,12 @@ export const SPREADS: SpreadDefinition[] = [
   },
   {
     id: "love-spread",
-    name: "연애 스프레드",
+    name: "연애",
     description: "사랑과 로맨스에 특화된 스프레드",
     cardCount: 5,
     category: "intermediate",
     estimatedTime: "8-10분",
-    recommendedFor: ["새로운 연애", "짝사랑", "연애 고민", "결혼 고민"],
+    recommendedFor: ["연애", "짝사랑", "재회", "결혼"],
     positions: [
       {
         id: 1,
@@ -254,7 +250,7 @@ export const SPREADS: SpreadDefinition[] = [
     cardCount: 5,
     category: "intermediate",
     estimatedTime: "8-10분",
-    recommendedFor: ["이직 고민", "진로 선택", "승진 가능성", "사업 시작"],
+    recommendedFor: ["이직", "진로", "승진", "사업"],
     positions: [
       {
         id: 1,
@@ -276,7 +272,7 @@ export const SPREADS: SpreadDefinition[] = [
     cardCount: 4,
     category: "simple",
     estimatedTime: "5-7분",
-    recommendedFor: ["중요한 결정", "선택의 고민", "방향성 확인"],
+    recommendedFor: ["양자택일", "선택", "고민"],
     positions: [
       {
         id: 1,

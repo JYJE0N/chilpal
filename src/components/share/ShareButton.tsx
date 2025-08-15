@@ -98,14 +98,14 @@ export default function ShareButton({
         onClick={handleNativeShare}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="flex items-center gap-2 px-4 py-2 rounded-full text-white transition-all"
+        className="flex items-center gap-2 px-8 py-3 rounded-full text-white font-bold transition-all"
         style={{
           background: `linear-gradient(135deg, ${designTokens.colors.primary[500]}, ${designTokens.colors.accent[500]})`,
           boxShadow: designTokens.shadows.glow.sm,
         }}
       >
         <Share2 className="w-4 h-4" />
-        <span className="text-sm font-medium">공유하기</span>
+        <span className="text-base">공유하기</span>
       </motion.button>
 
       {/* 데스크톱 공유 옵션 */}
