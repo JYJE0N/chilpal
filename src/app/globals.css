@@ -36,16 +36,48 @@
 
 /* 모바일 브라우저 주소창 대응 */
 html {
-  /* 삼성 브라우저 강제 다크모드 차단 */
+  /* 삼성 브라우저 강제 다크모드 완전 차단 */
   background-color: rgb(45, 25, 83) !important;
   filter: none !important;
   -webkit-filter: none !important;
+  color-scheme: only light !important;
+  forced-color-adjust: none !important;
 }
 
-html * {
-  /* 모든 요소에 필터 차단 */
+body {
+  /* body도 동일하게 설정 */
+  background-color: rgb(45, 25, 83) !important;
   filter: none !important;
   -webkit-filter: none !important;
+  color-scheme: only light !important;
+  forced-color-adjust: none !important;
+}
+
+html *, body *, * {
+  /* 모든 요소에 필터 및 다크모드 차단 */
+  filter: none !important;
+  -webkit-filter: none !important;
+  color-scheme: only light !important;
+  forced-color-adjust: none !important;
+}
+
+/* 삼성 인터넷 브라우저 특정 대응 */
+@supports (-webkit-appearance: none) {
+  html, body {
+    filter: none !important;
+    -webkit-filter: none !important;
+    color-scheme: only light !important;
+  }
+}
+
+/* 웹킷 기반 브라우저 대응 */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  html, body, * {
+    filter: none !important;
+    -webkit-filter: none !important;
+    color-scheme: only light !important;
+    forced-color-adjust: none !important;
+  }
 }
 
 body {
@@ -60,13 +92,50 @@ body {
   /* 모바일 브라우저 주소창 대응 */
   min-height: 100vh;
   min-height: calc(var(--vh, 1vh) * 100);
-  background-attachment: fixed;
   position: relative;
   overflow-x: hidden;
   
-  /* iOS 바운스 스크롤 방지 */
+  /* 모바일 스크롤 최적화 */
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
+  
+  /* 하드웨어 가속 및 렌더링 최적화 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  
+  /* 모바일에서 background-attachment: fixed 제거 */
+  background-attachment: scroll;
+}
+
+/* 데스크톱에서만 fixed 배경 */
+@media (min-width: 768px) and (hover: hover) {
+  body {
+    background-attachment: fixed;
+  }
+}
+
+/* 모바일 스크롤 블러 잔상 방지 */
+@media (max-width: 767px) {
+  * {
+    /* 모든 요소에서 블러 효과 완전 제거 */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+  }
+  
+  /* 모바일에서 스크롤 성능 최적화 */
+  *,
+  *::before,
+  *::after {
+    will-change: auto !important;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
 }
 
 /* 신비로운 밤하늘 효과를 위한 유틸리티 클래스 */
@@ -135,8 +204,14 @@ body {
       rgba(71, 85, 162, 0.7) 70%,
       rgba(68, 41, 139, 0.9) 100%
     );
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(186, 133, 196, 0.2);
+  }
+
+  /* 데스크톱에서만 블러 효과 활성화 */
+  @media (min-width: 768px) and (hover: hover) {
+    .mystic-bg {
+      backdrop-filter: blur(10px);
+    }
   }
 
   /* 신비로운 버튼 스타일 */
@@ -257,27 +332,45 @@ body {
 
   /* 네비게이션 전용 글래스모피즘 */
   .glass-nav {
-    background: rgba(45, 25, 83, 0.1);
-    backdrop-filter: blur(8px);
+    background: rgba(45, 25, 83, 0.8);
     border-bottom: 1px solid rgba(186, 133, 196, 0.1);
     transition: all 0.3s ease;
   }
 
   .glass-nav-scrolled {
-    background: rgba(45, 25, 83, 0.3);
-    backdrop-filter: blur(20px);
+    background: rgba(45, 25, 83, 0.9);
     border-bottom: 1px solid rgba(186, 133, 196, 0.3);
     box-shadow: 
       0 4px 32px rgba(45, 25, 83, 0.2),
       inset 0 1px 0 rgba(186, 133, 196, 0.1);
   }
 
+  /* 데스크톱에서만 네비게이션 블러 효과 */
+  @media (min-width: 768px) and (hover: hover) {
+    .glass-nav {
+      background: rgba(45, 25, 83, 0.1);
+      backdrop-filter: blur(8px);
+    }
+
+    .glass-nav-scrolled {
+      background: rgba(45, 25, 83, 0.3);
+      backdrop-filter: blur(20px);
+    }
+  }
+
   /* 네비게이션 링크 호버 효과 */
   .nav-link-hover {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
+  }
+
+  /* 데스크톱에서만 링크 호버 블러 효과 */
+  @media (min-width: 768px) and (hover: hover) {
+    .nav-link-hover {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
   }
 
   .nav-link-hover:hover {
