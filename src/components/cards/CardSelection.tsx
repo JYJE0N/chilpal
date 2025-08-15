@@ -10,7 +10,6 @@ import { useAsync } from "@/hooks/useAsync";
 import {
   Moon,
   Sparkles,
-  Dot,
   AtomIcon,
   BadgeCheckIcon,
   StarIcon,
@@ -684,16 +683,16 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           </div>
                         )}
                       </div>
-                      <h5 className="font-bold text-black-900 mb-3 text-lg">
+                      <h5 className="font-bold text-purple-900 dark:text-purple-100 mb-3 text-lg">
                         {card.name}
                       </h5>
-                      <p className="text-sm text-black-700 mb-4 leading-relaxed text-justify-center tracking-normal">
+                      <p className="text-sm text-purple-700 dark:text-purple-200 mb-4 leading-relaxed text-justify tracking-normal">
                         {card.current_meaning}
                       </p>
 
                       {/* 위치별 상세 해석 */}
-                      <div className="bg-white/50 p-4 rounded-lg mt-4 flex-grow backdrop-blur-sm border border-white/30">
-                        <p className="text-sm text-purple-900 leading-relaxed font-medium text-justify tracking-normal">
+                      <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg mt-4 flex-grow backdrop-blur-sm border border-white/30 dark:border-gray-600/30">
+                        <p className="text-sm text-purple-900 dark:text-purple-100 leading-relaxed font-medium text-justify tracking-normal">
                           {spreadType === "one-card"
                             ? `이 카드는 "${question}"에 대한 직접적인 답변을 제공합니다. ${card.current_interpretation}`
                             : generatePositionInterpretation(
@@ -714,7 +713,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
                           .map((keyword, idx) => (
                             <span
                               key={idx}
-                              className="text-xs bg-gradient-to-r from-purple-600 to-purple-800 text-white px-3 py-1.5 rounded-full font-medium backdrop-blur-sm shadow-lg border border-purple-400/30"
+                              className="text-xs bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-600 dark:to-pink-600 text-white px-3 py-1.5 rounded-full font-medium backdrop-blur-sm shadow-lg border border-purple-400/30 dark:border-purple-300/30"
                             >
                               {keyword}
                             </span>
