@@ -70,6 +70,32 @@ html *, body *, * {
   }
 }
 
+/* 삼성 브라우저 완전 차단 */
+html[data-color-scheme="light"],
+html[data-theme="light"] {
+  background-color: rgb(45, 25, 83) !important;
+  color-scheme: only light !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* 더 구체적인 삼성 브라우저 타겟팅 */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  @supports (-webkit-touch-callout: none) {
+    html, body, * {
+      filter: none !important;
+      -webkit-filter: none !important;
+      color-scheme: only light !important;
+      forced-color-adjust: none !important;
+      background-color: inherit !important;
+    }
+    
+    html {
+      background-color: rgb(45, 25, 83) !important;
+    }
+  }
+}
+
 /* 웹킷 기반 브라우저 대응 */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   html, body, * {
@@ -332,17 +358,22 @@ body {
 
   /* 네비게이션 전용 글래스모피즘 */
   .glass-nav {
-    background: rgba(45, 25, 83, 0.8);
-    border-bottom: 1px solid rgba(186, 133, 196, 0.1);
+    background: rgba(45, 25, 83, 0.95);
+    border-bottom: 1px solid rgba(186, 133, 196, 0.2);
     transition: all 0.3s ease;
+    /* 모바일 성능 최적화 */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .glass-nav-scrolled {
-    background: rgba(45, 25, 83, 0.9);
-    border-bottom: 1px solid rgba(186, 133, 196, 0.3);
+    background: rgba(45, 25, 83, 0.98);
+    border-bottom: 1px solid rgba(186, 133, 196, 0.4);
     box-shadow: 
-      0 4px 32px rgba(45, 25, 83, 0.2),
-      inset 0 1px 0 rgba(186, 133, 196, 0.1);
+      0 4px 16px rgba(45, 25, 83, 0.3),
+      inset 0 1px 0 rgba(186, 133, 196, 0.15);
   }
 
   /* 데스크톱에서만 네비게이션 블러 효과 */

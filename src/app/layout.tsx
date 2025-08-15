@@ -115,36 +115,67 @@ export default function RootLayout({
             }
           `
         }} />
-        {/* 런타임 다크모드 방지 스크립트 */}
+        {/* 삼성 브라우저 완전 차단 스크립트 */}
         <script dangerouslySetInnerHTML={{
           __html: `
             (function() {
-              // 삼성 브라우저 다크모드 런타임 차단
-              function preventDarkMode() {
-                if (document.documentElement) {
-                  document.documentElement.style.setProperty('color-scheme', 'only light', 'important');
-                  document.documentElement.style.setProperty('filter', 'none', 'important');
-                  document.documentElement.style.setProperty('-webkit-filter', 'none', 'important');
-                  document.documentElement.style.setProperty('forced-color-adjust', 'none', 'important');
-                }
-                if (document.body) {
-                  document.body.style.setProperty('color-scheme', 'only light', 'important');
-                  document.body.style.setProperty('filter', 'none', 'important');
-                  document.body.style.setProperty('-webkit-filter', 'none', 'important');
-                  document.body.style.setProperty('forced-color-adjust', 'none', 'important');
+              // 삼성 인터넷 브라우저 감지
+              const isSamsungBrowser = /SamsungBrowser/i.test(navigator.userAgent);
+              
+              // 다크모드 완전 차단 함수
+              function forceLightMode() {
+                const elements = [document.documentElement, document.body];
+                elements.forEach(el => {
+                  if (el) {
+                    el.style.setProperty('color-scheme', 'only light', 'important');
+                    el.style.setProperty('filter', 'none', 'important');
+                    el.style.setProperty('-webkit-filter', 'none', 'important');
+                    el.style.setProperty('forced-color-adjust', 'none', 'important');
+                    el.style.setProperty('background-color', 'rgb(45, 25, 83)', 'important');
+                    
+                    // 삼성 브라우저 전용 추가 설정
+                    if (isSamsungBrowser) {
+                      el.setAttribute('data-color-scheme', 'light');
+                      el.setAttribute('data-theme', 'light');
+                      el.style.setProperty('-webkit-color-scheme', 'only light', 'important');
+                      el.style.setProperty('color-scheme', 'light only', 'important');
+                    }
+                  }
+                });
+                
+                // 모든 자식 요소에도 적용 (삼성 브라우저 전용)
+                if (isSamsungBrowser) {
+                  document.querySelectorAll('*').forEach(el => {
+                    el.style.setProperty('filter', 'none', 'important');
+                    el.style.setProperty('-webkit-filter', 'none', 'important');
+                    el.style.setProperty('color-scheme', 'only light', 'important');
+                  });
                 }
               }
               
               // 즉시 실행
-              preventDarkMode();
+              forceLightMode();
               
               // DOM 로드 후 재실행
               if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', preventDarkMode);
+                document.addEventListener('DOMContentLoaded', forceLightMode);
+              } else {
+                forceLightMode();
               }
               
-              // 주기적 체크 (삼성 브라우저가 나중에 적용할 수 있으므로)
-              setInterval(preventDarkMode, 1000);
+              // 삼성 브라우저에서는 더 자주 체크
+              const interval = isSamsungBrowser ? 500 : 2000;
+              setInterval(forceLightMode, interval);
+              
+              // MutationObserver로 DOM 변경 감지
+              if (isSamsungBrowser && window.MutationObserver) {
+                const observer = new MutationObserver(forceLightMode);
+                observer.observe(document.documentElement, {
+                  attributes: true,
+                  attributeFilter: ['style', 'class'],
+                  subtree: true
+                });
+              }
             })();
           `
         }} />
