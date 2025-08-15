@@ -244,7 +244,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
   };
 
   return (
-    <div className="min-h-screen p-4 pt-20 relative">
+    <div className="min-h-screen p-4 relative">
       {/* 스크롤 진행 표시기 */}
       <div className="fixed top-0 left-0 w-full h-1 bg-white/10 z-50">
         <motion.div
