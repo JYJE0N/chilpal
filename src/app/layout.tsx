@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
+import MobileViewportProvider from "@/components/providers/MobileViewportProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -84,18 +85,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="color-scheme-normal">
+    <html lang="ko">
       <head>
-        <meta name="color-scheme" content="light dark" />
-        <meta name="supported-color-schemes" content="light dark" />
-        <meta name="theme-color" content="#1a1a2e" />
-        <meta name="msapplication-navbutton-color" content="#1a1a2e" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        {/* 삼성 브라우저 다크모드 차단 */}
+        <meta name="color-scheme" content="only light" />
+        <meta name="supported-color-schemes" content="light" />
+        {/* 모바일 브라우저 주소창 대응 */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, minimum-scale=1, maximum-scale=5" />
+        <meta name="theme-color" content="#2d1953" />
+        <meta name="msapplication-navbutton-color" content="#2d1953" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body
-        className={`${inter.variable} ${robotoMono.variable} antialiased pt-16`}
-        data-color-scheme="normal"
+        className={`${inter.variable} ${robotoMono.variable} antialiased`}
+        suppressHydrationWarning
       >
+        <MobileViewportProvider />
         <ToastProvider>
           {children}
         </ToastProvider>

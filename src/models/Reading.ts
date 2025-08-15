@@ -5,7 +5,7 @@ import { DrawnCard } from '@/types/tarot';
 
 export interface IReading extends Document {
   question: string;
-  spreadType: 'three-card' | 'one-card';
+  spreadType: 'one-card' | 'three-card' | 'celtic-cross' | 'relationship' | 'love-spread' | 'career-path' | 'yes-no';
   cards: DrawnCard[];
   interpretation: string;
   questionType: 'love' | 'career' | 'money' | 'health' | 'general';
@@ -54,16 +54,16 @@ const ReadingSchema = new Schema<IReading>({
   spreadType: {
     type: String,
     required: true,
-    enum: ['three-card', 'one-card']
+    enum: ['one-card', 'three-card', 'celtic-cross', 'relationship', 'love-spread', 'career-path', 'yes-no']
   },
   cards: {
     type: [CardSchema],
     required: true,
     validate: {
       validator: function(cards: DrawnCard[]) {
-        return cards.length >= 1 && cards.length <= 3;
+        return cards.length >= 1 && cards.length <= 10;
       },
-      message: 'Cards array must contain 1-3 cards'
+      message: 'Cards array must contain 1-10 cards'
     }
   },
   interpretation: {

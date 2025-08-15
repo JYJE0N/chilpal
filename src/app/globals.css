@@ -2,18 +2,13 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* 삼성 브라우저 다크모드 강제 변환 방지 */
+/* 모바일 브라우저 호환성 */
 :root {
-  color-scheme: light dark;
-  supported-color-schemes: light dark;
-}
-
-html {
-  color-scheme: normal !important;
-}
-
-html.color-scheme-normal {
-  filter: none !important;
+  /* 삼성 브라우저 다크모드 차단 */
+  color-scheme: only light;
+  
+  /* 동적 뷰포트 높이 */
+  --vh: 1vh;
 }
 
 :root {
@@ -39,6 +34,20 @@ html.color-scheme-normal {
   --text-accent: var(--mystic-gold);
 }
 
+/* 모바일 브라우저 주소창 대응 */
+html {
+  /* 삼성 브라우저 강제 다크모드 차단 */
+  background-color: rgb(45, 25, 83) !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+html * {
+  /* 모든 요소에 필터 차단 */
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
 body {
   color: rgb(var(--text-primary));
   background: linear-gradient(
@@ -48,8 +57,16 @@ body {
     rgb(var(--mystic-blue)) 70%,
     rgb(var(--bg-gradient-end)) 100%
   );
+  /* 모바일 브라우저 주소창 대응 */
   min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+  
+  /* iOS 바운스 스크롤 방지 */
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 신비로운 밤하늘 효과를 위한 유틸리티 클래스 */
@@ -160,72 +177,55 @@ body {
     background-clip: text;
   }
 
-  /* 글래스모피즘 스타일 - 모바일 성능 최적화 */
+  /* 글래스모피즘 스타일 - 블러 효과 제거 */
   .glass-card {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 16px;
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      0 8px 32px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    /* 하드웨어 가속 */
     transform: translateZ(0);
-    will-change: transform;
-  }
-  
-  @supports (backdrop-filter: blur(20px)) {
-    .glass-card {
-      backdrop-filter: blur(20px);
-    }
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .glass-card-dark {
-    background: rgba(45, 25, 83, 0.4);
-    border: 1px solid rgba(186, 133, 196, 0.3);
+    background: rgba(45, 25, 83, 0.5);
+    border: 1px solid rgba(186, 133, 196, 0.35);
     border-radius: 16px;
     box-shadow: 
-      0 8px 32px rgba(45, 25, 83, 0.2),
-      inset 0 1px 0 rgba(186, 133, 196, 0.1);
+      0 8px 32px rgba(45, 25, 83, 0.25),
+      inset 0 1px 0 rgba(186, 133, 196, 0.15);
     transform: translateZ(0);
-    will-change: transform;
-  }
-  
-  @supports (backdrop-filter: blur(20px)) {
-    .glass-card-dark {
-      background: rgba(45, 25, 83, 0.2);
-      backdrop-filter: blur(20px);
-    }
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .glass-card-light {
-    background: rgba(255, 255, 255, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     box-shadow: 
-      0 6px 24px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      0 6px 24px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
     transform: translateZ(0);
-    will-change: transform;
-  }
-  
-  @supports (backdrop-filter: blur(15px)) {
-    .glass-card-light {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(15px);
-    }
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .glass-button {
-    background: rgba(186, 133, 196, 0.4);
-    border: 1px solid rgba(186, 133, 196, 0.4);
+    background: rgba(186, 133, 196, 0.35);
+    border: 1px solid rgba(186, 133, 196, 0.45);
     transition: all 0.3s ease;
     transform: translateZ(0);
-  }
-  
-  @supports (backdrop-filter: blur(15px)) {
-    .glass-button {
-      background: rgba(186, 133, 196, 0.3);
-      backdrop-filter: blur(15px);
-    }
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .glass-button:hover {
@@ -238,17 +238,13 @@ body {
   }
 
   .glass-input {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     transition: all 0.3s ease;
     transform: translateZ(0);
-  }
-  
-  @supports (backdrop-filter: blur(10px)) {
-    .glass-input {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-    }
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .glass-input:focus {

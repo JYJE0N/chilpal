@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    if (cards.length < 1 || cards.length > 3) {
+    if (cards.length < 1 || cards.length > 10) {
       return NextResponse.json(
         { success: false, error: 'Invalid number of cards' },
         { status: 400 }
