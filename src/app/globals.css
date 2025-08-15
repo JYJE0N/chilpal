@@ -222,6 +222,70 @@ body::after {
   }
 }
 
+/* 추가 별똥별 애니메이션 */
+@keyframes shooting-star-1 {
+  0% {
+    transform: rotate(45deg) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  15% {
+    transform: rotate(45deg) translateX(calc(100vw + 200px));
+    opacity: 1;
+  }
+  20% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(45deg) translateX(calc(100vw + 200px));
+    opacity: 0;
+  }
+}
+
+@keyframes shooting-star-2 {
+  0% {
+    transform: rotate(35deg) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.8;
+  }
+  18% {
+    transform: rotate(35deg) translateX(calc(100vw + 150px));
+    opacity: 0.8;
+  }
+  23% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(35deg) translateX(calc(100vw + 150px));
+    opacity: 0;
+  }
+}
+
+@keyframes shooting-star-3 {
+  0% {
+    transform: rotate(40deg) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.9;
+  }
+  12% {
+    transform: rotate(40deg) translateX(calc(100vw + 180px));
+    opacity: 0.9;
+  }
+  17% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(40deg) translateX(calc(100vw + 180px));
+    opacity: 0;
+  }
+}
+
 /* 신비로운 밤하늘 효과를 위한 유틸리티 클래스 */
 @layer utilities {
   /* 애니메이션 딜레이 */

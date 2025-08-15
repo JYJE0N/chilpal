@@ -16,8 +16,39 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
-      <div className="text-center space-y-8">
+    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4 relative">
+      {/* 추가 별똥별 애니메이션 */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div 
+          className="absolute w-[200px] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent opacity-0"
+          style={{
+            top: '20%',
+            left: '-200px',
+            transform: 'rotate(45deg)',
+            animation: 'shooting-star-1 15s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className="absolute w-[150px] h-[2px] bg-gradient-to-r from-transparent via-blue-300 to-transparent opacity-0"
+          style={{
+            top: '60%',
+            left: '-150px',
+            transform: 'rotate(35deg)',
+            animation: 'shooting-star-2 18s ease-in-out infinite 5s',
+          }}
+        />
+        <div 
+          className="absolute w-[180px] h-[1px] bg-gradient-to-r from-transparent via-purple-300 to-transparent opacity-0"
+          style={{
+            top: '40%',
+            left: '-180px',
+            transform: 'rotate(40deg)',
+            animation: 'shooting-star-3 12s ease-in-out infinite 8s',
+          }}
+        />
+      </div>
+      
+      <div className="text-center space-y-8 relative z-10">
         <div className="space-y-6">
           <h1 className="text-7xl font-bold text-white drop-shadow-2xl flex items-center justify-center gap-6">
             <div className="flex items-center gap-2">
