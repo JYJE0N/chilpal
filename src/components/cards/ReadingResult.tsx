@@ -205,6 +205,7 @@ interface ReadingResultProps {
   selectedCards: DrawnCard[];
   showTopButton: boolean;
   dispatch: ReadingDispatch;
+  readingId?: string;
 }
 
 export default function ReadingResult({
@@ -212,7 +213,8 @@ export default function ReadingResult({
   spreadType,
   selectedCards,
   showTopButton,
-  dispatch
+  dispatch,
+  readingId
 }: ReadingResultProps) {
   const selectedSpread = SPREADS.find((s) => s.id === spreadType);
 
@@ -273,7 +275,9 @@ export default function ReadingResult({
             title={`${selectedSpread?.name} 타로 리딩 결과`}
             text={`질문: ${question}\n\n${selectedCards.map(card => 
               `${card.name} (${card.position === 'reversed' ? '역방향' : '정방향'})`
-            ).join(', ')}`}
+            ).join(', ')}\n\n칠팔 타로에서 확인한 타로 리딩 결과입니다. 뽑힌 카드들이 전하는 특별한 메시지를 확인해보세요!`}
+            url={readingId ? `${typeof window !== 'undefined' ? window.location.origin : ''}/reading/${readingId}` : undefined}
+            hashtags={['타로', '타로리딩', '운세', '칠팔타로']}
           />
           <button
             onClick={resetReading}

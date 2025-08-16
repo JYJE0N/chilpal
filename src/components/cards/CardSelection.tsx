@@ -98,7 +98,11 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     dispatch({ type: 'SET_LAST_SAVED_READING_ID', payload: readingHash });
 
     try {
-      await saveReading(readingData);
+      const result = await saveReading(readingData);
+      // 저장된 리딩의 ID를 state에 저장
+      if (result && result.data && result.data._id) {
+        dispatch({ type: 'SET_SAVED_READING_ID', payload: result.data._id });
+      }
       // useAsync에서 자동으로 토스트를 띄우므로 여기서는 제거
     } catch (error) {
       console.error('리딩 저장 오류:', error);
@@ -221,6 +225,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
               selectedCards={state.selectedCards}
               showTopButton={state.showTopButton}
               dispatch={dispatch}
+              readingId={state.savedReadingId || undefined}
             />
           </motion.div>
         )}

@@ -23,6 +23,7 @@ export interface ReadingState {
   // 저장 관련
   lastSavedReadingId: string | null;
   isSavingReading: boolean;
+  savedReadingId: string | null;
   
   // Pull to refresh
   isPulling: boolean;
@@ -45,6 +46,7 @@ export type ReadingAction =
   | { type: 'SET_CURRENT_PLACEHOLDER'; payload: string }
   | { type: 'SET_LAST_SAVED_READING_ID'; payload: string | null }
   | { type: 'SET_IS_SAVING_READING'; payload: boolean }
+  | { type: 'SET_SAVED_READING_ID'; payload: string | null }
   | { type: 'SET_PULL_STATE'; payload: { isPulling: boolean; pullDistance: number; isRefreshing: boolean } }
   | { type: 'RESET_READING' };
 
@@ -62,6 +64,7 @@ export const initialReadingState: ReadingState = {
   currentPlaceholder: '',
   lastSavedReadingId: null,
   isSavingReading: false,
+  savedReadingId: null,
   isPulling: false,
   pullDistance: 0,
   isRefreshing: false,
@@ -116,6 +119,9 @@ export function readingReducer(state: ReadingState, action: ReadingAction): Read
       
     case 'SET_IS_SAVING_READING':
       return { ...state, isSavingReading: action.payload };
+      
+    case 'SET_SAVED_READING_ID':
+      return { ...state, savedReadingId: action.payload };
       
     case 'SET_PULL_STATE':
       return { 
