@@ -42,15 +42,15 @@ export const useToast = () => {
 const getToastIcon = (type: ToastType) => {
   switch (type) {
     case 'success':
-      return '✅';
+      return '●';
     case 'error':
-      return '❌';
+      return '●';
     case 'warning':
-      return '⚠️';
+      return '●';
     case 'info':
-      return 'ℹ️';
+      return '●';
     default:
-      return 'ℹ️';
+      return '●';
   }
 };
 
@@ -98,7 +98,7 @@ const ToastItem = React.forwardRef<HTMLDivElement, { toast: Toast; onRemove: (id
         onClick={() => onRemove(toast.id)}
         className="absolute top-3 right-3 dawn-text-muted hover:dawn-text-primary transition-colors p-1 hover:bg-white/10 rounded"
       >
-        ✕
+        ×
       </button>
 
       <div className="flex items-start gap-3 pr-6">
@@ -148,18 +148,36 @@ ToastItem.displayName = 'ToastItem';
 
 // 토스트 컨테이너
 function ToastContainer({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: string) => void }) {
+  const hasToasts = toasts.length > 0;
+
   return (
-    <div className="fixed top-28 right-4 z-[10000] space-y-2">
-      <AnimatePresence mode="popLayout">
-        {toasts.map((toast) => (
-          <ToastItem
-            key={toast.id}
-            toast={toast}
-            onRemove={removeToast}
+    <>
+      {/* 배경 블러 오버레이 */}
+      <AnimatePresence>
+        {hasToasts && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-black/20 backdrop-blur-sm"
+            style={{ backdropFilter: 'blur(4px)' }}
           />
-        ))}
+        )}
       </AnimatePresence>
-    </div>
+
+      {/* 토스트 컨테이너 */}
+      <div className="fixed top-28 right-4 z-[10000] space-y-2">
+        <AnimatePresence mode="popLayout">
+          {toasts.map((toast) => (
+            <ToastItem
+              key={toast.id}
+              toast={toast}
+              onRemove={removeToast}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+    </>
   );
 }
 

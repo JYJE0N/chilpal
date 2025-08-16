@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { 
@@ -13,7 +14,9 @@ import {
   AtomIcon,
   BadgeCheckIcon,
   StarIcon,
-  BookAIcon 
+  BookAIcon,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { DrawnCard } from "@/types/tarot";
 import { SPREADS, SpreadType } from "@/types/spreads";
@@ -51,6 +54,150 @@ const getSuitColor = (suit: string) => {
       return "border-purple-400 shadow-purple-500/30";
   }
 };
+
+// 스프레드별 위치 레이블 가져오기
+const getPositionLabel = (index: number, spreadType: SpreadType): string => {
+  switch (spreadType) {
+    case "three-card":
+      return ["과거", "현재", "미래"][index] || "";
+    case "one-card":
+      return "답변";
+    case "celtic-cross":
+      return [
+        "현재 상황", 
+        "도전 과제", 
+        "먼 과거", 
+        "가까운 과거", 
+        "가능한 미래", 
+        "가까운 미래", 
+        "당신의 접근", 
+        "외부 영향", 
+        "희망과 두려움", 
+        "최종 결과"
+      ][index] || "";
+    case "love-spread":
+      return ["현재 감정", "상대의 마음", "관계의 장애물", "필요한 것", "연애운"][index] || "";
+    case "career-path":
+      return ["현재 위치", "강점", "약점", "기회", "조언"][index] || "";
+    case "relationship":
+      return ["당신", "상대방", "당신의 감정", "상대의 감정", "관계의 현재", "관계의 미래"][index] || "";
+    case "yes-no":
+      return ["현재 상황", "선택의 결과", "고려할 점", "최선의 길"][index] || "";
+    default:
+      return `카드 ${index + 1}`;
+  }
+};
+
+// 카드 상세정보 토글 컴포넌트
+interface CardDetailToggleProps {
+  card: DrawnCard;
+  index: number;
+  description?: string;
+  spreadType: SpreadType;
+}
+
+function CardDetailToggle({ card, index, description, spreadType }: CardDetailToggleProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const positionLabel = getPositionLabel(index, spreadType);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.6 + index * 0.1 }}
+      className="bg-white/5 rounded-lg border border-white/10 overflow-hidden"
+    >
+      {/* 클릭 가능한 헤더 */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-18 relative rounded-md overflow-hidden border border-gray-600">
+            <Image
+              src={card.image_url}
+              alt={card.name}
+              fill
+              className={`object-cover ${card.position === "reversed" ? "rotate-180" : ""}`}
+              placeholder="blur"
+              blurDataURL={getCardBlurDataUrl(card.suit)}
+              sizes="48px"
+            />
+          </div>
+          <div className="text-left">
+            {positionLabel && spreadType !== "one-card" && (
+              <div className="text-xs font-medium text-purple-300 mb-1">
+                {positionLabel}
+              </div>
+            )}
+            <h5 className="font-semibold text-white">
+              {card.name} ({card.position === 'reversed' ? '역방향' : '정방향'})
+            </h5>
+          </div>
+        </div>
+        {isExpanded ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+      </button>
+
+      {/* 확장 가능한 콘텐츠 */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="border-t border-white/10"
+          >
+            <div className="p-4 space-y-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-shrink-0 mx-auto md:mx-0">
+                  <div className="w-24 h-36 relative rounded-lg overflow-hidden">
+                    <Image
+                      src={card.image_url}
+                      alt={card.name}
+                      fill
+                      className={`object-cover ${card.position === "reversed" ? "rotate-180" : ""}`}
+                      placeholder="blur"
+                      blurDataURL={getCardBlurDataUrl(card.suit)}
+                      sizes="96px"
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex-1 space-y-3">
+                  {description && (
+                    <div>
+                      <h6 className="font-semibold text-white mb-2">디스크립션</h6>
+                      <p className="text-gray-300 text-sm leading-relaxed">
+                        {description}
+                      </p>
+                    </div>
+                  )}
+
+                  {card.current_keywords && card.current_keywords.length > 0 && (
+                    <div>
+                      <h6 className="font-semibold text-white mb-2">키워드</h6>
+                      <div className="flex flex-wrap gap-2">
+                        {card.current_keywords.map((keyword, idx) => (
+                          <span
+                            key={idx}
+                            className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm"
+                          >
+                            {keyword}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
 interface ReadingResultProps {
   question: string;
@@ -267,80 +414,24 @@ export default function ReadingResult({
           );
         })()}
 
-        {/* 개별 카드 상세 정보 */}
+        {/* 개별 카드 상세 정보 (클릭하여 펼치기) */}
         <div>
           <h4 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
             <BookAIcon className="w-5 h-5 text-purple-300" />
             카드 상세 정보
           </h4>
-          <div className="grid gap-6">
+          <div className="grid gap-4">
             {selectedCards.map((card, index) => {
               const description = cardDescriptions[card.name];
               
               return (
-                <motion.div
+                <CardDetailToggle
                   key={`detail-${card.id}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                  className={`rounded-xl p-6 border-2 ${getSuitColor(card.suit)} bg-white/5`}
-                >
-                  <div className="flex flex-col md:flex-row gap-6">
-                    <div className="flex-shrink-0 mx-auto md:mx-0">
-                      <div className="w-32 h-48 relative rounded-lg overflow-hidden">
-                        <Image
-                          src={card.image_url}
-                          alt={card.name}
-                          fill
-                          className="object-cover"
-                          placeholder="blur"
-                          blurDataURL={getCardBlurDataUrl(card.suit)}
-                          sizes="128px"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="flex-1 space-y-4">
-                      <div>
-                        <h5 className="text-xl font-bold text-white mb-2">
-                          {card.name}
-                          <span className="ml-3 text-sm px-3 py-1 rounded-full bg-purple-500/20 text-purple-300">
-                            {card.position === 'reversed' ? '역방향' : '정방향'}
-                          </span>
-                        </h5>
-                        
-                        {description && (
-                          <p className="text-gray-400 text-sm mb-4">
-                            {description}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <h6 className="font-semibold text-white mb-2">현재 의미</h6>
-                        <p className="text-gray-300 leading-relaxed">
-                          {card.current_meaning}
-                        </p>
-                      </div>
-
-                      {card.current_keywords && card.current_keywords.length > 0 && (
-                        <div>
-                          <h6 className="font-semibold text-white mb-2">키워드</h6>
-                          <div className="flex flex-wrap gap-2">
-                            {card.current_keywords.map((keyword, idx) => (
-                              <span
-                                key={idx}
-                                className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm"
-                              >
-                                {keyword}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
+                  card={card}
+                  index={index}
+                  description={description}
+                  spreadType={spreadType}
+                />
               );
             })}
           </div>

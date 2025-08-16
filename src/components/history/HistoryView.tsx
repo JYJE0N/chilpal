@@ -190,6 +190,19 @@ export default function HistoryView() {
         return ["과거", "현재", "미래"][index] || `카드 ${index + 1}`;
       case "one-card":
         return "답변";
+      case "celtic-cross":
+        return [
+          "현재 상황", 
+          "도전 과제", 
+          "먼 과거", 
+          "가까운 과거", 
+          "가능한 미래", 
+          "가까운 미래", 
+          "당신의 접근", 
+          "외부 영향", 
+          "희망과 두려움", 
+          "최종 결과"
+        ][index] || `카드 ${index + 1}`;
       case "love-spread":
         return ["현재 감정", "상대의 마음", "관계의 장애물", "필요한 것", "연애운"][index] || `카드 ${index + 1}`;
       case "career-path":
@@ -709,8 +722,9 @@ export default function HistoryView() {
                   {/* 공유 버튼 */}
                   <ShareButton
                     title={`칠팔 타로 - ${selectedReading.question}`}
-                    text={`"${selectedReading.question}"에 대한 과거 타로 리딩 결과입니다.`}
-                    hashtags={['타로', '타로기록', '운세', '칠팔타로']}
+                    text={`"${selectedReading.question}"에 대한 타로 리딩 결과입니다. 뽑힌 카드들이 전하는 특별한 메시지를 확인해보세요!`}
+                    url={`${typeof window !== 'undefined' ? window.location.origin : ''}/reading/${selectedReading._id}`}
+                    hashtags={['타로', '타로기록', '운세', '칠팔타로', selectedReading.questionType]}
                   />
                   
                   {/* 액션 버튼들 */}

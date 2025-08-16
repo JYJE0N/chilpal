@@ -276,7 +276,7 @@ export default function CardGrid({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+          className="flex justify-center mt-12 mb-8"
         >
           <button
             onClick={completeReading}

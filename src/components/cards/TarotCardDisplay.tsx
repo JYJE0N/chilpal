@@ -20,6 +20,19 @@ const getPositionLabel = (index: number, spreadType: SpreadType): string => {
       return ["과거", "현재", "미래"][index] || "";
     case "one-card":
       return "답변";
+    case "celtic-cross":
+      return [
+        "현재 상황", 
+        "도전 과제", 
+        "먼 과거", 
+        "가까운 과거", 
+        "가능한 미래", 
+        "가까운 미래", 
+        "당신의 접근", 
+        "외부 영향", 
+        "희망과 두려움", 
+        "최종 결과"
+      ][index] || "";
     case "love-spread":
       return ["현재 감정", "상대의 마음", "관계의 장애물", "필요한 것", "연애운"][index] || "";
     case "career-path":
@@ -93,25 +106,19 @@ export default function TarotCardDisplay({
         </motion.div>
 
         {/* 카드 정보 */}
-        <div className="mt-4 space-y-2">
+        <div className="mt-4 space-y-3">
           <h4 className="font-semibold text-white text-lg">{card.name}</h4>
           
-          {isResult && (
-            <div className="text-sm text-gray-400 space-y-1">
-              <p className="leading-relaxed">{card.current_meaning}</p>
-              
-              {card.current_keywords && card.current_keywords.length > 0 && (
-                <div className="flex flex-wrap gap-1 justify-center mt-2">
-                  {card.current_keywords.slice(0, 3).map((keyword, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs"
-                    >
-                      {keyword}
-                    </span>
-                  ))}
-                </div>
-              )}
+          {isResult && card.current_keywords && card.current_keywords.length > 0 && (
+            <div className="flex flex-wrap gap-1 justify-center">
+              {card.current_keywords.slice(0, 4).map((keyword, idx) => (
+                <span
+                  key={idx}
+                  className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs"
+                >
+                  {keyword}
+                </span>
+              ))}
             </div>
           )}
         </div>
