@@ -88,7 +88,7 @@ export function formatCardName(cardName: string, josaSuffix: string): string {
     }
   });
 
-  return josa(`${cardName}#{${josaSuffix}}`);
+  return josa(`${displayName}#{${josaSuffix}}`);
 }
 
 // 문장 내 조사 자동 처리

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, ArrowLeft } from "lucide-react";
+import { Sparkles, ArrowLeft, Zap, Clock, Cross, Users, Heart, Briefcase, HelpCircle } from "lucide-react";
 import { SPREADS, SpreadType } from "@/types/spreads";
 import { ReadingDispatch } from "@/hooks/useReadingState";
 import { drawRandomCards } from "@/data/all-tarot-cards";
@@ -124,26 +124,55 @@ export default function QuestionInput({
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-2xl w-full text-center"
-      >
+    <div className="min-h-screen flex flex-col p-4">
+      {/* 상단 네비게이션 */}
+      <div className="flex justify-start items-center mb-8 pt-4">
         <button
           onClick={handleBack}
-          className="absolute top-8 left-8 p-3 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/10"
+          className="flex items-center gap-2 p-3 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/10"
         >
-          <ArrowLeft className="w-6 h-6" />
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-sm font-medium">뒤로</span>
         </button>
+      </div>
+
+      {/* 메인 컨텐츠 */}
+      <div className="flex-1 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-2xl w-full text-center"
+        >
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-6xl mb-6"
+          className="mb-6 flex justify-center"
         >
-          ✨
+          {(() => {
+            const getSpreadIcon = (type: SpreadType) => {
+              switch (type) {
+                case "one-card":
+                  return <Zap className="w-16 h-16 text-yellow-400" />;
+                case "three-card":
+                  return <Clock className="w-16 h-16 text-blue-400" />;
+                case "celtic-cross":
+                  return <Cross className="w-16 h-16 text-purple-400" />;
+                case "relationship":
+                  return <Users className="w-16 h-16 text-green-400" />;
+                case "love-spread":
+                  return <Heart className="w-16 h-16 text-pink-400" />;
+                case "career-path":
+                  return <Briefcase className="w-16 h-16 text-orange-400" />;
+                case "yes-no":
+                  return <HelpCircle className="w-16 h-16 text-indigo-400" />;
+                default:
+                  return <Sparkles className="w-16 h-16 text-purple-400" />;
+              }
+            };
+            return getSpreadIcon(spreadType);
+          })()}
         </motion.div>
 
         <motion.h2
@@ -199,6 +228,7 @@ export default function QuestionInput({
           </motion.button>
         </motion.div>
       </motion.div>
+    </div>
     </div>
   );
 }

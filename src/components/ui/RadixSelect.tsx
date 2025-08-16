@@ -32,7 +32,7 @@ export default function RadixSelect({
       <Select.Root value={value} onValueChange={onChange} disabled={disabled}>
         <Select.Trigger
           className={`
-            dawn-select group
+            input-field group
             flex items-center justify-between gap-3
             ${!disabled && 'hover:border-pink-400/50 hover:shadow-lg hover:shadow-pink-500/20 hover:scale-[1.02]'}
             ${disabled && 'opacity-50 cursor-not-allowed'}
@@ -40,16 +40,16 @@ export default function RadixSelect({
             data-[state=open]:border-pink-400/60 data-[state=open]:shadow-lg data-[state=open]:shadow-pink-500/25
           `}
         >
-          <Select.Value placeholder={placeholder} className="dawn-text-primary" />
+          <Select.Value placeholder={placeholder} className="text-primary" />
           <Select.Icon>
-            <ChevronDown className="w-4 h-4 dawn-text-muted transition-transform duration-200 group-data-[state=open]:rotate-180" />
+            <ChevronDown className="w-4 h-4 text-muted transition-transform duration-200 group-data-[state=open]:rotate-180" />
           </Select.Icon>
         </Select.Trigger>
 
         <Select.Portal>
           <Select.Content
             className={`
-              dawn-glass-card-light
+              glass-card-light
               shadow-2xl shadow-black/40
               overflow-hidden z-50
               data-[state=open]:animate-in data-[state=closed]:animate-out
@@ -74,11 +74,11 @@ export default function RadixSelect({
                     className={`
                       relative flex items-center justify-between gap-3
                       px-4 py-3 text-sm font-medium
-                      dawn-text-secondary rounded-lg
+                      text-secondary rounded-lg
                       outline-none cursor-pointer
                       transition-all duration-200
-                      data-[highlighted]:bg-white/10 data-[highlighted]:dawn-text-primary
-                      data-[state=checked]:bg-pink-500/20 data-[state=checked]:dawn-text-point
+                      data-[highlighted]:bg-white/10 data-[highlighted]:text-primary
+                      data-[state=checked]:bg-pink-500/20 data-[state=checked]:text-point
                       data-[state=checked]:border-l-2 data-[state=checked]:border-pink-400
                       hover:translate-x-1
                     `}
@@ -101,7 +101,7 @@ export default function RadixSelect({
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.1 }}
                       >
-                        <Check className="w-4 h-4 dawn-text-point" />
+                        <Check className="w-4 h-4 text-point" />
                       </motion.div>
                     </Select.ItemIndicator>
                   </Select.Item>

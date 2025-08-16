@@ -51,14 +51,14 @@ export default function Header() {
     <header
       className={`fixed top-0 left-0 right-0 w-full z-[9999] h-20 transition-all duration-300 backdrop-blur-xl mobile-header-blur ${
         isScrolled
-          ? "bg-gradient-to-r from-slate-900/60 via-blue-950/50 to-slate-900/60 border-b border-white/10 shadow-lg shadow-slate-900/30"
+          ? "bg-gradient-to-r from-slate-900/60 via-blue-950/50 to-slate-900/60 border-b border-white/5 shadow-lg shadow-slate-900/30"
           : "bg-gradient-to-r from-slate-950/40 via-blue-950/30 to-slate-950/40 border-b border-white/5"
       }`}
       style={{
         transform: `translate3d(0, ${isHeaderVisible ? '0' : '-100%'}, 0)`
       }}
     >
-      <div className="dawn-container h-full">
+      <div className="container-unified h-full">
         <div className="flex justify-between items-center h-full">
           {/* 로고 */}
           <Link
@@ -127,7 +127,7 @@ export default function Header() {
 
         {/* 모바일 메뉴 */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pt-4 border-t border-purple-400/20 bg-slate-900/90 backdrop-blur-xl rounded-xl shadow-2xl">
+          <nav className="md:hidden mt-4 pt-4 border-t border-purple-400/10 bg-slate-900/90 backdrop-blur-xl rounded-xl shadow-2xl">
             <div className="space-y-3">
               {NAV_LINKS.map(({ href, label, icon: Icon }) => (
                 <Link
@@ -135,7 +135,7 @@ export default function Header() {
                   href={href}
                   className={`relative block px-6 py-4 transition-all duration-300 rounded-lg ${
                     pathname === href
-                      ? "text-white font-semibold bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30"
+                      ? "text-white font-semibold bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/15"
                       : "text-gray-300 hover:text-white hover:bg-white/5"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}

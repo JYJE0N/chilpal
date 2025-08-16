@@ -13,7 +13,12 @@ import {
   DollarSign,
   Heart as Health,
   Star,
-  Brain,
+  Lightbulb,
+  Zap,
+  Clock,
+  Cross,
+  Users,
+  HelpCircle,
 } from "lucide-react";
 import RadixSelect from "@/components/ui/RadixSelect";
 
@@ -28,6 +33,8 @@ interface ReadingRecord {
     image_url: string;
     is_reversed: boolean;
     current_meaning: string;
+    current_interpretation?: string;
+    current_keywords?: string[];
   }>;
   interpretation: string;
   questionType: string;
@@ -65,6 +72,8 @@ export default function HistoryView() {
   useEffect(() => {
     loadReadings();
     loadStats();
+    // 필터 변경 시 스크롤을 맨 위로 이동
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, filter]);
 
@@ -156,16 +165,115 @@ export default function HistoryView() {
   };
 
   const getSpreadTypeLabel = (spreadType: string) => {
-    const labels: Record<string, string> = {
-      "one-card": "원카드",
-      "three-card": "3카드",
-      "celtic-cross": "켈틱크로스",
-      relationship: "관계",
-      "love-spread": "연애",
-      "career-path": "경력",
-      "yes-no": "결정도움",
+    const labels: Record<string, { icon: any; label: string }> = {
+      "one-card": { icon: Zap, label: "원카드" },
+      "three-card": { icon: Clock, label: "3카드" },
+      "celtic-cross": { icon: Cross, label: "켈틱크로스" },
+      relationship: { icon: Users, label: "관계" },
+      "love-spread": { icon: Heart, label: "연애" },
+      "career-path": { icon: Briefcase, label: "경력" },
+      "yes-no": { icon: HelpCircle, label: "결정도움" },
     };
-    return labels[spreadType] || spreadType;
+    const typeData = labels[spreadType] || { icon: Sparkles, label: spreadType };
+    const IconComponent = typeData.icon;
+    return (
+      <span className="flex items-center gap-1">
+        <IconComponent className="w-3 h-3" />
+        {typeData.label}
+      </span>
+    );
+  };
+
+  const getCardPositionLabel = (index: number, spreadType: string): string => {
+    switch (spreadType) {
+      case "three-card":
+        return ["과거", "현재", "미래"][index] || `카드 ${index + 1}`;
+      case "one-card":
+        return "답변";
+      case "love-spread":
+        return ["현재 감정", "상대의 마음", "관계의 장애물", "필요한 것", "연애운"][index] || `카드 ${index + 1}`;
+      case "career-path":
+        return ["현재 위치", "강점", "약점", "기회", "조언"][index] || `카드 ${index + 1}`;
+      case "relationship":
+        return ["당신", "상대방", "당신의 감정", "상대의 감정", "관계의 현재", "관계의 미래"][index] || `카드 ${index + 1}`;
+      case "yes-no":
+        return ["현재 상황", "선택의 결과", "고려할 점", "최선의 길"][index] || `카드 ${index + 1}`;
+      default:
+        return `카드 ${index + 1}`;
+    }
+  };
+
+  const formatInterpretation = (interpretation: string): string => {
+    // 질문 부분과 개별 카드 해석, 메시지 제거하고 핵심 결론만 추출
+    let formatted = interpretation;
+    
+    // 불필요한 패턴들 제거
+    const unnecessaryPatterns = [
+      // 질문 관련
+      /질문:\s*.*?(?=\n|$)/gi,
+      /문의\s*내용:\s*.*?(?=\n|$)/gi,
+      /\".*?\"에\s*대한\s*(?:답변|해석|결과)[은는:]*\s*/gi,
+      /^.*?에\s*대해\s*(?:말씀|설명|해석)드리[면겠자면]*\s*/gi,
+      /^.*?(?:질문|문의)하신\s*내용에\s*대해\s*/gi,
+      
+      // 개별 카드 해석 (이미 위에서 표시됨)
+      /\d+\.\s*.*?:\s*.*?(?=\n\d+\.|$)/gi,
+      /과거:\s*.*?(?=\n현재:|\n미래:|$)/gi,
+      /현재:\s*.*?(?=\n미래:|$)/gi,
+      /미래:\s*.*?(?=\n|$)/gi,
+      
+      // 카드명 반복
+      /^.*?카드[가는]*\s*나타내는\s*/gi,
+      /^.*?카드의\s*의미[는]*\s*/gi,
+      
+      // 키워드 반복 (이미 위에서 표시됨)
+      /키워드:\s*.*?(?=\n|$)/gi,
+      /주요\s*키워드[는:]*\s*.*?(?=\n|$)/gi,
+      
+      // 불필요한 메시지 제거
+      /.*?타로.*?메시지.*?(?=\n|$)/gi,
+      /.*?우주.*?메시지.*?(?=\n|$)/gi,
+      /.*?전하고\s*있습니다.*?(?=\n|$)/gi,
+      /.*?말하고\s*있습니다.*?(?=\n|$)/gi,
+      /.*?보여주고\s*있습니다.*?(?=\n|$)/gi,
+      /.*?알려주고\s*있습니다.*?(?=\n|$)/gi,
+      /.*?가르쳐주고\s*있습니다.*?(?=\n|$)/gi
+    ];
+    
+    unnecessaryPatterns.forEach(pattern => {
+      formatted = formatted.replace(pattern, '');
+    });
+    
+    // 종합/결론 부분만 추출
+    const conclusionPatterns = [
+      /(?:종합|결론|전체적으로|핵심|요약)[적으로]*[은는:]*\s*(.*?)$/i,
+      /(?:따라서|그러므로|결국|결론적으로)\s*(.*?)$/i,
+      /(?:조언|권장|제안).*?:\s*(.*?)$/i
+    ];
+    
+    for (const pattern of conclusionPatterns) {
+      const match = formatted.match(pattern);
+      if (match && match[1] && match[1].trim().length > 20) {
+        formatted = match[1].trim();
+        break;
+      }
+    }
+    
+    // 앞뒤 공백 및 불필요한 문자 제거
+    formatted = formatted
+      .replace(/^\s*[-•*]\s*/gm, '') // 리스트 마커 제거
+      .replace(/\n\s*\n/g, '\n') // 빈 줄 제거
+      .replace(/.*?메시지.*?/gi, '') // 메시지 관련 문장 제거
+      .trim();
+    
+    // 너무 짧으면 원본의 마지막 문장들 사용
+    if (formatted.length < 30) {
+      const sentences = interpretation.split(/[.!?]+/).filter(s => s.trim().length > 10);
+      formatted = sentences.slice(-2).join('. ').trim();
+      if (formatted) formatted += '.';
+    }
+    
+    return formatted || interpretation;
   };
 
   if (loading) {
@@ -181,56 +289,49 @@ export default function HistoryView() {
 
   return (
     <div className="min-h-screen p-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto space-y-8">
         {/* 헤더 */}
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold dawn-text-primary mb-4 drop-shadow-2xl flex items-center justify-center gap-3">
-            <BookOpen className="w-8 h-8 dawn-text-sub" />
+        <header className="text-center">
+          <h1 className="text-4xl font-bold text-primary mb-4 flex items-center justify-center gap-3">
+            <BookOpen className="w-8 h-8 text-info" />
             타로 히스토리
-            <BookOpen className="w-8 h-8 dawn-text-accent animate-pulse" />
+            <BookOpen className="w-8 h-8 text-accent animate-pulse" />
           </h1>
-          <p className="dawn-text-secondary text-lg drop-shadow-lg">
+          <p className="text-secondary text-lg">
             당신의 신비로운 타로 여정을 돌아보세요
           </p>
         </header>
 
         {/* 통계 카드 */}
         {stats && (
-          <div className="dawn-container">
-            <div className="grid grid-cols-2 md:grid-cols-4 dawn-card-spacing mb-8">
+          <section>
+            <h2 className="text-2xl font-semibold text-primary mb-6 text-center">통계</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="dawn-glass-card-light text-center"
+                className="glass-card-light text-center"
               >
-                <div className="text-2xl font-bold dawn-text-primary">
+                <div className="text-2xl font-bold text-primary">
                   {stats.totalReadings}
                 </div>
-                <div className="dawn-text-secondary text-sm">총 리딩</div>
+                <div className="text-secondary text-sm">총 리딩</div>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="dawn-glass-card-light text-center"
+                className="glass-card-light text-center"
               >
-                <div className="text-2xl font-bold dawn-text-primary">
+                <div className="text-2xl font-bold text-primary">
                   {Object.values(stats.questionTypes).reduce(
                     (a, b) => Math.max(a, b),
                     0
                   )}
                 </div>
-                <div className="dawn-text-secondary text-sm">
-                  {Object.keys(stats.questionTypes).reduce(
-                    (a, b) =>
-                      stats.questionTypes[a] > stats.questionTypes[b] ? a : b,
-                    "general"
-                  ) === "general"
-                    ? "일반"
-                    : Object.keys(stats.questionTypes).reduce((a, b) =>
-                        stats.questionTypes[a] > stats.questionTypes[b] ? a : b
-                      )}
+                <div className="text-secondary text-sm">
+                  최다 질문
                 </div>
               </motion.div>
 
@@ -238,16 +339,16 @@ export default function HistoryView() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="dawn-glass-card-light text-center"
+                className="glass-card-light text-center"
               >
-                <div className="text-2xl font-bold dawn-text-primary">
+                <div className="text-2xl font-bold text-primary">
                   {stats.favoriteCards[0]?.count || 0}회
                 </div>
-                <div className="dawn-text-secondary text-sm">
+                <div className="text-secondary text-sm">
                   {stats.favoriteCards[0]?.name ? (
                     <div className="flex flex-col items-center gap-1">
                       <span>최다 카드</span>
-                      <span className="text-xs dawn-text-accent font-medium">
+                      <span className="text-xs text-accent font-medium">
                         {stats.favoriteCards[0].name}
                       </span>
                     </div>
@@ -261,67 +362,63 @@ export default function HistoryView() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="dawn-glass-card-light text-center"
+                className="glass-card-light text-center"
               >
-                <div className="text-2xl font-bold dawn-text-primary">
+                <div className="text-2xl font-bold text-primary">
                   {stats.spreadTypes["one-card"] || 0}
                 </div>
-                <div className="dawn-text-secondary text-sm">원카드 리딩</div>
+                <div className="text-secondary text-sm">원카드 리딩</div>
               </motion.div>
             </div>
-          </div>
+          </section>
         )}
 
         {/* 필터 */}
-        <div className="dawn-container mb-8">
-          {/* 필터 박스 */}
-          <div className="dawn-glass-card-light">
-            <div className="flex flex-col sm:flex-row items-center justify-center dawn-card-spacing">
-              {/* 질문 유형 */}
-              <div className="w-fit">
-                <RadixSelect
-                  value={filter.type}
-                  onChange={(value) =>
-                    setFilter((prev) => ({ ...prev, type: value }))
-                  }
-                  options={[
-                    { value: "love", label: "연애", icon: "•" },
-                    { value: "career", label: "직업", icon: "•" },
-                    { value: "money", label: "재물", icon: "•" },
-                    { value: "health", label: "건강", icon: "•" },
-                    { value: "general", label: "일반", icon: "•" },
-                    { value: "all", label: "전체 유형", icon: "✓" },
-                  ]}
-                  placeholder="질문유형"
-                />
-              </div>
+        <div className="glass-card">
+          <div className="flex flex-row items-center justify-center gap-2 sm:gap-4 overflow-hidden">
+            {/* 질문 유형 */}
+            <RadixSelect
+              value={filter.type}
+              onChange={(value) =>
+                setFilter((prev) => ({ ...prev, type: value }))
+              }
+              options={[
+                { value: "love", label: "연애" },
+                { value: "career", label: "직업" },
+                { value: "money", label: "재물" },
+                { value: "health", label: "건강" },
+                { value: "general", label: "일반" },
+                { value: "all", label: "전체 유형" },
+              ]}
+              placeholder="질문 유형 선택"
+              className="flex-1 min-w-[120px] max-w-[200px]"
+            />
 
-              {/* 스프레드 타입 */}
-              <div className="w-fit">
-                <RadixSelect
-                  value={filter.spread}
-                  onChange={(value) =>
-                    setFilter((prev) => ({ ...prev, spread: value }))
-                  }
-                  options={[
-                    { value: "one-card", label: "원카드", icon: "•" },
-                    { value: "three-card", label: "3카드", icon: "•" },
-                    { value: "celtic-cross", label: "켈틱크로스", icon: "•" },
-                    { value: "relationship", label: "관계", icon: "•" },
-                    { value: "love-spread", label: "연애스프레드", icon: "•" },
-                    { value: "career-path", label: "커리어패스", icon: "•" },
-                    { value: "yes-no", label: "결정도움", icon: "•" },
-                    { value: "all", label: "전체 타입", icon: "✓" },
-                  ]}
-                  placeholder="스프레드타입"
-                />
-              </div>
-            </div>
+            {/* 스프레드 타입 */}
+            <RadixSelect
+              value={filter.spread}
+              onChange={(value) =>
+                setFilter((prev) => ({ ...prev, spread: value }))
+              }
+              options={[
+                { value: "one-card", label: "원카드" },
+                { value: "three-card", label: "3카드" },
+                { value: "celtic-cross", label: "켈틱크로스" },
+                { value: "relationship", label: "관계" },
+                { value: "love-spread", label: "연애스프레드" },
+                { value: "career-path", label: "커리어패스" },
+                { value: "yes-no", label: "결정도움" },
+                { value: "all", label: "전체 타입" },
+              ]}
+              placeholder="스프레드 타입 선택"
+              className="flex-1 min-w-[120px] max-w-[200px]"
+            />
           </div>
         </div>
 
         {/* 리딩 목록 */}
-        <div className="dawn-container">
+        <section>
+          <h2 className="text-xl font-semibold text-primary mb-6 text-center">리딩 기록</h2>
           {readings.length === 0 ? (
             <div className="text-center py-16">
               <div className="mb-6">
@@ -329,82 +426,91 @@ export default function HistoryView() {
                   <Sparkles className="w-8 h-8 text-white" />
                 </div>
               </div>
-              <h3 className="text-xl dawn-text-primary mb-3">
+              <h3 className="text-xl text-primary mb-3">
                 아직 리딩 기록이 없습니다
               </h3>
-              <p className="dawn-text-secondary mb-8">
+              <p className="text-secondary mb-8">
                 첫 번째 타로 리딩을 시작해보세요!
               </p>
               <Link href="/">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="dawn-btn-primary text-lg"
+                  className="btn-primary text-lg"
                 >
                   타로 리딩 시작하기
                 </motion.button>
               </Link>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 dawn-card-spacing">
+            <div className="space-y-4">
               {readings.map((reading, index) => (
                 <motion.div
                   key={reading._id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="dawn-glass-card cursor-pointer transition-all hover:scale-105"
+                  className="glass-card-light cursor-pointer transition-all hover:border-purple-400/40"
                   onClick={() => setSelectedReading(reading)}
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-xs bg-gradient-to-r from-pink-400 to-purple-400 text-white px-3 py-1 rounded-full font-bold">
-                      {getSpreadTypeLabel(reading.spreadType)}
-                    </span>
-                    <span className="text-xs dawn-text-muted">
-                      {formatDate(reading.createdAt)}
-                    </span>
-                  </div>
+                  <div className="p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-gradient-to-r from-pink-400 to-purple-400 text-white px-2 py-1 rounded-full font-medium">
+                          {getSpreadTypeLabel(reading.spreadType)}
+                        </span>
+                        <span className="text-xs text-secondary">
+                          {getQuestionTypeLabel(reading.questionType)}
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted">
+                        {formatDate(reading.createdAt)}
+                      </span>
+                    </div>
 
-                  <h3 className="dawn-text-primary font-semibold mb-3 line-clamp-2">
-                    {reading.question.length > 40
-                      ? reading.question.substring(0, 40) + "..."
-                      : reading.question}
-                  </h3>
+                    <h3 className="text-primary font-medium mb-2 line-clamp-1">
+                      {reading.question.length > 60
+                        ? reading.question.substring(0, 60) + "..."
+                        : reading.question}
+                    </h3>
 
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-xs dawn-text-secondary">
-                      {getQuestionTypeLabel(reading.questionType)}
-                    </span>
-                  </div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-1">
+                        {reading.cards?.slice(0, reading.spreadType === 'one-card' ? 1 : 3).map((card, idx) => {
+                          if (!card || !card.name) return null;
 
-                  <div className="flex gap-2">
-                    {reading.cards?.slice(0, 3).map((card, idx) => {
-                      if (!card || !card.name) return null;
-
-                      return (
-                        <div
-                          key={idx}
-                          className="relative w-8 h-12"
-                        >
-                          <Image
-                            src={card.image_url || "/images/cards/card-back.png"}
-                            alt={card.name}
-                            fill
-                            className={`object-cover rounded border ${
-                              card.is_reversed ? "rotate-180" : ""
-                            }`}
-                            sizes="32px"
-                          />
-                        </div>
-                      );
-                    })}
+                          return (
+                            <div
+                              key={idx}
+                              className="relative w-7 h-10"
+                              title={card.name}
+                            >
+                              <Image
+                                src={card.image_url || "/images/cards/card-back.png"}
+                                alt={card.name}
+                                fill
+                                className={`object-cover rounded border border-purple-400/30 ${
+                                  card.is_reversed ? "rotate-180" : ""
+                                }`}
+                                sizes="28px"
+                              />
+                              {card.is_reversed && (
+                                <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-400 rounded-full border border-white/50" />
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="text-xs text-accent hover:text-point transition-colors">
+                        자세히 보기 →
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </div>
           )}
-        </div>
+        </section>
 
         {/* 상세 모달 */}
         <AnimatePresence>
@@ -420,30 +526,30 @@ export default function HistoryView() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="dawn-glass-card max-w-3xl w-full mx-2 md:mx-0 max-h-[90vh] overflow-hidden flex flex-col"
+                className="glass-card max-w-3xl w-full mx-1 md:mx-0 max-h-[95vh] md:max-h-[90vh] overflow-hidden flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* 헤더 - 고정 */}
-                <div className="p-6 border-b border-purple-400/20 flex-shrink-0">
+                <div className="p-3 md:p-6 border-b border-purple-400/20 flex-shrink-0">
                   <div className="flex justify-between items-start gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="inline-block bg-gradient-to-r from-pink-500/20 to-purple-500/20 dawn-text-point px-3 py-1.5 rounded-full text-sm font-medium border border-pink-400/30">
+                        <span className="inline-block bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-point px-3 py-1.5 rounded-full text-sm font-medium border border-pink-400/30">
                           {getSpreadTypeLabel(selectedReading.spreadType)} 리딩
                         </span>
-                        <span className="text-sm dawn-text-muted">
+                        <span className="text-sm text-muted">
                           {formatDate(selectedReading.createdAt)}
                         </span>
                       </div>
-                      <h2 className="text-base dawn-text-secondary leading-relaxed break-words line-clamp-2">
-                        {selectedReading.question.length > 60 
-                          ? `${selectedReading.question.substring(0, 60)}...` 
+                      <h2 className="text-base text-secondary leading-relaxed break-words line-clamp-1">
+                        {selectedReading.question.length > 40
+                          ? `${selectedReading.question.substring(0, 40)}...` 
                           : selectedReading.question}
                       </h2>
                     </div>
                     <button
                       onClick={() => setSelectedReading(null)}
-                      className="dawn-text-muted hover:dawn-text-primary p-2 rounded-full hover:bg-white/10 transition-all flex-shrink-0 self-start"
+                      className="text-muted hover:text-primary p-2 rounded-lg hover:bg-white/10 transition-all flex-shrink-0 self-start"
                     >
                       ✕
                     </button>
@@ -452,44 +558,133 @@ export default function HistoryView() {
 
                 {/* 컨텐츠 - 스크롤 가능 */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar">
-                  <div className="space-y-6 p-6">
+                  <div className="space-y-4 md:space-y-6 p-3 md:p-6">
                     {/* 카드 섹션 */}
                     <div className="space-y-4">
                       {selectedReading.cards?.map((card, idx) => {
                         if (!card || !card.name) return null;
+                        const positionLabel = getCardPositionLabel(idx, selectedReading.spreadType);
 
                         return (
-                          <div
-                            key={idx}
-                            className="flex gap-4 p-4 dawn-glass-card-light hover:border-pink-400/30 transition-all"
-                          >
-                            <div className="relative w-16 h-24 flex-shrink-0">
-                              <Image
-                                src={
-                                  card.image_url ||
-                                  "/images/cards/card-back.png"
-                                }
-                                alt={card.name}
-                                fill
-                                className={`object-cover rounded-lg shadow-sm ${
-                                  card.is_reversed ? "rotate-180" : ""
-                                }`}
-                                sizes="64px"
-                              />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold dawn-text-primary mb-2 flex items-center gap-2 flex-wrap text-sm">
-                                <span className="break-words">{card.name}</span>
+                          <div key={idx} className="glass-card-light">
+                            {/* 모바일: 세로 배치, 데스크톱: 가로 배치 */}
+                            <div className="flex flex-col md:flex-row gap-3 md:gap-4 p-3 md:p-4">
+                              <div className="relative w-20 h-28 md:w-16 md:h-24 flex-shrink-0 mx-auto md:mx-0">
+                                <Image
+                                  src={card.image_url || "/images/cards/card-back.png"}
+                                  alt={card.name}
+                                  fill
+                                  className={`object-cover rounded-lg shadow-sm ${
+                                    card.is_reversed ? "rotate-180" : ""
+                                  }`}
+                                  sizes="64px"
+                                />
+                                {/* 역방향 표시 */}
                                 {card.is_reversed && (
-                                  <span className="dawn-text-accent text-xs bg-yellow-500/20 px-2 py-1 rounded-full flex-shrink-0 border border-yellow-400/30">
-                                    역방향
-                                  </span>
+                                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full border border-white/50" />
                                 )}
-                              </h4>
-                              <p className="text-xs dawn-text-secondary leading-relaxed break-words line-clamp-3">
-                                {card.current_meaning ||
-                                  "해석 정보가 없습니다."}
-                              </p>
+                              </div>
+                              
+                              <div className="flex-1 min-w-0 space-y-2 md:space-y-3 text-center md:text-left">
+                                {/* 카드명 */}
+                                <div>
+                                  {/* 모바일: 세로 배치 */}
+                                  <div className="block md:hidden text-center">
+                                    {/* 스프레드 위치 */}
+                                    {selectedReading.spreadType !== "one-card" && positionLabel && (
+                                      <span className="text-xs font-medium text-accent bg-purple-500/20 px-2 py-1 rounded border border-purple-400/30 inline-block mb-1">
+                                        {positionLabel}
+                                      </span>
+                                    )}
+                                    {/* 카드명과 역방향 표시 */}
+                                    <h4 className="font-semibold text-primary text-base flex items-center justify-center gap-2">
+                                      <span>{card.name}</span>
+                                      {card.is_reversed && (
+                                        <span className="text-white text-xs bg-red-500 px-2 py-1 rounded-full font-medium shadow-sm">
+                                          역
+                                        </span>
+                                      )}
+                                    </h4>
+                                  </div>
+                                  
+                                  {/* 데스크톱: 가로 배치 */}
+                                  <h4 className="hidden md:flex font-semibold text-primary text-base mb-1 items-center gap-2">
+                                    {/* 스프레드 위치 말머리 */}
+                                    {selectedReading.spreadType !== "one-card" && positionLabel && (
+                                      <span className="text-xs font-medium text-accent bg-purple-500/20 px-2 py-1 rounded border border-purple-400/30">
+                                        {positionLabel}
+                                      </span>
+                                    )}
+                                    <span>{card.name}</span>
+                                    {card.is_reversed && (
+                                      <span className="text-white text-xs bg-red-500 px-2 py-1 rounded-full font-medium shadow-sm">
+                                        역
+                                      </span>
+                                    )}
+                                  </h4>
+                                </div>
+                                
+                                {(() => {
+                                  // 키워드와 해석을 올바르게 분리
+                                  let keywords = card.current_keywords || [];
+                                  let interpretation = card.current_interpretation || card.current_meaning || "";
+                                  
+                                  // current_keywords가 없고 current_meaning에 키워드가 포함된 경우 분리
+                                  if (!keywords.length && card.current_meaning && card.current_meaning.includes('키워드:')) {
+                                    const parts = card.current_meaning.split('키워드:');
+                                    if (parts.length > 1) {
+                                      interpretation = parts[0].trim();
+                                      const keywordText = parts[1].trim();
+                                      keywords = keywordText.split(/[,、\s]+/).filter(k => k.trim().length > 0).slice(0, 4);
+                                    }
+                                  }
+                                  
+                                  // 해석에서 키워드 패턴 및 불필요한 부분 제거
+                                  interpretation = interpretation
+                                    .replace(/키워드:\s*.*?(?=\n|$)/gi, '')
+                                    .replace(/주요\s*키워드[는:]*\s*.*?(?=\n|$)/gi, '')
+                                    .replace(/^.*?의미:\s*/gi, '') // "의미:" 접두사 제거
+                                    .replace(/^.*?해석:\s*/gi, '') // "해석:" 접두사 제거
+                                    .trim();
+                                  
+                                  // 해석이 키워드 나열식이면 서술형으로 변환
+                                  if (interpretation && interpretation.length < 50 && !interpretation.includes('.') && !interpretation.includes('니다')) {
+                                    const cardAction = card.is_reversed ? '주의하라고' : '나아가라고';
+                                    interpretation = `이 카드는 당신에게 ${interpretation} 상황에서 ${cardAction} 말하고 있습니다.`;
+                                  }
+                                  
+                                  return (
+                                    <>
+                                      {/* 키워드 표시 */}
+                                      {keywords.length > 0 && (
+                                        <div>
+                                          <h5 className="text-xs font-medium text-muted heading-sm">키워드</h5>
+                                          <div className="flex flex-wrap gap-1">
+                                            {keywords.map((keyword, kidx) => (
+                                              <span
+                                                key={kidx}
+                                                className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs"
+                                              >
+                                                {keyword.trim()}
+                                              </span>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      )}
+                                      
+                                      {/* 서술형 해석 */}
+                                      <div>
+                                        <h5 className="text-xs font-medium text-muted heading-sm">
+                                          {card.is_reversed ? "역방향 해석" : "정방향 해석"}
+                                        </h5>
+                                        <p className="text-sm text-secondary leading-relaxed break-words paragraph">
+                                          {interpretation || "해석 정보가 없습니다."}
+                                        </p>
+                                      </div>
+                                    </>
+                                  );
+                                })()}
+                              </div>
                             </div>
                           </div>
                         );
@@ -497,43 +692,41 @@ export default function HistoryView() {
                     </div>
 
                     {/* 종합 해석 */}
-                    <div className="dawn-glass-card-light">
-                      <h4 className="font-semibold dawn-text-primary mb-3 text-base flex items-center gap-2">
-                        <Brain className="w-4 h-4 dawn-text-sub" />
-                        <span>종합 해석</span>
+                    <div className="glass-card-light">
+                      <h4 className="font-semibold text-yellow-400 mb-3 text-base flex items-center gap-2">
+                        <Lightbulb className="w-4 h-4 text-yellow-400" />
+                        핵심결론
                       </h4>
-                      <p className="dawn-text-secondary whitespace-pre-line leading-relaxed break-words text-sm max-h-32 overflow-y-auto custom-scrollbar">
-                        {selectedReading.interpretation}
+                      <p className="text-secondary whitespace-pre-line leading-relaxed break-words text-sm max-h-40 overflow-y-auto custom-scrollbar">
+                        {formatInterpretation(selectedReading.interpretation)}
                       </p>
                     </div>
                   </div>
                 </div>
 
                 {/* 하단 버튼 - 고정 */}
-                <div className="p-6 border-t border-purple-400/20 dawn-glass-card-light flex-shrink-0">
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    {/* 공유 버튼 */}
-                    <ShareButton
-                      title={`칠팔 타로 - ${selectedReading.question}`}
-                      text={`"${selectedReading.question}"에 대한 과거 타로 리딩 결과입니다.`}
-                      hashtags={['타로', '타로기록', '운세', '칠팔타로']}
-                    />
-                    
-                    {/* 액션 버튼들 */}
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => deleteReading(selectedReading._id)}
-                        className="px-5 py-2.5 bg-gradient-to-r from-red-500 to-red-400 hover:from-red-600 hover:to-red-500 text-white rounded-lg transition-all font-medium text-sm"
-                      >
-                        삭제
-                      </button>
-                      <button
-                        onClick={() => setSelectedReading(null)}
-                        className="dawn-btn-primary text-sm"
-                      >
-                        닫기
-                      </button>
-                    </div>
+                <div className="p-3 md:p-6 border-t border-purple-400/20 flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4">
+                  {/* 공유 버튼 */}
+                  <ShareButton
+                    title={`칠팔 타로 - ${selectedReading.question}`}
+                    text={`"${selectedReading.question}"에 대한 과거 타로 리딩 결과입니다.`}
+                    hashtags={['타로', '타로기록', '운세', '칠팔타로']}
+                  />
+                  
+                  {/* 액션 버튼들 */}
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => deleteReading(selectedReading._id)}
+                      className="btn-danger btn-sm"
+                    >
+                      삭제
+                    </button>
+                    <button
+                      onClick={() => setSelectedReading(null)}
+                      className="btn-primary btn-sm"
+                    >
+                      닫기
+                    </button>
                   </div>
                 </div>
               </motion.div>
