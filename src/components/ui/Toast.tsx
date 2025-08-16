@@ -38,21 +38,7 @@ export const useToast = () => {
   return context;
 };
 
-// 토스트 아이콘
-const getToastIcon = (type: ToastType) => {
-  switch (type) {
-    case 'success':
-      return '●';
-    case 'error':
-      return '●';
-    case 'warning':
-      return '●';
-    case 'info':
-      return '●';
-    default:
-      return '●';
-  }
-};
+// 토스트 아이콘 (제거됨)
 
 // 토스트 색상
 const getToastColors = (type: ToastType) => {
@@ -101,35 +87,28 @@ const ToastItem = React.forwardRef<HTMLDivElement, { toast: Toast; onRemove: (id
         ×
       </button>
 
-      <div className="flex items-start gap-3 pr-6">
-        {/* 아이콘 */}
-        <span className="text-xl flex-shrink-0">
-          {getToastIcon(toast.type)}
-        </span>
+      <div className="pr-6">
+        {/* 제목 */}
+        <h4 className="font-semibold dawn-text-primary mb-1">
+          {toast.title}
+        </h4>
 
-        <div className="flex-1">
-          {/* 제목 */}
-          <h4 className="font-semibold dawn-text-primary mb-1">
-            {toast.title}
-          </h4>
+        {/* 메시지 */}
+        {toast.message && (
+          <p className="text-sm dawn-text-secondary opacity-90">
+            {toast.message}
+          </p>
+        )}
 
-          {/* 메시지 */}
-          {toast.message && (
-            <p className="text-sm dawn-text-secondary opacity-90">
-              {toast.message}
-            </p>
-          )}
-
-          {/* 액션 버튼 */}
-          {toast.action && (
-            <button
-              onClick={toast.action.onClick}
-              className="mt-2 text-xs font-semibold dawn-text-accent underline hover:no-underline"
-            >
-              {toast.action.label}
-            </button>
-          )}
-        </div>
+        {/* 액션 버튼 */}
+        {toast.action && (
+          <button
+            onClick={toast.action.onClick}
+            className="mt-2 text-xs font-semibold dawn-text-accent underline hover:no-underline"
+          >
+            {toast.action.label}
+          </button>
+        )}
       </div>
 
       {/* 진행 바 */}
@@ -148,36 +127,18 @@ ToastItem.displayName = 'ToastItem';
 
 // 토스트 컨테이너
 function ToastContainer({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: string) => void }) {
-  const hasToasts = toasts.length > 0;
-
   return (
-    <>
-      {/* 배경 블러 오버레이 */}
-      <AnimatePresence>
-        {hasToasts && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-black/20 backdrop-blur-sm"
-            style={{ backdropFilter: 'blur(4px)' }}
+    <div className="fixed top-28 right-4 z-[10000] space-y-2">
+      <AnimatePresence mode="popLayout">
+        {toasts.map((toast) => (
+          <ToastItem
+            key={toast.id}
+            toast={toast}
+            onRemove={removeToast}
           />
-        )}
+        ))}
       </AnimatePresence>
-
-      {/* 토스트 컨테이너 */}
-      <div className="fixed top-28 right-4 z-[10000] space-y-2">
-        <AnimatePresence mode="popLayout">
-          {toasts.map((toast) => (
-            <ToastItem
-              key={toast.id}
-              toast={toast}
-              onRemove={removeToast}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
-    </>
+    </div>
   );
 }
 

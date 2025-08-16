@@ -259,7 +259,6 @@ export default function ReadingResult({
         className="text-center mb-8"
       >
         <div className="flex items-center justify-center gap-4 mb-4">
-          <div className="text-4xl">✨</div>
           <h1 className="text-3xl md:text-4xl font-bold text-white">
             {selectedSpread?.name} 결과
           </h1>

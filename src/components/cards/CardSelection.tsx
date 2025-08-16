@@ -40,7 +40,7 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     saveReadingAsync,
     {
       showSuccessToast: true,
-      successMessage: "리딩이 저장되었습니다! 📝",
+      successMessage: "리딩이 저장되었습니다",
     }
   );
 
