@@ -9,7 +9,7 @@ import ShareButton from "@/components/share/ShareButton";
 async function getReading(id: string) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/readings/${id}`, {
+    const response = await fetch(`${baseUrl}/api/readings/${id}?shared=true`, {
       cache: 'no-store' // 항상 최신 데이터
     });
     
