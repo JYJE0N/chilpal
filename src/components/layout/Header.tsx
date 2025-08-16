@@ -49,25 +49,25 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 backdrop-blur-xl mobile-header-blur ${
+      className={`fixed top-0 left-0 right-0 w-full z-[9999] h-20 transition-all duration-300 backdrop-blur-xl mobile-header-blur ${
         isScrolled
-          ? "bg-black/60 border-b border-white/20 shadow-xl"
-          : "bg-black/40 border-b border-white/10"
+          ? "bg-gradient-to-r from-slate-900/60 via-blue-950/50 to-slate-900/60 border-b border-white/10 shadow-lg shadow-slate-900/30"
+          : "bg-gradient-to-r from-slate-950/40 via-blue-950/30 to-slate-950/40 border-b border-white/5"
       }`}
       style={{
         transform: `translate3d(0, ${isHeaderVisible ? '0' : '-100%'}, 0)`
       }}
     >
-      <div className="max-w-6xl mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
+      <div className="dawn-container h-full">
+        <div className="flex justify-between items-center h-full">
           {/* 로고 */}
           <Link
             href="/"
             className="flex items-center space-x-3 hover:opacity-80 transition-all hover:scale-105"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <Sparkles className="w-5 h-5 text-blue-300 animate-pulse" />
-            <h1 className="text-xl font-bold text-white/90">TAROT 78</h1>
+            <Sparkles className="w-6 h-6 text-purple-400 animate-pulse" />
+            <h1 className="text-xl font-bold text-white">TAROT 78</h1>
           </Link>
 
           {/* 데스크톱 네비게이션 */}
@@ -76,19 +76,21 @@ export default function Header() {
               <Link
                 key={href}
                 href={href}
-                className={`relative px-3 py-2 transition-all duration-300 ${
+                className={`relative px-3 py-2 transition-all duration-300 font-medium group ${
                   pathname === href
-                    ? "text-purple-300 font-semibold"
-                    : "text-white/80 hover:text-white"
+                    ? "text-white"
+                    : "text-gray-300 hover:text-white"
                 }`}
               >
                 {label}
-                {/* 액티브 언더라인 */}
+                {/* 액티브 밑줄 - 은은한 핑크-보라 */}
                 {pathname === href && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full" />
                 )}
-                {/* 호버 언더라인 */}
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/30 rounded-full transform scale-x-0 hover:scale-x-100 transition-transform duration-300" />
+                {/* 호버 밑줄 - 은은한 보라색 */}
+                {pathname !== href && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-400/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                )}
               </Link>
             ))}
           </nav>
@@ -125,27 +127,23 @@ export default function Header() {
 
         {/* 모바일 메뉴 */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pt-4 border-t border-white/20 bg-gray-900/90 backdrop-blur-md mobile-menu-blur rounded-lg shadow-lg">
-            <div className="space-y-1">
+          <nav className="md:hidden mt-4 pt-4 border-t border-purple-400/20 bg-slate-900/90 backdrop-blur-xl rounded-xl shadow-2xl">
+            <div className="space-y-3">
               {NAV_LINKS.map(({ href, label, icon: Icon }) => (
                 <Link
                   key={href}
                   href={href}
-                  className={`relative block px-4 py-3 transition-all duration-300 ${
+                  className={`relative block px-6 py-4 transition-all duration-300 rounded-lg ${
                     pathname === href
-                      ? "text-purple-300 font-semibold"
-                      : "text-white/80 hover:text-white"
+                      ? "text-white font-semibold bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30"
+                      : "text-gray-300 hover:text-white hover:bg-white/5"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <div className="flex items-center">
-                    <Icon className="w-4 h-4 mr-3" />
-                    {label}
+                    <Icon className="w-5 h-5 mr-4" />
+                    <span className="text-base">{label}</span>
                   </div>
-                  {/* 액티브 인디케이터 */}
-                  {pathname === href && (
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-400 to-pink-400 rounded-r" />
-                  )}
                 </Link>
               ))}
             </div>

@@ -82,7 +82,7 @@ export const pentaclesCards: TarotCard[] = [
     upright_interpretation:
       "재정적 안정을 위해 보수적으로 행동하고 있습니다. 절약은 좋지만 너무 움켜쥐고 있지는 않은지 살펴보세요.",
     upright_keywords: [
-      "보수성",
+      "보수적",
       "안정 추구",
       "절약",
       "소유욕",

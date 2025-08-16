@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4 relative">
+    <div className="dawn-container flex items-center justify-center min-h-[calc(100vh-200px)] relative">
       {/* 추가 별똥별 애니메이션 */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div 
@@ -48,20 +48,20 @@ export default function HomePage() {
         />
       </div>
       
-      <div className="text-center space-y-8 relative z-10">
-        <div className="space-y-6">
-          <h1 className="text-7xl font-bold text-white drop-shadow-2xl flex items-center justify-center gap-6">
+      <div className="text-center dawn-section-spacing relative z-10">
+        <div className="space-y-8">
+          <h1 className="text-7xl font-bold dawn-text-primary drop-shadow-2xl flex items-center justify-center gap-6">
             <div className="flex items-center gap-2">
-              <Moon className="w-12 h-12 text-blue-300 animate-pulse" />
+              <Moon className="w-12 h-12 dawn-text-sub animate-pulse" />
             </div>
             칠팔 타로
-            <Star className="w-12 h-12 text-blue-200 animate-pulse" />
+            <Star className="w-12 h-12 dawn-text-accent animate-pulse" />
           </h1>
-          <div className="space-y-3">
-            <p className="text-2xl font-semibold text-white/90 drop-shadow-lg">
+          <div className="space-y-4">
+            <p className="text-2xl font-semibold dawn-text-point drop-shadow-lg">
               78장 카드가 전하는 메시지
             </p>
-            <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
+            <p className="text-lg dawn-text-secondary max-w-2xl mx-auto leading-relaxed">
               알 수 없는 미래에 대한 궁금증을
               <br />
               카드를 통해 확인해보세요
@@ -71,8 +71,8 @@ export default function HomePage() {
 
         <div className="max-w-md mx-auto">
           <Link href="/reading">
-            <button className="w-full px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-full text-lg transition-all transform hover:scale-105 hover:bg-white/15 hover:border-white/30 shadow-xl flex items-center justify-center gap-3">
-              <Sparkles className="w-5 h-5 text-blue-300" />
+            <button className="dawn-btn-primary w-full text-xl px-8 py-6 flex items-center justify-center gap-3 shadow-2xl">
+              <Sparkles className="w-6 h-6 dawn-text-primary" />
               타로 보기
             </button>
           </Link>

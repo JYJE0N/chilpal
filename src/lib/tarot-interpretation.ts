@@ -1,6 +1,8 @@
 // src/lib/tarot-interpretation.ts
 
 import { DrawnCard } from "@/types/tarot";
+import { generateComprehensiveInterpretation } from "./contextual-interpretation";
+import { formatCardName, 은는, 이가, 을를 } from "./korean-utils";
 
 // 질문 유형 분류
 export const classifyQuestion = (question: string): string => {
@@ -72,15 +74,15 @@ export const generatePositionInterpretation = (
   const contextKey = questionType as keyof typeof questionContext;
   
   if (position === 'past') {
-    interpretation += `${card.name}은 당신의 ${questionContext[contextKey]} 지나온 경험을 나타냅니다. `;
+    interpretation += `${은는(card.name)} 당신의 ${questionContext[contextKey]} 지나온 경험을 나타냅니다. `;
     interpretation += card.current_interpretation;
     interpretation += ' 이러한 과거의 에너지가 현재 상황에 영향을 미치고 있습니다.';
   } else if (position === 'present') {
-    interpretation += `${card.name}이 보여주는 ${questionContext[contextKey]} 현재의 핵심입니다. `;
+    interpretation += `${이가(card.name)} 보여주는 ${questionContext[contextKey]} 현재의 핵심입니다. `;
     interpretation += card.current_interpretation;
     interpretation += ' 지금 이 순간에 집중하여 현명한 선택을 하세요.';
   } else {
-    interpretation += `${card.name}이 ${questionContext[contextKey]} 다가올 가능성을 암시합니다. `;
+    interpretation += `${이가(card.name)} ${questionContext[contextKey]} 다가올 가능성을 암시합니다. `;
     interpretation += card.current_interpretation;
     interpretation += ' 현재의 노력이 이러한 미래로 이어질 것입니다.';
   }
@@ -96,7 +98,7 @@ export const generateOneCardInterpretation = (
 ): string => {
   let interpretation = `"${question}"에 대한 타로의 답변:\n\n`;
   
-  interpretation += `${card.name}이 당신의 질문에 대한 핵심 메시지를 전달합니다.\n\n`;
+  interpretation += `${이가(card.name)} 당신의 질문에 대한 핵심 메시지를 전달합니다.\n\n`;
   
   // 질문 유형별 맞춤 해석
   const contextMessage: Record<string, string> = {
@@ -135,7 +137,7 @@ export const generateOneCardInterpretation = (
   return interpretation;
 };
 
-// 전체 종합 해석 생성 (3카드용)
+// 전체 종합 해석 생성 (3카드용) - 컨텍스트 기반 해석 통합
 export const generateOverallInterpretation = (
   question: string,
   cards: DrawnCard[],
@@ -160,43 +162,35 @@ export const generateOverallInterpretation = (
     return generateOneCardInterpretation(question, cards[0] || cards.find(c => c && c.name), questionType);
   }
   
-  let overall = `"${question}"에 대한 타로의 답변:\n\n`;
+  // 컨텍스트 기반 종합 해석 사용
+  const comprehensiveResult = generateComprehensiveInterpretation(cards, questionType, question);
   
-  // 카드 조합 메시지
-  overall += analyzeCardCombination(cards) + '\n\n';
+  // 객체를 문자열로 변환
+  let result = '';
   
-  // 핵심 메시지
-  overall += '핵심 메시지: ';
-  if (questionType === 'love') {
-    overall += '사랑에 있어서 ';
-  } else if (questionType === 'career') {
-    overall += '직업적 성장에 있어서 ';
-  } else if (questionType === 'money') {
-    overall += '재정적 측면에서 ';
-  } else if (questionType === 'health') {
-    overall += '건강 관리에 있어서 ';
+  // 카드별 해석
+  result += '카드별 해석\n\n';
+  comprehensiveResult.cardInterpretations.forEach(card => {
+    if (card.position) {
+      result += `[${card.position}] ${card.interpretation}\n\n`;
+    } else {
+      result += `${card.interpretation}\n\n`;
+    }
+  });
+  
+  // 시너지 분석
+  if (comprehensiveResult.synergies.length > 0) {
+    result += '\n카드 시너지\n\n';
+    comprehensiveResult.synergies.forEach(synergy => {
+      result += `${synergy}\n\n`;
+    });
   }
   
-  overall += `${pastCard.name}으로 시작된 에너지가 ${presentCard.name}을 통해 현재 상황을 만들어냈고, `;
-  overall += `이것이 ${futureCard.name}으로 이어질 것입니다.\n\n`;
+  // 종합 조언
+  result += '\n종합 조언\n\n';
+  result += comprehensiveResult.advice;
   
-  // 조언
-  overall += '조언: ';
-  if (presentCard.suit === 'major') {
-    overall += '지금은 인생의 중요한 전환점입니다. ';
-  }
-  
-  overall += '과거의 경험을 바탕으로 현재를 현명하게 살아가면, ';
-  overall += '미래는 당신이 원하는 방향으로 펼쳐질 것입니다. ';
-  
-  const reversedCount = cards.filter(card => card.is_reversed).length;
-  if (reversedCount > 1) {
-    overall += '다소 인내가 필요하지만, 내면의 성장이 동반될 것입니다.';
-  } else {
-    overall += '긍정적인 변화가 기다리고 있으니 자신감을 가지세요.';
-  }
-  
-  return overall;
+  return result;
 };
 
 // 키워드 기반 추가 인사이트

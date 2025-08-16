@@ -31,21 +31,26 @@ export default function Navigation() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 h-20 transition-all duration-300 opacity-95 ${
         isScrolled
-          ? "glass-nav-scrolled backdrop-blur-xl border-b border-white/20"
-          : "glass-nav backdrop-blur-sm"
+          ? "bg-gradient-to-r from-slate-800/40 via-blue-900/30 to-slate-800/40 backdrop-blur-xl border-b border-solid border-white/8 shadow-lg shadow-slate-900/20"
+          : "bg-gradient-to-r from-slate-900/15 via-blue-950/10 to-slate-900/15 backdrop-blur-sm border-b border-solid border-white/4 shadow-md shadow-slate-900/10"
       }`}
+      style={{
+        boxShadow: isScrolled 
+          ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.05)'
+          : '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+      }}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="dawn-container h-full">
+        <div className="flex items-center justify-between h-full">
           {/* 로고 */}
           <Link href="/" className="flex items-center space-x-3">
             <div className="relative">
               <span className="text-2xl">🌙</span>
               <span className="absolute -top-1 -right-1 text-xs">✨</span>
             </div>
-            <span className="font-bold text-lg mystic-text-gradient">
+            <span className="font-bold text-lg dawn-text-primary">
               칠팔 타로
             </span>
           </Link>
@@ -56,38 +61,38 @@ export default function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-3 py-2 rounded-full transition-all duration-300 group ${
+                className={`relative px-3 py-3 transition-all duration-300 group font-medium ${
                   pathname === item.href
-                    ? "text-white glass-button"
-                    : "text-purple-200 hover:text-white hover:bg-white/10"
+                    ? "dawn-text-primary"
+                    : "dawn-text-secondary hover:dawn-text-primary"
                 }`}
               >
-                <span className="relative z-10 flex items-center space-x-2">
+                <span className="flex items-center space-x-2">
                   <span>{item.icon}</span>
-                  <span className="font-medium">{item.label.split(" ")[1]}</span>
+                  <span>{item.label.split(" ")[1]}</span>
                 </span>
-                
+                {/* 액티브 밑줄 - 은은한 핵크-보라 */}
                 {pathname === item.href && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-full border border-white/30"
-                    transition={{ type: "spring", duration: 0.6 }}
-                  />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-pink-400/30 to-purple-400/30 rounded-full" />
+                )}
+                {/* 호버 밑줄 - 아주 은은한 흰색 */}
+                {pathname !== item.href && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 )}
               </Link>
             ))}
           </div>
 
           {/* 모바일 메뉴 */}
-          <div className="md:hidden flex items-center space-x-4">
+          <div className="md:hidden flex items-center space-x-2">
             {navItems.slice(0, 3).map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`p-2 rounded-full transition-all duration-300 ${
+                className={`px-3 py-2 rounded-lg transition-all duration-300 ${
                   pathname === item.href
-                    ? "text-white glass-button"
-                    : "text-purple-200 hover:text-white hover:bg-white/10"
+                    ? "dawn-text-primary bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-400/30"
+                    : "dawn-text-secondary hover:dawn-text-primary hover:bg-white/10"
                 }`}
               >
                 <span className="text-lg">{item.icon}</span>
@@ -102,7 +107,7 @@ export default function Navigation() {
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 origin-left"
+          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-pink-400 via-yellow-400 to-cyan-400 origin-left"
           style={{ width: "100%" }}
         />
       )}

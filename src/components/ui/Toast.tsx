@@ -58,15 +58,15 @@ const getToastIcon = (type: ToastType) => {
 const getToastColors = (type: ToastType) => {
   switch (type) {
     case 'success':
-      return 'border-green-500 bg-green-500/10 text-green-100';
+      return 'border-green-400 bg-green-500/10 dawn-text-primary';
     case 'error':
-      return 'border-red-500 bg-red-500/10 text-red-100';
+      return 'border-red-400 bg-red-500/10 dawn-text-primary';
     case 'warning':
-      return 'border-yellow-500 bg-yellow-500/10 text-yellow-100';
+      return 'border-yellow-400 bg-yellow-500/10 dawn-text-primary';
     case 'info':
-      return 'border-blue-500 bg-blue-500/10 text-blue-100';
+      return 'border-cyan-400 bg-cyan-500/10 dawn-text-primary';
     default:
-      return 'border-gray-500 bg-gray-500/10 text-gray-100';
+      return 'border-purple-400 bg-purple-500/10 dawn-text-primary';
   }
 };
 
@@ -89,14 +89,14 @@ const ToastItem = React.forwardRef<HTMLDivElement, { toast: Toast; onRemove: (id
       exit={{ opacity: 0, x: 300, scale: 0.9 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={`
-        relative max-w-sm w-full bg-gray-800/95 backdrop-blur-lg mobile-toast-blur rounded-lg p-4 shadow-2xl border-l-4
+        dawn-glass-card-light relative max-w-sm w-full mobile-toast-blur shadow-2xl border-l-4
         ${getToastColors(toast.type)}
       `}
     >
       {/* 닫기 버튼 */}
       <button
         onClick={() => onRemove(toast.id)}
-        className="absolute top-2 right-2 text-white/60 hover:text-white transition-colors"
+        className="absolute top-3 right-3 dawn-text-muted hover:dawn-text-primary transition-colors p-1 hover:bg-white/10 rounded"
       >
         ✕
       </button>
@@ -109,13 +109,13 @@ const ToastItem = React.forwardRef<HTMLDivElement, { toast: Toast; onRemove: (id
 
         <div className="flex-1">
           {/* 제목 */}
-          <h4 className="font-semibold text-white mb-1">
+          <h4 className="font-semibold dawn-text-primary mb-1">
             {toast.title}
           </h4>
 
           {/* 메시지 */}
           {toast.message && (
-            <p className="text-sm opacity-90">
+            <p className="text-sm dawn-text-secondary opacity-90">
               {toast.message}
             </p>
           )}
@@ -124,7 +124,7 @@ const ToastItem = React.forwardRef<HTMLDivElement, { toast: Toast; onRemove: (id
           {toast.action && (
             <button
               onClick={toast.action.onClick}
-              className="mt-2 text-xs font-semibold text-white underline hover:no-underline"
+              className="mt-2 text-xs font-semibold dawn-text-accent underline hover:no-underline"
             >
               {toast.action.label}
             </button>
@@ -134,7 +134,7 @@ const ToastItem = React.forwardRef<HTMLDivElement, { toast: Toast; onRemove: (id
 
       {/* 진행 바 */}
       <motion.div
-        className="absolute bottom-0 left-0 h-1 bg-white/30 rounded-b-lg"
+        className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-pink-400 to-purple-400 rounded-b-lg"
         initial={{ width: '100%' }}
         animate={{ width: '0%' }}
         transition={{ duration: (toast.duration || 5000) / 1000, ease: "linear" }}

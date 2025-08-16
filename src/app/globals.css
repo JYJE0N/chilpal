@@ -2,49 +2,85 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* 모바일 브라우저 호환성 */
+/* 통합 디자인 시스템 CSS 변수 */
 :root {
-  /* 기본 라이트 모드 */
-  color-scheme: light;
+  /* 밤하늘 색상 */
+  --night-deep: 10, 15, 40;
+  --night-blue: 30, 40, 95;
+  --night-indigo: 55, 65, 140;
+  --night-mystic: 80, 100, 180;
+  --night-purple: 120, 100, 200;
+  --night-lavender: 150, 130, 220;
+  --night-pink: 200, 150, 230;
+  --night-starlight: 230, 235, 255;
+  --night-moonlight: 255, 255, 255;
+  
+  /* 텍스트 색상 */
+  --text-primary: rgb(255, 255, 255);
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-accent: rgb(168, 85, 247);
+  --text-point: rgb(236, 72, 153);
+  --text-success: rgb(34, 197, 94);
+  --text-warning: rgb(250, 204, 21);
+  --text-error: rgb(239, 68, 68);
+  --text-info: rgb(6, 182, 212);
+  
+  /* 배경 색상 */
+  --bg-deep: rgb(10, 15, 40);
+  --bg-dark: rgb(30, 40, 95);
+  --bg-medium: rgb(55, 65, 140);
+  --bg-glass-light: rgba(255, 255, 255, 0.08);
+  --bg-glass-medium: rgba(255, 255, 255, 0.12);
+  --bg-glass-strong: rgba(255, 255, 255, 0.16);
+  
+  /* 그라데이션 */
+  --gradient-primary: linear-gradient(135deg, rgb(168, 85, 247), rgb(236, 72, 153));
+  --gradient-secondary: linear-gradient(135deg, rgb(59, 130, 246), rgb(147, 51, 234));
+  --gradient-night: linear-gradient(180deg, rgb(10, 15, 40) 0%, rgb(30, 40, 95) 50%, rgb(55, 65, 140) 100%);
+  --gradient-mystic: linear-gradient(135deg, rgba(45, 37, 71, 0.4) 0%, rgba(69, 57, 97, 0.3) 50%, rgba(45, 37, 71, 0.4) 100%);
+  
+  /* 간격 */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* 반경 */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* 그림자 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --shadow-glow-purple: 0 0 20px rgba(168, 85, 247, 0.4);
+  --shadow-glow-pink: 0 0 20px rgba(236, 72, 153, 0.4);
+  --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.4);
+  --shadow-glow-mystic: 0 0 30px rgba(120, 100, 200, 0.3);
   
   /* 동적 뷰포트 높이 */
   --vh: 1vh;
 }
 
-:root {
-  /* 몽환적 밤하늘 색상 팔레트 - 푸른색 강조 */
-  --night-deep: 10, 15, 40;           /* #0a0f28 - 깊은 밤 */
-  --night-blue: 30, 40, 95;           /* #1e285f - 진한 블루 */
-  --mystic-indigo: 55, 65, 140;       /* #37418c - 인디고 */
-  --mystic-blue: 80, 100, 180;        /* #5064b4 - 메인 블루 */
-  --mystic-purple: 120, 100, 200;     /* #7864c8 - 보라빛 블루 */
-  --mystic-lavender: 150, 130, 220;   /* #9682dc - 라벤더 */
-  --mystic-pink: 200, 150, 230;       /* #c896e6 - 연한 핑크 퍼플 */
-  --starlight: 230, 235, 255;         /* #e6ebff - 별빛 */
-  --moonlight: 255, 255, 255;         /* #ffffff - 달빛 */
-  
-  /* 그라데이션 색상 */
-  --bg-gradient-start: var(--night-deep);
-  --bg-gradient-middle: var(--night-blue);
-  --bg-gradient-end: var(--mystic-indigo);
-  
-  /* 텍스트 색상 */
-  --text-primary: var(--starlight);
-  --text-secondary: var(--mystic-lavender);
-  --text-accent: var(--mystic-pink);
-}
-
 /* 기본 배경색 설정 */
 html {
-  background-color: rgb(10, 15, 40);
+  background-color: var(--bg-deep);
   color-scheme: dark;
 }
 
 /* 모바일 webkit 블러 강제 적용 */
 .mobile-header-blur {
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  backdrop-filter: blur(12px) saturate(180%);
-  /* iOS Safari 강제 활성화 */
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  backdrop-filter: blur(20px) saturate(120%);
   will-change: transform;
   -webkit-transform: translateZ(0);
 }
@@ -66,7 +102,7 @@ html {
 /* 블러 미지원 시 fallback */
 @supports not (backdrop-filter: blur(1px)) and not (-webkit-backdrop-filter: blur(1px)) {
   .mobile-header-blur {
-    background: rgba(0, 0, 0, 0.85) !important;
+    background: rgba(51, 65, 85, 0.9) !important;
   }
   
   .mobile-menu-blur {
@@ -110,19 +146,16 @@ html {
   background-color: rgba(156, 163, 175, 0.7);
 }
 
+/* 메인 배경 */
 body {
-  color: rgb(var(--text-primary));
+  color: var(--text-primary);
   background: 
-    radial-gradient(ellipse 800px 400px at 20% 30%, rgba(120, 100, 200, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse 600px 300px at 80% 70%, rgba(80, 100, 180, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 400px 600px at 60% 10%, rgba(150, 130, 220, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 500px 200px at 10% 80%, rgba(200, 150, 230, 0.04) 0%, transparent 50%),
-    linear-gradient(
-      180deg,
-      rgb(var(--bg-gradient-start)) 0%,
-      rgb(var(--bg-gradient-middle)) 50%,
-      rgb(var(--bg-gradient-end)) 100%
-    );
+    radial-gradient(ellipse 800px 400px at 20% 30%, rgba(var(--night-purple), 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 600px 300px at 80% 70%, rgba(var(--night-mystic), 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 400px 600px at 60% 10%, rgba(var(--night-lavender), 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 500px 200px at 10% 80%, rgba(var(--night-pink), 0.04) 0%, transparent 50%),
+    var(--gradient-night);
+  
   /* 모바일 브라우저 주소창 대응 */
   min-height: 100vh;
   min-height: calc(var(--vh, 1vh) * 100);
@@ -144,13 +177,7 @@ body {
   }
 }
 
-/* 모바일 스크롤 성능 최적화 */
-@media (max-width: 767px) {
-  /* 모바일에서 스크롤 성능 최적화 - transform 제거 */
-  /* transform은 fixed positioning을 깨뜨리므로 제거 */
-}
-
-/* 별빛 효과 - 수량 감소 */
+/* 별빛 효과 */
 body::before {
   content: '';
   position: fixed;
@@ -161,7 +188,7 @@ body::before {
   pointer-events: none;
   background-image: 
     radial-gradient(1px 1px at 80px 40px, rgba(255, 255, 255, 0.8), transparent),
-    radial-gradient(1px 1px at 250px 80px, rgba(230, 235, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 250px 80px, rgba(var(--night-starlight), 0.6), transparent),
     radial-gradient(2px 2px at 450px 120px, rgba(255, 255, 255, 0.7), transparent),
     radial-gradient(1px 1px at 150px 200px, rgba(200, 220, 255, 0.5), transparent);
   background-repeat: repeat;
@@ -175,7 +202,7 @@ body::before {
   100% { opacity: 0.8; }
 }
 
-/* 별똥별 효과 - 사선으로 떨어짐 */
+/* 별똥별 효과 */
 body::after {
   content: '';
   position: fixed;
@@ -190,8 +217,8 @@ body::after {
       transparent 0%, 
       transparent 40%, 
       rgba(255, 255, 255, 0.8) 50%, 
-      rgba(200, 150, 230, 0.6) 60%, 
-      rgba(150, 100, 200, 0.3) 80%, 
+      rgba(var(--night-pink), 0.6) 60%, 
+      rgba(var(--night-purple), 0.3) 80%, 
       transparent 100%
     );
   background-size: 150px 3px;
@@ -222,260 +249,134 @@ body::after {
   }
 }
 
-/* 추가 별똥별 애니메이션 */
-@keyframes shooting-star-1 {
-  0% {
-    transform: rotate(45deg) translateX(0);
-    opacity: 0;
-  }
-  5% {
-    opacity: 1;
-  }
-  15% {
-    transform: rotate(45deg) translateX(calc(100vw + 200px));
-    opacity: 1;
-  }
-  20% {
-    opacity: 0;
-  }
-  100% {
-    transform: rotate(45deg) translateX(calc(100vw + 200px));
-    opacity: 0;
-  }
-}
-
-@keyframes shooting-star-2 {
-  0% {
-    transform: rotate(35deg) translateX(0);
-    opacity: 0;
-  }
-  5% {
-    opacity: 0.8;
-  }
-  18% {
-    transform: rotate(35deg) translateX(calc(100vw + 150px));
-    opacity: 0.8;
-  }
-  23% {
-    opacity: 0;
-  }
-  100% {
-    transform: rotate(35deg) translateX(calc(100vw + 150px));
-    opacity: 0;
-  }
-}
-
-@keyframes shooting-star-3 {
-  0% {
-    transform: rotate(40deg) translateX(0);
-    opacity: 0;
-  }
-  5% {
-    opacity: 0.9;
-  }
-  12% {
-    transform: rotate(40deg) translateX(calc(100vw + 180px));
-    opacity: 0.9;
-  }
-  17% {
-    opacity: 0;
-  }
-  100% {
-    transform: rotate(40deg) translateX(calc(100vw + 180px));
-    opacity: 0;
-  }
-}
-
-/* 신비로운 밤하늘 효과를 위한 유틸리티 클래스 */
+/* 통합 디자인 시스템 유틸리티 클래스 */
 @layer utilities {
-  /* 애니메이션 딜레이 */
-  .animate-delay-100 {
-    animation-delay: 100ms;
-  }
-  .animate-delay-200 {
-    animation-delay: 200ms;
-  }
-  .animate-delay-300 {
-    animation-delay: 300ms;
-  }
-  .animate-delay-400 {
-    animation-delay: 400ms;
-  }
-  .animate-delay-500 {
-    animation-delay: 500ms;
-  }
-
-  /* 신비로운 글로우 효과 */
-  .mystic-glow {
-    box-shadow: 
-      0 0 20px rgba(186, 133, 196, 0.3),
-      0 0 40px rgba(99, 67, 181, 0.2),
-      0 0 60px rgba(71, 85, 162, 0.1);
-  }
-
-  .mystic-glow-hover:hover {
-    box-shadow: 
-      0 0 30px rgba(186, 133, 196, 0.5),
-      0 0 60px rgba(99, 67, 181, 0.3),
-      0 0 90px rgba(71, 85, 162, 0.2);
-    transition: box-shadow 0.3s ease;
-  }
-
-  /* 별빛 반짝임 효과 */
-  .starlight-shimmer {
-    background: linear-gradient(
-      45deg,
-      rgba(240, 230, 255, 0.8),
-      rgba(255, 215, 175, 0.6),
-      rgba(186, 133, 196, 0.8),
-      rgba(240, 230, 255, 0.8)
-    );
-    background-size: 200% 200%;
-    animation: shimmer 3s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    0%, 100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-  }
-
-  /* 몽환적 배경 */
-  .mystic-bg {
-    background: linear-gradient(
-      135deg,
-      rgba(45, 25, 83, 0.9) 0%,
-      rgba(46, 44, 107, 0.8) 35%,
-      rgba(71, 85, 162, 0.7) 70%,
-      rgba(68, 41, 139, 0.9) 100%
-    );
-    border: 1px solid rgba(186, 133, 196, 0.2);
-  }
-
-  /* 데스크톱에서만 블러 효과 활성화 */
-  @media (min-width: 768px) and (hover: hover) {
-    .mystic-bg {
-      backdrop-filter: blur(10px);
-    }
-  }
-
-  /* 신비로운 버튼 스타일 */
-  .mystic-button {
-    background: linear-gradient(
-      135deg,
-      rgba(99, 67, 181, 0.8) 0%,
-      rgba(186, 133, 196, 0.9) 50%,
-      rgba(109, 140, 207, 0.8) 100%
-    );
-    border: 1px solid rgba(255, 215, 175, 0.3);
-    transition: all 0.3s ease;
-  }
-
-  .mystic-button:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(99, 67, 181, 1) 0%,
-      rgba(186, 133, 196, 1) 50%,
-      rgba(109, 140, 207, 1) 100%
-    );
-    transform: translateY(-2px);
-    box-shadow: 
-      0 10px 25px rgba(186, 133, 196, 0.4),
-      0 5px 15px rgba(99, 67, 181, 0.3);
-  }
-
-  /* 텍스트 그라데이션 */
-  .mystic-text-gradient {
-    background: linear-gradient(
-      135deg,
-      rgb(var(--starlight)) 0%,
-      rgb(var(--mystic-lavender)) 50%,
-      rgb(var(--mystic-pink)) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* 글래스모피즘 스타일 */
+  /* 텍스트 색상 */
+  .text-primary { color: var(--text-primary); }
+  .text-secondary { color: var(--text-secondary); }
+  .text-muted { color: var(--text-muted); }
+  .text-accent { color: var(--text-accent); }
+  .text-point { color: var(--text-point); }
+  .text-success { color: var(--text-success); }
+  .text-warning { color: var(--text-warning); }
+  .text-error { color: var(--text-error); }
+  .text-info { color: var(--text-info); }
+  
+  /* 배경 색상 */
+  .bg-deep { background-color: var(--bg-deep); }
+  .bg-dark { background-color: var(--bg-dark); }
+  .bg-medium { background-color: var(--bg-medium); }
+  .bg-glass-light { background-color: var(--bg-glass-light); }
+  .bg-glass-medium { background-color: var(--bg-glass-medium); }
+  .bg-glass-strong { background-color: var(--bg-glass-strong); }
+  
+  /* 그라데이션 */
+  .bg-gradient-primary { background: var(--gradient-primary); }
+  .bg-gradient-secondary { background: var(--gradient-secondary); }
+  .bg-gradient-night { background: var(--gradient-night); }
+  .bg-gradient-mystic { background: var(--gradient-mystic); }
+  
+  /* 그림자 */
+  .shadow-glow-purple { box-shadow: var(--shadow-glow-purple); }
+  .shadow-glow-pink { box-shadow: var(--shadow-glow-pink); }
+  .shadow-glow-blue { box-shadow: var(--shadow-glow-blue); }
+  .shadow-glow-mystic { box-shadow: var(--shadow-glow-mystic); }
+  
+  /* 글래스모피즘 카드 */
   .glass-card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
+    background: var(--gradient-mystic);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(157, 143, 199, 0.2);
+    border-radius: var(--radius-xl);
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.2),
+      0 8px 32px rgba(15, 12, 31, 0.5),
+      0 0 64px rgba(236, 72, 153, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
-
+  
   .glass-card-light {
-    background: rgba(255, 255, 255, 0.12);
+    background: linear-gradient(135deg, 
+      rgba(69, 57, 97, 0.3) 0%,
+      rgba(93, 78, 123, 0.25) 50%,
+      rgba(69, 57, 97, 0.3) 100%);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    border: 1px solid rgba(157, 143, 199, 0.3);
+    border-radius: var(--radius-lg);
     box-shadow: 
-      0 6px 24px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      0 4px 20px rgba(15, 12, 31, 0.4),
+      0 0 32px rgba(236, 72, 153, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
-
-  .glass-button {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  /* 버튼 스타일 */
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+    background: linear-gradient(135deg, rgb(147, 51, 234), rgb(219, 39, 119));
+  }
+  
+  .btn-secondary {
+    background: var(--bg-glass-light);
+    color: var(--text-secondary);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-weight: 500;
     transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
   }
-
-  .glass-button:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 
-      0 10px 30px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  .glass-input {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-  }
-
-  .glass-input:focus {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(150, 130, 220, 0.5);
-    box-shadow: 
-      0 0 0 3px rgba(150, 130, 220, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  /* glass-nav 클래스 제거 - Header에서 직접 Tailwind 사용 */
-
-  /* 네비게이션 링크 호버 효과 */
-  .nav-link-hover {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-  }
-
-  /* 데스크톱에서만 링크 호버 블러 효과 */
-  @media (min-width: 768px) and (hover: hover) {
-    .nav-link-hover {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-    }
-  }
-
-  .nav-link-hover:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(186, 133, 196, 0.4);
+  
+  .btn-secondary:hover {
+    background: var(--bg-glass-medium);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: var(--text-primary);
     transform: translateY(-1px);
-    box-shadow: 
-      0 4px 12px rgba(186, 133, 196, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
-
-  /* glass-footer 클래스 제거 - Footer에서 직접 Tailwind 사용 */
+  
+  /* 입력 필드 */
+  .input-field {
+    background: rgba(45, 37, 71, 0.3);
+    border: 1px solid rgba(157, 143, 199, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    color: var(--text-primary);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: var(--text-accent);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+    background: rgba(69, 57, 97, 0.4);
+  }
+  
+  .input-field::placeholder {
+    color: var(--text-muted);
+  }
+  
+  /* 컨테이너 */
+  .container-unified {
+    max-width: 1152px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+  
+  /* 애니메이션 딜레이 */
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
 }
