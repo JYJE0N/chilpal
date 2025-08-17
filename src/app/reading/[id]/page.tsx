@@ -54,7 +54,12 @@ export async function generateMetadata({
       url: `/reading/${params.id}`,
       images: [
         {
-          url: '/og-image.png',
+          url: `/api/og/reading/${params.id}?${new URLSearchParams({
+            title: `"${shortQuestion}" 타로 리딩 결과`,
+            cards: cardNames,
+            question: reading.question,
+            spreadType: reading.spreadType
+          }).toString()}`,
           width: 1200,
           height: 630,
           alt: '칠팔 타로 리딩 결과',
@@ -65,7 +70,12 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: `"${shortQuestion}" 타로 리딩 결과`,
       description: `뽑힌 카드: ${cardNames}`,
-      images: ['/og-image.png'],
+      images: [`/api/og/reading/${params.id}?${new URLSearchParams({
+        title: `"${shortQuestion}" 타로 리딩 결과`,
+        cards: cardNames,
+        question: reading.question,
+        spreadType: reading.spreadType
+      }).toString()}`],
     },
   };
 }
@@ -340,6 +350,10 @@ export default async function ReadingDetailPage({
               text={`칠팔 타로에서 확인한 타로 리딩 결과입니다. 뽑힌 카드들이 전하는 특별한 메시지를 확인해보세요!`}
               url={typeof window !== 'undefined' ? window.location.href : ''}
               hashtags={['타로', '타로리딩', '운세', '칠팔타로', reading.questionType]}
+              readingId={params.id}
+              cards={reading.cards?.map((card: any) => ({ name: card.name, position: card.position || (card.is_reversed ? 'reversed' : 'upright') }))}
+              question={reading.question}
+              spreadType={reading.spreadType}
             />
           </div>
         </div>

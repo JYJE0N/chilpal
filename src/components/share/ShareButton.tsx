@@ -12,17 +12,53 @@ interface ShareButtonProps {
   url?: string;
   image?: string;
   hashtags?: string[];
+  readingId?: string;
+  cards?: Array<{ name: string; position: string }>;
+  question?: string;
+  spreadType?: string;
 }
 
 export default function ShareButton({ 
   title, 
   text, 
   url = typeof window !== 'undefined' ? window.location.href : '',
-  hashtags = ['타로', '타로카드', '운세', '칠팔타로']
+  hashtags = ['타로', '타로카드', '운세', '칠팔타로'],
+  readingId,
+  cards,
+  question,
+  spreadType
 }: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { isLoaded: isKakaoLoaded, Kakao } = useKakao();
+
+  // 동적 OG 이미지 URL 생성
+  const generateOGImageUrl = () => {
+    if (readingId && cards && question && spreadType) {
+      // 특정 리딩 결과용 OG 이미지 (URL 파라미터로 데이터 전달)
+      const cardNames = cards.map(card => card.name).join(',');
+      const params = new URLSearchParams({
+        title: title,
+        cards: cardNames,
+        question: question,
+        spreadType: spreadType
+      });
+      return `${typeof window !== 'undefined' ? window.location.origin : ''}/api/og/reading/${readingId}?${params.toString()}`;
+    } else if (cards && question && spreadType) {
+      // 일반적인 동적 OG 이미지
+      const cardNames = cards.map(card => card.name).join(',');
+      const params = new URLSearchParams({
+        title: title,
+        cards: cardNames,
+        question: question,
+        spreadType: spreadType
+      });
+      return `${typeof window !== 'undefined' ? window.location.origin : ''}/api/og?${params.toString()}`;
+    }
+    return '/og-image.png'; // 기본 이미지
+  };
+
+  const ogImageUrl = generateOGImageUrl();
 
   // 공유 URL 생성
   const shareUrl = encodeURIComponent(url);
@@ -41,7 +77,9 @@ export default function ShareButton({
           content: {
             title: title,
             description: text,
-            imageUrl: '/og-image.png',
+            imageUrl: ogImageUrl.startsWith('/') ? 
+              `${typeof window !== 'undefined' ? window.location.origin : ''}${ogImageUrl}` : 
+              ogImageUrl,
             link: {
               mobileWebUrl: url,
               webUrl: url,

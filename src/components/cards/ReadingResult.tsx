@@ -281,6 +281,10 @@ export default function ReadingResult({
             ).join(', ')}\n\n칠팔 타로에서 확인한 타로 리딩 결과입니다. 뽑힌 카드들이 전하는 특별한 메시지를 확인해보세요!`}
             url={readingId ? `${typeof window !== 'undefined' ? window.location.origin : ''}/reading/${readingId}` : undefined}
             hashtags={['타로', '타로리딩', '운세', '칠팔타로']}
+            readingId={readingId}
+            cards={selectedCards.map(card => ({ name: card.name, position: card.position }))}
+            question={question}
+            spreadType={spreadType}
           />
           <button
             onClick={resetReading}
