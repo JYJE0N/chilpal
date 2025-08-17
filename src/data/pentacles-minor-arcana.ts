@@ -9,7 +9,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 1,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/ace-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/ace-pentacles.webp",
 
     upright_meaning: "새로운 기회, 물질적 시작, 번영의 씨앗, 투자",
     upright_interpretation:
@@ -32,7 +32,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 2,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/02-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/02-pentacles.webp",
 
     upright_meaning: "균형, 다중 업무, 유연성, 우선순위 설정",
     upright_interpretation:
@@ -54,7 +54,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 3,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/03-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/03-pentacles.webp",
 
     upright_meaning: "팀워크, 협력, 기술 발전, 인정받음",
     upright_interpretation:
@@ -76,7 +76,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 4,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/04-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/04-pentacles.webp",
 
     upright_meaning: "보수성, 안정 추구, 절약, 소유욕",
     upright_interpretation:
@@ -98,7 +98,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 5,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/05-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/05-pentacles.webp",
 
     upright_meaning: "재정적 어려움, 빈곤, 도움 요청, 극복",
     upright_interpretation:
@@ -121,7 +121,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 6,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/06-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/06-pentacles.webp",
 
     upright_meaning: "관대함, 기부, 균형잡힌 교환, 도움 주기",
     upright_interpretation:
@@ -144,7 +144,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 7,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/07-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/07-pentacles.webp",
 
     upright_meaning: "인내, 평가, 장기 투자, 결실 기다림",
     upright_interpretation:
@@ -167,7 +167,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 8,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/08-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/08-pentacles.webp",
 
     upright_meaning: "기술 향상, 집중, 장인정신, 완벽주의",
     upright_interpretation:
@@ -189,7 +189,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 9,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/09-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/09-pentacles.webp",
 
     upright_meaning: "독립성, 자급자족, 고급스러움, 성취감",
     upright_interpretation:
@@ -212,7 +212,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: 10,
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/10-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/10-pentacles.webp",
 
     upright_meaning: "가족 유산, 장기적 안정, 부의 축적, 전통",
     upright_interpretation:
@@ -235,7 +235,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: "page",
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/page-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/page-pentacles.webp",
 
     upright_meaning: "학습 기회, 실용적 시작, 새로운 기술, 근면함",
     upright_interpretation:
@@ -258,7 +258,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: "knight",
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/knight-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/knight-pentacles.webp",
 
     upright_meaning: "근면성, 신뢰성, 체계적 접근, 끈기",
     upright_interpretation:
@@ -280,7 +280,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: "queen",
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/queen-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/queen-pentacles.webp",
 
     upright_meaning: "실용적 지혜, 풍요로운 돌봄, 가정 관리, 자원 관리",
     upright_interpretation:
@@ -303,7 +303,7 @@ export const pentaclesCards: TarotCard[] = [
     suit: "pentacles",
     number: "king",
     has_reversal: false,
-    image_url: "/images/cards/minor/pentacles/king-pentacles.png",
+    image_url: "/images/cards/minor/pentacles/king-pentacles.webp",
 
     upright_meaning: "재정적 성공, 사업 수완, 관대한 리더십, 물질적 마스터리",
     upright_interpretation:

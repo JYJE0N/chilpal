@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowLeft, Zap, Clock, Cross, Users, Heart, Briefcase, HelpCircle } from "lucide-react";
 import { SPREADS, SpreadType } from "@/types/spreads";
 import { ReadingDispatch } from "@/hooks/useReadingState";
-import { drawRandomCards } from "@/data/all-tarot-cards";
+// drawRandomCards는 동적 import로 로드
 import { DrawnCard } from "@/types/tarot";
 
 // 질문 예시 배열 (랜덤 노출용)
@@ -84,7 +84,8 @@ export default function QuestionInput({
     } else {
       cardCount = 20; // 5열×4줄
     }
-    const randomCards = drawRandomCards(cardCount);
+    const { drawRandomCards } = await import('@/data/all-tarot-cards');
+    const randomCards = await drawRandomCards(cardCount);
     
     // 카드에 역방향 여부 미리 결정
     const cardsWithPosition: DrawnCard[] = randomCards.map(card => {

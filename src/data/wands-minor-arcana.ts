@@ -9,7 +9,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 1,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/ace-wands.png",
+    image_url: "/images/cards/minor/wands/ace-wands.webp",
 
     upright_meaning: "새로운 시작, 창조적 영감, 열정, 잠재력",
     upright_interpretation:
@@ -32,7 +32,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 2,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/02-wands.png",
+    image_url: "/images/cards/minor/wands/02-wands.webp",
 
     upright_meaning: "계획, 미래 전망, 개인적 힘, 결정",
     upright_interpretation:
@@ -55,7 +55,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 3,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/03-wands.png",
+    image_url: "/images/cards/minor/wands/03-wands.webp",
 
     upright_meaning: "확장, 원거리 계획, 탐험, 예견",
     upright_interpretation:
@@ -78,7 +78,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 4,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/04-wands.png",
+    image_url: "/images/cards/minor/wands/04-wands.webp",
 
     upright_meaning: "축하, 화합, 가정의 행복, 성취",
     upright_interpretation:
@@ -101,7 +101,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 5,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/05-wands.png",
+    image_url: "/images/cards/minor/wands/05-wands.webp",
 
     upright_meaning: "경쟁, 갈등, 의견 충돌, 도전",
     upright_interpretation:
@@ -124,7 +124,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 6,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/06-wands.png",
+    image_url: "/images/cards/minor/wands/06-wands.webp",
 
     upright_meaning: "승리, 인정, 공적 성공, 리더십",
     upright_interpretation:
@@ -140,7 +140,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 7,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/07-wands.png",
+    image_url: "/images/cards/minor/wands/07-wands.webp",
 
     upright_meaning: "방어, 도전에 맞서기, 용기, 지위 유지",
     upright_interpretation:
@@ -162,7 +162,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 8,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/08-wands.png",
+    image_url: "/images/cards/minor/wands/08-wands.webp",
 
     upright_meaning: "빠른 행동, 급속한 진전, 소식, 여행",
     upright_interpretation:
@@ -185,7 +185,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 9,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/09-wands.png",
+    image_url: "/images/cards/minor/wands/09-wands.webp",
 
     upright_meaning: "인내, 경계, 회복력, 최후의 방어",
     upright_interpretation:
@@ -208,7 +208,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: 10,
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/10-wands.png",
+    image_url: "/images/cards/minor/wands/10-wands.webp",
 
     upright_meaning: "과로, 부담, 책임감, 목표 달성 직전",
     upright_interpretation:
@@ -231,7 +231,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: "page",
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/page-wands.png",
+    image_url: "/images/cards/minor/wands/page-wands.webp",
 
     upright_meaning: "열정적 메시지, 새로운 프로젝트, 모험심, 학습",
     upright_interpretation:
@@ -254,7 +254,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: "knight",
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/knight-wands.png",
+    image_url: "/images/cards/minor/wands/knight-wands.webp",
 
     upright_meaning: "충동적 행동, 모험, 열정적 추구, 급진적 변화",
     upright_interpretation:
@@ -276,7 +276,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: "queen",
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/queen-wands.png",
+    image_url: "/images/cards/minor/wands/queen-wands.webp",
 
     upright_meaning: "자신감, 독립성, 따뜻한 리더십, 창조적 에너지",
     upright_interpretation:
@@ -299,7 +299,7 @@ export const wandsCards: TarotCard[] = [
     suit: "wands",
     number: "king",
     has_reversal: false,
-    image_url: "/images/cards/minor/wands/king-wands.png",
+    image_url: "/images/cards/minor/wands/king-wands.webp",
 
     upright_meaning: "리더십, 비전, 기업가 정신, 영감을 주는 지도력",
     upright_interpretation:

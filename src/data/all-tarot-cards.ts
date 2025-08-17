@@ -2,31 +2,56 @@
 
 import { TarotCard, DrawnCard, Suit } from "@/types/tarot";
 
-// 임포트된 카드 데이터들
-import { majorArcanaCards } from "./major-arcana";
-import { cupsCards } from "./cups-minor-arcana";
-import { pentaclesCards } from "./pentacles-minor-arcana";
-import { swordsCards } from "./swords-minor-arcana";
-import { wandsCards } from "./wands-minor-arcana";
+// 동적 import를 위한 캐시
+let cardsCache: TarotCard[] | null = null;
 
-// 전체 카드 덱 (78장 완성!) - 타입 단언으로 해결
-export const allTarotCards: TarotCard[] = [
-  ...(majorArcanaCards as TarotCard[]),
-  ...(cupsCards as TarotCard[]),
-  ...(pentaclesCards as TarotCard[]),
-  ...(swordsCards as TarotCard[]),
-  ...(wandsCards as TarotCard[]),
-];
+// 동적으로 모든 카드 데이터를 로드
+export async function getAllTarotCards(): Promise<TarotCard[]> {
+  if (cardsCache) {
+    return cardsCache;
+  }
 
-// 수트별 카드 가져오기
-export const getCardsBySuit = (suit: Suit): TarotCard[] => {
-  return allTarotCards.filter((card) => card.suit === suit);
-};
+  // 병렬로 모든 카드 데이터 로드
+  const [
+    { majorArcanaCards },
+    { cupsCards },
+    { pentaclesCards },
+    { swordsCards },
+    { wandsCards }
+  ] = await Promise.all([
+    import("./major-arcana"),
+    import("./cups-minor-arcana"),
+    import("./pentacles-minor-arcana"),
+    import("./swords-minor-arcana"),
+    import("./wands-minor-arcana")
+  ]);
 
-// ID로 카드 찾기
-export const getCardById = (id: number): TarotCard | undefined => {
-  return allTarotCards.find((card) => card.id === id);
-};
+  // 캐시에 저장
+  cardsCache = [
+    ...(majorArcanaCards as TarotCard[]),
+    ...(cupsCards as TarotCard[]),
+    ...(pentaclesCards as TarotCard[]),
+    ...(swordsCards as TarotCard[]),
+    ...(wandsCards as TarotCard[]),
+  ];
+
+  return cardsCache;
+}
+
+// 동기식 접근을 위한 백업 (기존 코드 호환성)
+export const allTarotCards: TarotCard[] = [];
+
+// 수트별 카드 가져오기 (동적)
+export async function getCardsBySuit(suit: Suit): Promise<TarotCard[]> {
+  const cards = await getAllTarotCards();
+  return cards.filter((card) => card.suit === suit);
+}
+
+// ID로 카드 찾기 (동적)
+export async function getCardById(id: number): Promise<TarotCard | undefined> {
+  const cards = await getAllTarotCards();
+  return cards.find((card) => card.id === id);
+}
 
 // Fisher-Yates 셔플 알고리즘
 const shuffleArray = <T>(array: T[]): T[] => {
@@ -38,14 +63,16 @@ const shuffleArray = <T>(array: T[]): T[] => {
   return shuffled;
 };
 
-// 랜덤 카드 뽑기 (중복 방지)
-export const drawRandomCards = (count: number): TarotCard[] => {
-  if (count > allTarotCards.length) {
-    console.warn(`요청된 카드 수 ${count}이 전체 카드 수 ${allTarotCards.length}보다 많습니다.`);
-    count = allTarotCards.length;
+// 랜덤 카드 뽑기 (중복 방지) - 동적 로딩
+export async function drawRandomCards(count: number): Promise<TarotCard[]> {
+  const cards = await getAllTarotCards();
+  
+  if (count > cards.length) {
+    console.warn(`요청된 카드 수 ${count}이 전체 카드 수 ${cards.length}보다 많습니다.`);
+    count = cards.length;
   }
   
-  const shuffled = shuffleArray(allTarotCards);
+  const shuffled = shuffleArray(cards);
   return shuffled.slice(0, count);
 };
 
@@ -69,47 +96,45 @@ export const drawCardWithPosition = (card: TarotCard): DrawnCard => {
   };
 };
 
-// 3장 뽑기 (과거-현재-미래)
-export const drawThreeCardSpread = (): DrawnCard[] => {
-  const cards = drawRandomCards(3);
+// 3장 뽑기 (과거-현재-미래) - 동적 로딩
+export async function drawThreeCardSpread(): Promise<DrawnCard[]> {
+  const cards = await drawRandomCards(3);
   return cards.map(drawCardWithPosition);
+}
+
+// 통계 정보 가져오기 (동적)
+export async function getDeckStats() {
+  const allCards = await getAllTarotCards();
+  const majorCards = await getCardsBySuit("major");
+  const cupsCards = await getCardsBySuit("cups");
+  const pentaclesCards = await getCardsBySuit("pentacles");
+  const swordsCards = await getCardsBySuit("swords");
+  const wandsCards = await getCardsBySuit("wands");
+  
+  return {
+    total: allCards.length,
+    major: majorCards.length,
+    minor: allCards.length - majorCards.length,
+    cups: cupsCards.length,
+    pentacles: pentaclesCards.length,
+    swords: swordsCards.length,
+    wands: wandsCards.length,
+  };
 };
 
-// 통계 정보 (전체 78장 완성!)
-export const DECK_STATS = {
-  total: allTarotCards.length,
-  major: getCardsBySuit("major").length,
-  minor: allTarotCards.length - getCardsBySuit("major").length,
-  cups: getCardsBySuit("cups").length,
-  pentacles: getCardsBySuit("pentacles").length,
-  swords: getCardsBySuit("swords").length,
-  wands: getCardsBySuit("wands").length,
-};
-
-// 카드 ID 중복 검사
-const checkDuplicateIds = () => {
-  const ids = allTarotCards.map(card => card.id);
+// 카드 ID 중복 검사 (비동기)
+export async function checkDuplicateIds() {
+  const allCards = await getAllTarotCards();
+  const ids = allCards.map(card => card.id);
   const uniqueIds = new Set(ids);
   
   if (ids.length !== uniqueIds.size) {
     console.error('🚨 카드 ID 중복 발견!');
     const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
     console.error('중복된 ID들:', [...new Set(duplicates)]);
+    return false;
   } else {
     console.log('✅ 카드 ID 중복 검사 통과');
+    return true;
   }
-};
-
-// 개발 환경에서만 중복 검사 실행
-if (process.env.NODE_ENV === 'development') {
-  checkDuplicateIds();
 }
-
-// 디버깅용 로그 (프로덕션에서는 주석 처리)
-// console.log(`🎴 칠팔 타로 데이터 로드 완료!`);
-// console.log(
-//   `📊 총 ${DECK_STATS.total}장 | 메이저: ${DECK_STATS.major}장 | 마이너: ${DECK_STATS.minor}장`
-// );
-// console.log(
-//   `💕 컵: ${DECK_STATS.cups}장 | 💰 펜타클: ${DECK_STATS.pentacles}장 | ⚔️ 소드: ${DECK_STATS.swords}장 | 🔥 완드: ${DECK_STATS.wands}장`
-// );

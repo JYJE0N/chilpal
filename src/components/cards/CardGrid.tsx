@@ -153,9 +153,8 @@ export default function CardGrid({
 
     // 기존과 동일한 카드 수로 다시 섞기
     const cardCount = availableCards.length;
-    const randomCards = await import('@/data/all-tarot-cards').then(module => 
-      module.drawRandomCards(cardCount)
-    );
+    const { drawRandomCards } = await import('@/data/all-tarot-cards');
+    const randomCards = await drawRandomCards(cardCount);
     
     // 카드에 역방향 여부 미리 결정
     const cardsWithPosition: DrawnCard[] = randomCards.map(card => {
@@ -323,6 +322,8 @@ export default function CardGrid({
                           placeholder="blur"
                           blurDataURL={getCardBlurDataUrl(card.suit)}
                           sizes="(max-width: 768px) 25vw, (max-width: 1024px) 20vw, 16vw"
+                          priority={index < 4} // 첫 4개 카드는 우선 로딩
+                          loading={index < 4 ? "eager" : "lazy"}
                         />
                       </div>
                     ) : (
@@ -336,6 +337,8 @@ export default function CardGrid({
                           placeholder="blur"
                           blurDataURL={CARD_BACK_BLUR_DATA_URL}
                           sizes="(max-width: 768px) 25vw, (max-width: 1024px) 20vw, 16vw"
+                          priority={index < 6} // 첫 6개 카드 뒷면은 우선 로딩
+                          loading={index < 6 ? "eager" : "lazy"}
                         />
                       </div>
                     )}

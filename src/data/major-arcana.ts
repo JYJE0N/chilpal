@@ -9,7 +9,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/00-fool.png",
+    image_url: "/images/cards/major/00-fool.webp",
 
     // 정방향
     upright_meaning: "새로운 시작, 순수함, 모험, 신뢰",
@@ -39,7 +39,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/01-magician.png",
+    image_url: "/images/cards/major/01-magician.webp",
 
     upright_meaning: "의지력, 창조, 실현, 능력",
     upright_interpretation:
@@ -59,7 +59,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/02-high-priestess.png",
+    image_url: "/images/cards/major/02-high-priestess.webp",
 
     upright_meaning: "직감, 내적 지혜, 신비, 잠재의식",
     upright_interpretation:
@@ -93,7 +93,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/03-empress.png",
+    image_url: "/images/cards/major/03-empress.webp",
 
     upright_meaning: "풍요, 창조력, 모성, 자연",
     upright_interpretation:
@@ -121,7 +121,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/04-emperor.png",
+    image_url: "/images/cards/major/04-emperor.webp",
 
     upright_meaning: "권위, 안정, 질서, 리더십",
     upright_interpretation:
@@ -148,7 +148,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/05-hierophant.png",
+    image_url: "/images/cards/major/05-hierophant.webp",
 
     upright_meaning: "전통, 교육, 영성, 조언",
     upright_interpretation:
@@ -175,7 +175,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/06-lovers.png",
+    image_url: "/images/cards/major/06-lovers.webp",
 
     upright_meaning: "사랑, 선택, 조화, 관계",
     upright_interpretation:
@@ -202,7 +202,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/07-chariot.png",
+    image_url: "/images/cards/major/07-chariot.webp",
 
     upright_meaning: "승리, 의지력, 통제, 전진",
     upright_interpretation:
@@ -229,7 +229,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/08-strength.png",
+    image_url: "/images/cards/major/08-strength.webp",
 
     upright_meaning: "용기, 내적 힘, 인내, 자제력",
     upright_interpretation:
@@ -256,7 +256,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/09-hermit.png",
+    image_url: "/images/cards/major/09-hermit.webp",
 
     upright_meaning: "내적 탐구, 지혜, 고독, 성찰",
     upright_interpretation:
@@ -283,7 +283,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/10-wheel-of-fortune.png",
+    image_url: "/images/cards/major/10-wheel-of-fortune.webp",
 
     upright_meaning: "변화, 운명, 기회, 순환",
     upright_interpretation:
@@ -310,7 +310,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/11-justice.png",
+    image_url: "/images/cards/major/11-justice.webp",
 
     upright_meaning: "정의, 균형, 진실, 공정",
     upright_interpretation:
@@ -337,7 +337,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/12-hanged-man.png",
+    image_url: "/images/cards/major/12-hanged-man.webp",
 
     upright_meaning: "희생, 관점 전환, 대기, 깨달음",
     upright_interpretation:
@@ -364,7 +364,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/13-death.png",
+    image_url: "/images/cards/major/13-death.webp",
 
     upright_meaning: "변화, 종료, 재생, 전환",
     upright_interpretation:
@@ -391,7 +391,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/14-temperance.png",
+    image_url: "/images/cards/major/14-temperance.webp",
 
     upright_meaning: "절제, 조화, 균형, 인내",
     upright_interpretation:
@@ -418,7 +418,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/15-devil.png",
+    image_url: "/images/cards/major/15-devil.webp",
 
     upright_meaning: "유혹, 속박, 중독, 물질주의",
     upright_interpretation:
@@ -445,7 +445,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/16-tower.png",
+    image_url: "/images/cards/major/16-tower.webp",
 
     upright_meaning: "파괴, 급변, 각성, 해방",
     upright_interpretation:
@@ -472,7 +472,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/17-star.png",
+    image_url: "/images/cards/major/17-star.webp",
 
     upright_meaning: "희망, 영감, 치유, 평화",
     upright_interpretation:
@@ -499,7 +499,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/18-moon.png",
+    image_url: "/images/cards/major/18-moon.webp",
 
     upright_meaning: "환상, 직감, 무의식, 혼란",
     upright_interpretation:
@@ -526,7 +526,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/19-sun.png",
+    image_url: "/images/cards/major/19-sun.webp",
 
     upright_meaning: "성공, 기쁨, 활력, 성취",
     upright_interpretation:
@@ -553,7 +553,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/20-judgement.png",
+    image_url: "/images/cards/major/20-judgement.webp",
 
     upright_meaning: "재생, 각성, 용서, 새로운 시작",
     upright_interpretation:
@@ -580,7 +580,7 @@ export const majorArcanaCards: TarotCard[] = [
     suit: "major",
     number: undefined,
     has_reversal: true,
-    image_url: "/images/cards/major/21-world.png",
+    image_url: "/images/cards/major/21-world.webp",
 
     upright_meaning: "완성, 성취, 완전함, 여행",
     upright_interpretation:
