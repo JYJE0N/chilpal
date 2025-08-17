@@ -1,5 +1,6 @@
 import { DrawnCard } from '@/types/tarot';
 import { SpreadType, INTERPRETATION_GUIDES } from '@/types/spreads';
+import { generateCoreConclusion } from './core-conclusion';
 
 // 스프레드별 종합 해석 생성
 export function generateSpreadInterpretation(
@@ -94,10 +95,8 @@ function generateCelticCrossInterpretation(
   }
   interpretation += `\n`;
 
-  interpretation += `✨ 최종 메시지\n`;
-  interpretation += `${outcome.name}가 최종 결과로 나타났습니다. `;
-  interpretation += `${outcome.current_meaning}\n`;
-  interpretation += `모든 카드를 종합해보면, ${getOverallTheme(cards.filter(card => card))}의 메시지가 강하게 나타납니다.`;
+  interpretation += `✨ 핵심결론\n`;
+  interpretation += generateCoreConclusion('celtic-cross', cards, question, questionType);
 
   return interpretation;
 }
@@ -301,9 +300,8 @@ function generateThreeCardInterpretation(
   interpretation += `⏭ 미래: ${future.name}\n`;
   interpretation += `${future.current_meaning}\n\n`;
   
-  interpretation += `✨ 종합 메시지\n`;
-  interpretation += `과거의 ${past.current_keywords[0]}이(가) 현재의 ${present.current_keywords[0]}으로 이어지고, `;
-  interpretation += `미래에는 ${future.current_keywords[0]}의 결과를 맞이하게 될 것입니다.`;
+  interpretation += `✨ 핵심결론\n`;
+  interpretation += generateCoreConclusion('three-card', cards, question, questionType);
 
   return interpretation;
 }
@@ -328,8 +326,8 @@ function generateOneCardInterpretation(
     interpretation += `💡 핵심 키워드: ${card.current_keywords.join(', ')}\n\n`;
   }
   
-  interpretation += `✨ 조언: `;
-  interpretation += getCardAdvice(card, questionType);
+  interpretation += `✨ 핵심결론\n`;
+  interpretation += generateCoreConclusion('one-card', [card], question, questionType);
 
   return interpretation;
 }

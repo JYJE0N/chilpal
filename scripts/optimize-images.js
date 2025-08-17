@@ -5,9 +5,9 @@ const fs = require('fs').promises;
 const path = require('path');
 
 // 이미지 최적화 설정
-const IMAGE_QUALITY = 85; // WebP 품질 (1-100)
-const MAX_WIDTH = 800; // 최대 너비
-const MAX_HEIGHT = 1200; // 최대 높이
+const IMAGE_QUALITY = 75; // WebP 품질 (1-100) - 모바일 최적화를 위해 낮춤
+const MAX_WIDTH = 400; // 최대 너비 - 모바일에 맞게 축소
+const MAX_HEIGHT = 600; // 최대 높이 - 모바일에 맞게 축소
 
 async function optimizeImage(inputPath, outputPath) {
   try {

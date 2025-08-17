@@ -26,18 +26,31 @@ export function getCardBlurDataUrl(suit: string): string {
   }
 }
 
-// 이미지 사이즈 계산 헬퍼
+// 이미지 사이즈 계산 헬퍼 (모바일 최적화)
 export function getImageSizes(cardSize: "small" | "medium" | "large"): string {
   switch (cardSize) {
     case "small":
-      return "(max-width: 640px) 80px, 96px";
+      return "(max-width: 480px) 64px, (max-width: 768px) 80px, 96px";
     case "medium":
-      return "(max-width: 640px) 112px, (max-width: 768px) 128px, 128px";
+      return "(max-width: 480px) 96px, (max-width: 768px) 112px, 128px";
     case "large":
-      return "(max-width: 640px) 160px, (max-width: 768px) 192px, 192px";
+      return "(max-width: 480px) 128px, (max-width: 768px) 160px, 192px";
     default:
-      return "(max-width: 640px) 112px, 128px";
+      return "(max-width: 480px) 96px, (max-width: 768px) 112px, 128px";
   }
+}
+
+// 카드 그리드용 반응형 사이즈
+export function getCardGridSizes(): string {
+  return "(max-width: 480px) 18vw, (max-width: 768px) 14vw, (max-width: 1024px) 10vw, 8vw";
+}
+
+// 해석 결과용 사이즈
+export function getResultImageSizes(isExpanded: boolean = false): string {
+  if (isExpanded) {
+    return "(max-width: 480px) 80px, 96px";
+  }
+  return "48px";
 }
 
 // 이미지 로딩 우선순위 결정

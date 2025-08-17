@@ -6,7 +6,7 @@ import { ArrowLeft, RotateCcw, Eye } from "lucide-react";
 import { DrawnCard } from "@/types/tarot";
 import { SPREADS, SpreadType } from "@/types/spreads";
 import { ReadingDispatch } from "@/hooks/useReadingState";
-import { CARD_BACK_BLUR_DATA_URL, getCardBlurDataUrl } from "@/lib/image-utils";
+import { CARD_BACK_BLUR_DATA_URL, getCardBlurDataUrl, getCardGridSizes } from "@/lib/image-utils";
 import { classifyQuestion } from "@/lib/tarot-interpretation";
 import { generateSpreadInterpretation } from "@/lib/spread-interpretation";
 
@@ -321,9 +321,9 @@ export default function CardGrid({
                           className="object-cover"
                           placeholder="blur"
                           blurDataURL={getCardBlurDataUrl(card.suit)}
-                          sizes="(max-width: 768px) 25vw, (max-width: 1024px) 20vw, 16vw"
-                          priority={index < 4} // 첫 4개 카드는 우선 로딩
-                          loading={index < 4 ? "eager" : "lazy"}
+                          sizes={getCardGridSizes()}
+                          priority={index < 2} // 모바일에서 첫 2개만 우선 로딩
+                          loading={index < 2 ? "eager" : "lazy"}
                         />
                       </div>
                     ) : (
@@ -336,9 +336,9 @@ export default function CardGrid({
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                           placeholder="blur"
                           blurDataURL={CARD_BACK_BLUR_DATA_URL}
-                          sizes="(max-width: 768px) 25vw, (max-width: 1024px) 20vw, 16vw"
-                          priority={index < 6} // 첫 6개 카드 뒷면은 우선 로딩
-                          loading={index < 6 ? "eager" : "lazy"}
+                          sizes={getCardGridSizes()}
+                          priority={index < 4} // 모바일에서 첫 4개 카드 뒷면만 우선 로딩
+                          loading={index < 4 ? "eager" : "lazy"}
                         />
                       </div>
                     )}

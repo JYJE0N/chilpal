@@ -97,6 +97,15 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         
+        {/* 파비콘 설정 */}
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        
+        {/* 중요한 이미지 preload */}
+        <link rel="preload" href="/images/cards/card-back.webp" as="image" type="image/webp" />
+        
       </head>
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}

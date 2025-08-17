@@ -122,6 +122,8 @@ function CardDetailToggle({ card, index, description, spreadType }: CardDetailTo
               placeholder="blur"
               blurDataURL={getCardBlurDataUrl(card.suit)}
               sizes="48px"
+              priority={index === 0} // 첫 번째 카드만 우선 로딩
+              loading={index === 0 ? "eager" : "lazy"}
             />
           </div>
           <div className="text-left">
@@ -159,7 +161,9 @@ function CardDetailToggle({ card, index, description, spreadType }: CardDetailTo
                       className={`object-cover ${card.position === "reversed" ? "rotate-180" : ""}`}
                       placeholder="blur"
                       blurDataURL={getCardBlurDataUrl(card.suit)}
-                      sizes="96px"
+                      sizes="(max-width: 480px) 80px, 96px"
+                      priority={index === 0} // 첫 번째 카드만 우선 로딩
+                      loading={index === 0 ? "eager" : "lazy"}
                     />
                   </div>
                 </div>
@@ -366,6 +370,7 @@ export default function ReadingResult({
                               placeholder="blur"
                               blurDataURL={getCardBlurDataUrl(selectedCard.suit)}
                               sizes="48px"
+                              loading="lazy"
                             />
                           </div>
                           <div>
