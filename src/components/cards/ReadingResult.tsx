@@ -126,7 +126,7 @@ function CardDetailToggle({ card, index, description, spreadType }: CardDetailTo
           </div>
           <div className="text-left">
             {positionLabel && spreadType !== "one-card" && (
-              <div className="text-xs font-medium text-purple-300 mb-1">
+              <div className="text-xs font-medium text-purple-300 mb-2 bg-purple-500/10 rounded px-2 py-1 border border-purple-500/20 inline-block">
                 {positionLabel}
               </div>
             )}
@@ -167,7 +167,7 @@ function CardDetailToggle({ card, index, description, spreadType }: CardDetailTo
                 <div className="flex-1 space-y-3">
                   {description && (
                     <div>
-                      <h6 className="font-semibold text-white mb-2">디스크립션</h6>
+                      <h6 className="font-semibold text-white mb-2">카드 조언</h6>
                       <p className="text-gray-300 text-sm leading-relaxed">
                         {description}
                       </p>
@@ -259,7 +259,7 @@ export default function ReadingResult({
         className="text-center mb-8"
       >
         <div className="flex items-center justify-center gap-4 mb-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-white">
+          <h1 className="text-2xl md:text-3xl font-bold text-white">
             {selectedSpread?.name} 결과
           </h1>
         </div>
@@ -346,12 +346,15 @@ export default function ReadingResult({
                     const selectedCard = selectedCards[idx];
                     return (
                       <div key={idx} className="bg-white/5 rounded-lg p-4 border border-white/10">
-                        {/* 현재 상황 (스프레드 위치) */}
-                        {card.position && (
-                          <div className="text-sm font-medium text-purple-300 mb-3 bg-purple-500/10 rounded-lg px-3 py-2 border border-purple-500/20">
-                            {card.position}
-                          </div>
-                        )}
+                        {/* 포지션 라벨 (스프레드 위치) */}
+                        {(() => {
+                          const positionLabel = getPositionLabel(idx, spreadType);
+                          return positionLabel && spreadType !== "one-card" && (
+                            <div className="text-sm font-medium text-purple-300 mb-3 bg-purple-500/10 rounded-lg px-3 py-2 border border-purple-500/20">
+                              {positionLabel}
+                            </div>
+                          );
+                        })()}
                         
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-12 h-18 relative rounded-md overflow-hidden border border-gray-600">

@@ -75,19 +75,19 @@ const ToastItem = React.forwardRef<HTMLDivElement, { toast: Toast; onRemove: (id
       exit={{ opacity: 0, x: 300, scale: 0.9 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={`
-        dawn-glass-card-light relative max-w-sm w-full mobile-toast-blur shadow-2xl border-l-4
+        dawn-glass-card-light relative max-w-sm w-full mobile-toast-blur shadow-2xl border-l-4 p-4
         ${getToastColors(toast.type)}
       `}
     >
       {/* 닫기 버튼 */}
       <button
         onClick={() => onRemove(toast.id)}
-        className="absolute top-3 right-3 dawn-text-muted hover:dawn-text-primary transition-colors p-1 hover:bg-white/10 rounded"
+        className="absolute top-2 right-2 dawn-text-muted hover:dawn-text-primary transition-colors p-1 hover:bg-white/10 rounded flex items-center justify-center w-6 h-6"
       >
         ×
       </button>
 
-      <div className="pr-6">
+      <div className="pr-8">
         {/* 제목 */}
         <h4 className="font-semibold dawn-text-primary mb-1">
           {toast.title}

@@ -127,21 +127,21 @@ export default function Header() {
 
         {/* 모바일 메뉴 */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pt-4 border-t border-purple-400/10 bg-slate-900/90 backdrop-blur-xl rounded-xl shadow-2xl">
-            <div className="space-y-3">
+          <nav className="md:hidden mt-4 pt-4 border-t border-purple-400/30 bg-slate-900 rounded-xl shadow-2xl border border-slate-700/50">
+            <div className="space-y-2 p-2">
               {NAV_LINKS.map(({ href, label, icon: Icon }) => (
                 <Link
                   key={href}
                   href={href}
-                  className={`relative block px-6 py-4 transition-all duration-300 rounded-lg ${
+                  className={`relative block px-4 py-3 transition-all duration-300 rounded-lg ${
                     pathname === href
-                      ? "text-white font-semibold bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/15"
+                      ? "text-pink-300 font-semibold bg-gradient-to-r from-purple-600/30 to-pink-600/30 border border-pink-400/30 shadow-lg shadow-purple-500/20"
                       : "text-gray-300 hover:text-white hover:bg-white/5"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <div className="flex items-center">
-                    <Icon className="w-5 h-5 mr-4" />
+                    <Icon className="w-5 h-5 mr-3" />
                     <span className="text-base">{label}</span>
                   </div>
                 </Link>

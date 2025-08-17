@@ -52,6 +52,23 @@ export default function CardSelection({ onComplete }: CardSelectionProps) {
     threshold: 100,
   });
 
+  // 페이지 로드 및 phase 변경 시 스크롤 최상단으로 이동 (타이밍 이슈 해결)
+  useEffect(() => {
+    // 브라우저 체크
+    if (typeof window === 'undefined') return;
+    
+    // 지연 실행으로 렌더링 완료 후 스크롤
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant'
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [state.phase]); // phase가 변경될 때마다 실행
+
   // Pull state를 reducer에 동기화
   useEffect(() => {
     dispatch({

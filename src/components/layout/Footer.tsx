@@ -13,9 +13,11 @@ export default function Footer() {
               <h3 className="text-lg font-bold text-primary">칠팔 타로</h3>
             </div>
             <p className="text-secondary text-sm leading-relaxed">
-              78장의 완전한 타로 덱으로 당신의 운명을 확인하세요.
+              78장 인생의 길라잡이.
               <br />
-              <span className="text-accent font-medium">재미로 보는 타로 점술</span>
+              <span className="text-accent font-medium">
+                재미로 보는 칠팔타로
+              </span>
             </p>
           </div>
 

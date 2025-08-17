@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { ArrowLeft, RotateCcw } from "lucide-react";
+import { ArrowLeft, RotateCcw, Eye } from "lucide-react";
 import { DrawnCard } from "@/types/tarot";
 import { SPREADS, SpreadType } from "@/types/spreads";
 import { ReadingDispatch } from "@/hooks/useReadingState";
@@ -131,7 +131,58 @@ export default function CardGrid({
     });
   };
 
-  // 다시 시작
+  // 카드만 다시 섞기
+  const reshuffleCards = async () => {
+    // 선택된 카드가 있으면 확인
+    if (selectedCards.length > 0) {
+      if (!confirm('선택한 카드가 초기화됩니다. 계속하시겠습니까?')) {
+        return;
+      }
+    }
+
+    // 고유한 셔플 키 생성 (중복 방지)
+    const newShuffleKey = Date.now();
+    dispatch({ type: 'SET_SHUFFLE_KEY', payload: newShuffleKey });
+    dispatch({ type: 'SET_SHUFFLING', payload: true });
+
+    // 기존 상태 초기화
+    dispatch({ type: 'RESET_SELECTED_CARDS' });
+    dispatch({ type: 'RESET_REVEALED_CARDS' });
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // 기존과 동일한 카드 수로 다시 섞기
+    const cardCount = availableCards.length;
+    const randomCards = await import('@/data/all-tarot-cards').then(module => 
+      module.drawRandomCards(cardCount)
+    );
+    
+    // 카드에 역방향 여부 미리 결정
+    const cardsWithPosition: DrawnCard[] = randomCards.map(card => {
+      const isReversed = card.has_reversal ? Math.random() < 0.5 : false;
+      return {
+        ...card,
+        position: isReversed ? "reversed" : "upright",
+        is_reversed: isReversed,
+        current_meaning: isReversed
+          ? card.reversed_meaning || card.upright_meaning
+          : card.upright_meaning,
+        current_interpretation: isReversed
+          ? card.reversed_interpretation || card.upright_interpretation || ''
+          : card.upright_interpretation || '',
+        current_keywords: isReversed
+          ? card.reversed_keywords || card.upright_keywords || []
+          : card.upright_keywords || [],
+      };
+    });
+
+    // 새 카드 설정
+    dispatch({ type: 'SET_AVAILABLE_CARDS', payload: cardsWithPosition });
+
+    setTimeout(() => dispatch({ type: 'SET_SHUFFLING', payload: false }), 800);
+  };
+
+  // 다시 시작 (전체 초기화)
   const resetReading = () => {
     dispatch({ type: 'RESET_READING' });
   };
@@ -143,14 +194,30 @@ export default function CardGrid({
     dispatch({ type: 'RESET_SELECTED_CARDS' });
   };
 
-  // 카드 그리드 레이아웃 계산
+  // 카드 그리드 레이아웃 계산 (크기와 정렬 균형)
   const getGridCols = () => {
-    if (maxCards === 1) return "grid-cols-4"; // 4열×4줄
-    if (maxCards === 3) return "grid-cols-7"; // 7열×2줄
-    if (maxCards === 4) return "grid-cols-4 md:grid-cols-6"; // 모바일 4열, 데스크톱 6열
-    if (maxCards === 5) return "grid-cols-5"; // 5열×3줄
-    if (spreadType === "celtic-cross") return "grid-cols-6"; // 6열×5줄
-    return "grid-cols-5"; // 기본 5열×4줄
+    const cardCount = availableCards.length;
+    
+    // 카드 크기를 적절히 유지하면서 정렬도 고려
+    if (cardCount <= 4) {
+      return "grid-cols-2 sm:grid-cols-4"; // 모바일 2열, 데스크톱 4열
+    } else if (cardCount <= 6) {
+      return "grid-cols-3 sm:grid-cols-3 md:grid-cols-6"; // 3열 기본, 데스크톱에서 6열
+    } else if (cardCount <= 8) {
+      return "grid-cols-4 sm:grid-cols-4 md:grid-cols-8"; // 4열 기본
+    } else if (cardCount <= 9) {
+      return "grid-cols-3 sm:grid-cols-3 md:grid-cols-9"; // 3열×3행
+    } else if (cardCount <= 12) {
+      return "grid-cols-3 sm:grid-cols-4 md:grid-cols-6"; // 모바일 3열, 데스크톱 6열
+    } else if (cardCount <= 15) {
+      return "grid-cols-3 sm:grid-cols-5 md:grid-cols-5"; // 3열 또는 5열
+    } else if (cardCount <= 16) {
+      return "grid-cols-4 sm:grid-cols-4 md:grid-cols-8"; // 4열×4행
+    } else if (cardCount <= 20) {
+      return "grid-cols-4 sm:grid-cols-5 md:grid-cols-5"; // 4열 또는 5열
+    } else {
+      return "grid-cols-4 sm:grid-cols-5 md:grid-cols-6"; // 많은 카드는 최대 6열
+    }
   };
 
   return (
@@ -168,14 +235,23 @@ export default function CardGrid({
           <h2 className="text-2xl font-bold text-white mb-2">
             {selectedSpread?.name}
           </h2>
-          <p className="text-gray-400">
-            {selectedCards.length}/{maxCards} 카드 선택됨
-          </p>
+          <div className="flex items-center justify-center gap-2">
+            <p className={`font-medium ${selectedCards.length === maxCards ? 'text-green-400' : 'text-gray-400'}`}>
+              {selectedCards.length}/{maxCards} 카드 선택됨
+            </p>
+            {selectedCards.length === maxCards && (
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-green-400 text-sm font-semibold">완료!</span>
+              </div>
+            )}
+          </div>
         </div>
 
         <button
-          onClick={resetReading}
+          onClick={reshuffleCards}
           className="p-3 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/10"
+          title="카드 다시 섞기"
         >
           <RotateCcw className="w-6 h-6" />
         </button>
@@ -214,7 +290,7 @@ export default function CardGrid({
               key={`cards-${shuffleKey}`}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className={`grid ${getGridCols()} gap-4 max-w-6xl mx-auto`}
+              className={`grid ${getGridCols()} gap-2 sm:gap-3 md:gap-4 max-w-6xl mx-auto px-2 justify-items-center`}
             >
               {availableCards.map((card, index) => (
                 <motion.div
@@ -231,7 +307,7 @@ export default function CardGrid({
                     type: "spring",
                     stiffness: 100
                   }}
-                  className="relative group cursor-pointer"
+                  className="relative group cursor-pointer w-full min-w-[80px] max-w-[140px] mx-auto"
                   onClick={() => handleCardClick(card)}
                   style={{ perspective: "1000px" }}
                 >
@@ -271,19 +347,44 @@ export default function CardGrid({
         </AnimatePresence>
       </div>
 
+      {/* 카드 선택 완료 알림 */}
+      {selectedCards.length === maxCards && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center mt-8 mb-8"
+        >
+          <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 rounded-xl p-4 max-w-md mx-auto">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-green-400 font-bold text-lg">모든 카드를 선택했습니다!</span>
+            </div>
+            <p className="text-gray-300 text-sm">이제 카드의 해석을 확인해보세요</p>
+          </div>
+        </motion.div>
+      )}
+
       {/* 완료 버튼 */}
       {selectedCards.length === maxCards && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex justify-center mt-12 mb-8"
+          className="flex justify-center mt-8 mb-8"
         >
-          <button
+          <motion.button
             onClick={completeReading}
-            className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg"
+            className="relative px-12 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden group"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            리딩 완료
-          </button>
+            {/* 반짝이는 효과 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            
+            <div className="relative flex items-center gap-3">
+              <Eye className="w-5 h-5" />
+              <span>해석하기</span>
+            </div>
+          </motion.button>
         </motion.div>
       )}
     </div>

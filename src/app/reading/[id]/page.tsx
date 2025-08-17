@@ -147,12 +147,15 @@ export default async function ReadingDetailPage({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
+    // 한국 시간대로 명시적 변환
     return date.toLocaleDateString("ko-KR", {
       year: 'numeric',
-      month: 'long', 
+      month: 'numeric', 
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'Asia/Seoul'
     });
   };
 

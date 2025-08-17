@@ -39,6 +39,7 @@ export type ReadingAction =
   | { type: 'ADD_SELECTED_CARD'; payload: DrawnCard }
   | { type: 'RESET_SELECTED_CARDS' }
   | { type: 'ADD_REVEALED_CARD'; payload: number }
+  | { type: 'RESET_REVEALED_CARDS' }
   | { type: 'SET_SHUFFLING'; payload: boolean }
   | { type: 'SET_SHUFFLE_KEY'; payload: number }
   | { type: 'SET_SCROLL_PROGRESS'; payload: number }
@@ -98,6 +99,9 @@ export function readingReducer(state: ReadingState, action: ReadingAction): Read
         ...state, 
         revealedCards: new Set([...state.revealedCards, action.payload]) 
       };
+      
+    case 'RESET_REVEALED_CARDS':
+      return { ...state, revealedCards: new Set() };
       
     case 'SET_SHUFFLING':
       return { ...state, isShuffling: action.payload };

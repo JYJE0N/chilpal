@@ -64,7 +64,7 @@ export default function QuestionInput({
 
     // 먼저 기존 상태 초기화 (한 번에 처리)
     dispatch({ type: 'RESET_SELECTED_CARDS' });
-    dispatch({ type: 'ADD_REVEALED_CARD', payload: -1 }); // revealedCards 초기화를 위한 더미
+    dispatch({ type: 'RESET_REVEALED_CARDS' });
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -126,10 +126,10 @@ export default function QuestionInput({
   return (
     <div className="min-h-screen flex flex-col p-4">
       {/* 상단 네비게이션 */}
-      <div className="flex justify-start items-center mb-8 pt-4">
+      <div className="flex justify-start items-center mb-4 pt-2">
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 p-3 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/10"
+          className="flex items-center gap-2 p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/10"
         >
           <ArrowLeft className="w-5 h-5" />
           <span className="text-sm font-medium">뒤로</span>
@@ -137,38 +137,38 @@ export default function QuestionInput({
       </div>
 
       {/* 메인 컨텐츠 */}
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex flex-col justify-start pt-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-2xl w-full text-center"
+          className="max-w-2xl w-full text-center mx-auto"
         >
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="mb-6 flex justify-center"
+          className="mb-3 flex justify-center"
         >
           {(() => {
             const getSpreadIcon = (type: SpreadType) => {
               switch (type) {
                 case "one-card":
-                  return <Zap className="w-16 h-16 text-yellow-400" />;
+                  return <Zap className="w-12 h-12 text-yellow-400" />;
                 case "three-card":
-                  return <Clock className="w-16 h-16 text-blue-400" />;
+                  return <Clock className="w-12 h-12 text-blue-400" />;
                 case "celtic-cross":
-                  return <Cross className="w-16 h-16 text-purple-400" />;
+                  return <Cross className="w-12 h-12 text-purple-400" />;
                 case "relationship":
-                  return <Users className="w-16 h-16 text-green-400" />;
+                  return <Users className="w-12 h-12 text-green-400" />;
                 case "love-spread":
-                  return <Heart className="w-16 h-16 text-pink-400" />;
+                  return <Heart className="w-12 h-12 text-pink-400" />;
                 case "career-path":
-                  return <Briefcase className="w-16 h-16 text-orange-400" />;
+                  return <Briefcase className="w-12 h-12 text-orange-400" />;
                 case "yes-no":
-                  return <HelpCircle className="w-16 h-16 text-indigo-400" />;
+                  return <HelpCircle className="w-12 h-12 text-indigo-400" />;
                 default:
-                  return <Sparkles className="w-16 h-16 text-purple-400" />;
+                  return <Sparkles className="w-12 h-12 text-purple-400" />;
               }
             };
             return getSpreadIcon(spreadType);
@@ -179,7 +179,7 @@ export default function QuestionInput({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-3xl md:text-4xl font-bold text-white mb-4"
+          className="text-3xl md:text-4xl font-bold text-white mb-2"
         >
           {selectedSpread?.name}
         </motion.h2>
@@ -188,7 +188,7 @@ export default function QuestionInput({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="text-gray-300 mb-8"
+          className="text-gray-300 mb-6 text-sm"
         >
           {selectedSpread?.description}
         </motion.p>
@@ -199,7 +199,7 @@ export default function QuestionInput({
           transition={{ delay: 0.5 }}
           className="space-y-6"
         >
-          <div className="text-left">
+          <div className="text-center">
             <label className="block text-white text-lg font-medium mb-3">
               타로에게 묻고 싶은 질문을 입력하세요
             </label>

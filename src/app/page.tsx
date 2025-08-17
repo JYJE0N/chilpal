@@ -1,7 +1,8 @@
 // src/app/page.tsx
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Moon, Sparkles, Star } from "lucide-react";
+import { Moon, Eye, Star } from "lucide-react";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "칠팔 타로 - 78장 완전한 타로 카드 리딩 | 무료 온라인 타로점",
@@ -19,12 +20,20 @@ export default function HomePage() {
     <div className="container-unified flex items-center justify-center min-h-[calc(100vh-200px)] relative">
       <div className="text-center py-16 relative z-10">
         <div className="space-y-8">
-          <h1 className="text-6xl md:text-7xl font-bold text-primary drop-shadow-2xl flex items-center justify-center gap-4 md:gap-6">
-            <div className="flex items-center gap-2">
-              <Moon className="w-10 h-10 md:w-12 md:h-12 text-blue-300 animate-pulse" />
+          <h1 className="text-6xl md:text-7xl font-bold drop-shadow-2xl">
+            {/* 모든 화면에서 동일한 세로 레이아웃 */}
+            <div className="flex flex-col items-center gap-4 md:gap-6">
+              <Image 
+                src="/images/cards/card-back.png" 
+                alt="타로 카드 뒷면" 
+                width={60} 
+                height={90}
+                className="md:w-20 md:h-30 rounded-lg shadow-2xl animate-pulse hover:scale-105 transition-transform duration-300"
+              />
+              <span className="text-white">
+                칠팔 타로
+              </span>
             </div>
-            칠팔 타로
-            <Star className="w-10 h-10 md:w-12 md:h-12 text-accent animate-pulse" />
           </h1>
           <div className="space-y-4">
             <p className="text-xl md:text-2xl font-semibold text-point drop-shadow-lg">
@@ -46,9 +55,9 @@ export default function HomePage() {
               
               {/* 버튼 내용 */}
               <div className="relative flex items-center justify-center gap-3">
-                <Sparkles className="w-5 h-5 md:w-6 md:h-6 group-hover:animate-spin" />
+                <Moon className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 타로 보기
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                <Star className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
             </button>
           </Link>

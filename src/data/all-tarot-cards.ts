@@ -28,9 +28,24 @@ export const getCardById = (id: number): TarotCard | undefined => {
   return allTarotCards.find((card) => card.id === id);
 };
 
-// 랜덤 카드 뽑기
+// Fisher-Yates 셔플 알고리즘
+const shuffleArray = <T>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+// 랜덤 카드 뽑기 (중복 방지)
 export const drawRandomCards = (count: number): TarotCard[] => {
-  const shuffled = [...allTarotCards].sort(() => Math.random() - 0.5);
+  if (count > allTarotCards.length) {
+    console.warn(`요청된 카드 수 ${count}이 전체 카드 수 ${allTarotCards.length}보다 많습니다.`);
+    count = allTarotCards.length;
+  }
+  
+  const shuffled = shuffleArray(allTarotCards);
   return shuffled.slice(0, count);
 };
 
@@ -70,6 +85,25 @@ export const DECK_STATS = {
   swords: getCardsBySuit("swords").length,
   wands: getCardsBySuit("wands").length,
 };
+
+// 카드 ID 중복 검사
+const checkDuplicateIds = () => {
+  const ids = allTarotCards.map(card => card.id);
+  const uniqueIds = new Set(ids);
+  
+  if (ids.length !== uniqueIds.size) {
+    console.error('🚨 카드 ID 중복 발견!');
+    const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+    console.error('중복된 ID들:', [...new Set(duplicates)]);
+  } else {
+    console.log('✅ 카드 ID 중복 검사 통과');
+  }
+};
+
+// 개발 환경에서만 중복 검사 실행
+if (process.env.NODE_ENV === 'development') {
+  checkDuplicateIds();
+}
 
 // 디버깅용 로그 (프로덕션에서는 주석 처리)
 // console.log(`🎴 칠팔 타로 데이터 로드 완료!`);

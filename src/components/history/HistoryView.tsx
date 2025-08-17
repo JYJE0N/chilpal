@@ -142,7 +142,9 @@ export default function HistoryView() {
       const days = Math.floor(diffInHours / 24);
       return `${days}일 전`;
     } else {
-      return date.toLocaleDateString("ko-KR");
+      return date.toLocaleDateString("ko-KR", {
+        timeZone: 'Asia/Seoul'
+      });
     }
   };
 
@@ -305,10 +307,10 @@ export default function HistoryView() {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* 헤더 */}
         <header className="text-center">
-          <h1 className="text-4xl font-bold text-primary mb-4 flex items-center justify-center gap-3">
-            <BookOpen className="w-8 h-8 text-info" />
+          <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4 flex items-center justify-center gap-3">
+            {/* <BookOpen className="w-8 h-8 text-info" /> */}
             타로 히스토리
-            <BookOpen className="w-8 h-8 text-accent animate-pulse" />
+            {/* <BookOpen className="w-8 h-8 text-accent animate-pulse" /> */}
           </h1>
           <p className="text-secondary text-lg">
             당신의 신비로운 타로 여정을 돌아보세요
@@ -318,7 +320,6 @@ export default function HistoryView() {
         {/* 통계 카드 */}
         {stats && (
           <section>
-            <h2 className="text-2xl font-semibold text-primary mb-6 text-center">통계</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -548,7 +549,7 @@ export default function HistoryView() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-3">
                         <span className="inline-block bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-point px-3 py-1.5 rounded-full text-sm font-medium border border-pink-400/30">
-                          {getSpreadTypeLabel(selectedReading.spreadType)} 리딩
+                          {getSpreadTypeLabel(selectedReading.spreadType)}
                         </span>
                         <span className="text-sm text-muted">
                           {formatDate(selectedReading.createdAt)}
