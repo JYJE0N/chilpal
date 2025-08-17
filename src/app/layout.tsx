@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"}/api/og/default`,
+        url: `${process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"}/og-image.png`,
         width: 1200,
         height: 630,
         alt: "칠팔 타로 - 78장 완전한 타로 카드 리딩",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "칠팔 타로 - 78장 완전한 타로 카드 리딩",
     description: "78장의 완전한 타로 덱으로 당신의 운명을 확인하세요",
-    images: [`${process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"}/api/og/default`],
+    images: [`${process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"}/og-image.png`],
   },
   robots: {
     index: true,
@@ -96,6 +96,18 @@ export default function RootLayout({
         <meta name="msapplication-navbutton-color" content="#2d1953" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        
+        {/* 카카오톡 OG 메타태그 */}
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:secure_url" content={`${process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"}/og-image.png`} />
+        
+        {/* 카카오톡 특화 메타태그 */}
+        <meta name="kakao:card" content="summary_large_image" />
+        <meta name="kakao:image" content={`${process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"}/og-image.png`} />
+        <meta name="kakao:title" content="칠팔 타로 - 78장 완전한 타로 카드 리딩" />
+        <meta name="kakao:description" content="78장의 완전한 타로 덱으로 당신의 운명을 확인하세요" />
         
         {/* 파비콘 설정 */}
         <link rel="icon" href="/favicon.ico" sizes="32x32" />

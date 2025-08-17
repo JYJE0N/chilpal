@@ -34,16 +34,18 @@ export interface DrawnCard extends TarotCard {
   current_keywords: string[];
 }
 
-export type SpreadType = "three-card" | "celtic-cross" | "single-card";
+export type SpreadType = "one-card" | "three-card" | "celtic-cross" | "relationship" | "love-spread" | "career-path" | "yes-no";
 
 export interface Reading {
   id: string;
   question: string;
-  spread_type: SpreadType;
+  spreadType: SpreadType;
   cards: DrawnCard[];
   interpretation: string;
-  created_at: Date;
-  user_id?: string;
+  questionType: 'love' | 'career' | 'money' | 'health' | 'general';
+  userSession?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CardSpread {

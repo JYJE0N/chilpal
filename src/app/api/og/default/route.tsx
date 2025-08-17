@@ -1,7 +1,10 @@
 import { ImageResponse } from 'next/og';
 
-export async function GET() {
-  return new ImageResponse(
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const v = searchParams.get('v') || Date.now().toString();
+  
+  const response = new ImageResponse(
     (
       <div
         style={{
@@ -236,6 +239,11 @@ export async function GET() {
         >
           무료 온라인 타로 점술 서비스
         </div>
+        
+        {/* 버전 숨김 표시 (캐시 무효화용) */}
+        <div style={{ position: 'absolute', left: '-1000px', opacity: 0 }}>
+          v{v}
+        </div>
       </div>
     ),
     {
@@ -243,4 +251,11 @@ export async function GET() {
       height: 630,
     }
   );
+  
+  // 캐시 제어 헤더 설정
+  response.headers.set('Cache-Control', 'public, max-age=86400, s-maxage=86400');
+  response.headers.set('CDN-Cache-Control', 'public, max-age=86400');
+  response.headers.set('Vercel-CDN-Cache-Control', 'public, max-age=86400');
+  
+  return response;
 }

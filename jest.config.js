@@ -35,6 +35,14 @@ const customJestConfig = {
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   moduleDirectories: ['node_modules', '<rootDir>/'],
   verbose: true,
+  transformIgnorePatterns: [
+    'node_modules/(?!(uuid|@testing-library|bson|mongodb)/)',
+  ],
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    },
+  },
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

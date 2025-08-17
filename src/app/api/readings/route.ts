@@ -5,6 +5,7 @@ import dbConnect from '@/lib/mongodb';
 import Reading from '@/models/Reading';
 import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
+import { captureError, captureTarotError } from '@/lib/error-monitoring';
 
 // 세션 ID 생성 또는 조회
 async function getOrCreateSession(_request: NextRequest): Promise<string> {
@@ -20,14 +21,19 @@ async function getOrCreateSession(_request: NextRequest): Promise<string> {
 
 // GET - 리딩 히스토리 조회
 export async function GET(request: NextRequest) {
+  let sessionId: string | undefined;
+  let page = 1;
+  let limit = 10;
+  let questionType: string | null = null;
+  
   try {
     await dbConnect();
     
-    const sessionId = await getOrCreateSession(request);
+    sessionId = await getOrCreateSession(request);
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const questionType = searchParams.get('type');
+    page = parseInt(searchParams.get('page') || '1');
+    limit = parseInt(searchParams.get('limit') || '10');
+    questionType = searchParams.get('type');
     const spreadType = searchParams.get('spread');
     
     // 필터 조건 구성
@@ -75,6 +81,11 @@ export async function GET(request: NextRequest) {
     
   } catch (error) {
     console.error('Failed to fetch readings:', error);
+    captureTarotError(error as Error, 'database_operation', {
+      operation: 'fetch_readings',
+      sessionId,
+      query: { page, limit, questionType }
+    });
     return NextResponse.json(
       { success: false, error: 'Failed to fetch readings' },
       { status: 500 }
@@ -84,13 +95,24 @@ export async function GET(request: NextRequest) {
 
 // POST - 새 리딩 저장
 export async function POST(request: NextRequest) {
+  let sessionId: string | undefined;
+  let spreadType: string | undefined;
+  let questionType: string | undefined;
+  let question: string | undefined;
+  let cards: any[] = [];
+  
   try {
     await dbConnect();
     
-    const sessionId = await getOrCreateSession(request);
+    sessionId = await getOrCreateSession(request);
     const body = await request.json();
     
-    const { question, spreadType, cards, interpretation, questionType } = body;
+    const requestData = body;
+    question = requestData.question;
+    spreadType = requestData.spreadType;
+    cards = requestData.cards;
+    const interpretation = requestData.interpretation;
+    questionType = requestData.questionType;
     
     // 유효성 검사
     if (!question || !spreadType || !cards || !interpretation || !questionType) {
@@ -136,6 +158,13 @@ export async function POST(request: NextRequest) {
     
   } catch (error) {
     console.error('Failed to save reading:', error);
+    captureTarotError(error as Error, 'database_operation', {
+      operation: 'save_reading',
+      sessionId,
+      spreadType,
+      questionType,
+      cardCount: cards?.length
+    });
     return NextResponse.json(
       { success: false, error: 'Failed to save reading' },
       { status: 500 }
