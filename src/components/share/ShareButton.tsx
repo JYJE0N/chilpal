@@ -72,18 +72,31 @@ export default function ShareButton({
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
     kakao: () => {
       if (isKakaoLoaded && Kakao) {
+        // 절대 URL 생성
+        const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+        const fullImageUrl = ogImageUrl.startsWith('http') ? 
+          ogImageUrl : 
+          `${baseUrl}${ogImageUrl.startsWith('/') ? ogImageUrl : '/' + ogImageUrl}`;
+        
+        console.log('카카오톡 공유 이미지 URL:', fullImageUrl); // 디버깅용
+        
         Kakao.Share.sendDefault({
           objectType: 'feed',
           content: {
             title: title,
             description: text,
-            imageUrl: ogImageUrl.startsWith('/') ? 
-              `${typeof window !== 'undefined' ? window.location.origin : ''}${ogImageUrl}` : 
-              ogImageUrl,
+            imageUrl: fullImageUrl,
+            imageWidth: 1200,
+            imageHeight: 630,
             link: {
               mobileWebUrl: url,
               webUrl: url,
             },
+          },
+          social: {
+            likeCount: 0,
+            commentCount: 0,
+            sharedCount: 0,
           },
           buttons: [
             {
