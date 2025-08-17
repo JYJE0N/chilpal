@@ -35,20 +35,20 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_URL || "https://chilpal-tarot.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "칠팔 타로 - 78장 완전한 타로 카드 리딩",
     description: "78장의 완전한 타로 덱으로 과거, 현재, 미래를 확인하세요. 무료 온라인 타로 점술 서비스",
-    url: process.env.NEXT_PUBLIC_URL || "https://chilpal-tarot.vercel.app",
+    url: process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app",
     siteName: "칠팔 타로",
     locale: "ko_KR",
     type: "website",
     images: [
       {
-        url: "/og-image.png",
+        url: `${process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"}/api/og/default`,
         width: 1200,
         height: 630,
         alt: "칠팔 타로 - 78장 완전한 타로 카드 리딩",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "칠팔 타로 - 78장 완전한 타로 카드 리딩",
     description: "78장의 완전한 타로 덱으로 당신의 운명을 확인하세요",
-    images: ["/og-image.png"],
+    images: [`${process.env.NEXT_PUBLIC_URL || "https://chilpal-production.up.railway.app"}/api/og/default`],
   },
   robots: {
     index: true,
