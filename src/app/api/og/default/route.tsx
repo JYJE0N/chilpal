@@ -11,7 +11,7 @@ export async function GET() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b69 20%, #5b21b6 40%, #be185d 60%, #f91880 80%, #fbbf24 100%)',
+          background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #4c1d95 50%, #6b21a8 75%, #7c3aed 100%)',
           fontFamily: 'system-ui, -apple-system, sans-serif',
           position: 'relative',
         }}
@@ -70,7 +70,7 @@ export async function GET() {
             78장 완전한 타로 카드 리딩
           </div>
           
-          {/* 카드 아이콘들 */}
+          {/* 카드 뒷면 스타일 */}
           <div
             style={{
               display: 'flex',
@@ -84,17 +84,128 @@ export async function GET() {
                 style={{
                   width: '120px',
                   height: '180px',
-                  backgroundColor: 'rgba(255,255,255,0.95)',
+                  background: 'linear-gradient(135deg, #4c1d95, #6b21a8)',
                   borderRadius: '15px',
-                  border: '3px solid #a855f7',
+                  border: '2px solid rgba(255,255,255,0.3)',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 12px 40px rgba(168, 85, 247, 0.4)',
-                  fontSize: '48px',
+                  boxShadow: '0 12px 40px rgba(76, 29, 149, 0.6)',
+                  position: 'relative',
+                  overflow: 'hidden',
                 }}
               >
-                ✨
+                {/* 장식적 테두리 */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '8px',
+                    left: '8px',
+                    right: '8px',
+                    bottom: '8px',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '10px',
+                  }}
+                />
+                
+                {/* 중앙 신비로운 패턴 */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: 'rgba(255,255,255,0.8)',
+                  }}
+                >
+                  {/* 상단 별 */}
+                  <div style={{ fontSize: '14px' }}>*</div>
+                  
+                  {/* 중앙 원형 패턴 */}
+                  <div
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      border: '2px solid rgba(255,255,255,0.6)',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        border: '1px solid rgba(255,255,255,0.4)',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '20px',
+                          height: '20px',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          borderRadius: '50%',
+                        }}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 하단 별 */}
+                  <div style={{ fontSize: '14px' }}>*</div>
+                </div>
+                
+                {/* 모서리 장식 */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    left: '12px',
+                    fontSize: '10px',
+                    color: 'rgba(255,255,255,0.5)',
+                  }}
+                >
+                  +
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    fontSize: '10px',
+                    color: 'rgba(255,255,255,0.5)',
+                  }}
+                >
+                  +
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '12px',
+                    left: '12px',
+                    fontSize: '10px',
+                    color: 'rgba(255,255,255,0.5)',
+                  }}
+                >
+                  +
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '12px',
+                    right: '12px',
+                    fontSize: '10px',
+                    color: 'rgba(255,255,255,0.5)',
+                  }}
+                >
+                  +
+                </div>
               </div>
             ))}
           </div>

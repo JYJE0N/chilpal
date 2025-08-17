@@ -55,7 +55,7 @@ export async function GET(
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b69 20%, #5b21b6 40%, #be185d 60%, #f91880 80%, #fbbf24 100%)',
+            background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #4c1d95 50%, #6b21a8 75%, #7c3aed 100%)',
             fontFamily: 'system-ui, -apple-system, sans-serif',
             position: 'relative',
           }}
@@ -165,44 +165,132 @@ export async function GET(
                   </div>
                 )}
                 
-                {/* 카드 */}
+                {/* 카드 뒷면 스타일 */}
                 <div
                   style={{
                     width: cardArray.length === 1 ? '160px' : '130px',
                     height: cardArray.length === 1 ? '240px' : '195px',
-                    backgroundColor: 'rgba(255,255,255,0.95)',
+                    background: 'linear-gradient(135deg, #4c1d95, #6b21a8)',
                     borderRadius: '15px',
-                    border: '3px solid #a855f7',
+                    border: '2px solid rgba(255,255,255,0.3)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 12px 40px rgba(168, 85, 247, 0.4)',
+                    boxShadow: '0 12px 40px rgba(76, 29, 149, 0.6)',
                     position: 'relative',
-                    // 카드 회전은 임의로 설정 (실제 데이터 없음)
+                    overflow: 'hidden',
                     transform: 'rotate(0deg)',
                   }}
                 >
-                  {/* 카드 내용 */}
+                  {/* 장식적 테두리 */}
                   <div
                     style={{
-                      fontSize: cardArray.length === 1 ? '72px' : '48px',
-                      marginBottom: '8px',
+                      position: 'absolute',
+                      top: cardArray.length === 1 ? '12px' : '8px',
+                      left: cardArray.length === 1 ? '12px' : '8px',
+                      right: cardArray.length === 1 ? '12px' : '8px',
+                      bottom: cardArray.length === 1 ? '12px' : '8px',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      borderRadius: cardArray.length === 1 ? '12px' : '10px',
+                    }}
+                  />
+                  
+                  {/* 중앙 신비로운 패턴 */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: cardArray.length === 1 ? '12px' : '8px',
+                      color: 'rgba(255,255,255,0.8)',
                     }}
                   >
-                    ✨
+                    {/* 상단 별 */}
+                    <div style={{ fontSize: cardArray.length === 1 ? '18px' : '14px' }}>*</div>
+                    
+                    {/* 중앙 원형 패턴 */}
+                    <div
+                      style={{
+                        width: cardArray.length === 1 ? '80px' : '60px',
+                        height: cardArray.length === 1 ? '80px' : '60px',
+                        border: '2px solid rgba(255,255,255,0.6)',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: cardArray.length === 1 ? '50px' : '40px',
+                          height: cardArray.length === 1 ? '50px' : '40px',
+                          border: '1px solid rgba(255,255,255,0.4)',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: cardArray.length === 1 ? '25px' : '20px',
+                            height: cardArray.length === 1 ? '25px' : '20px',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '50%',
+                          }}
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* 하단 별 */}
+                    <div style={{ fontSize: cardArray.length === 1 ? '18px' : '14px' }}>*</div>
+                  </div>
+                  
+                  {/* 모서리 장식 */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: cardArray.length === 1 ? '16px' : '12px',
+                      left: cardArray.length === 1 ? '16px' : '12px',
+                      fontSize: cardArray.length === 1 ? '12px' : '10px',
+                      color: 'rgba(255,255,255,0.5)',
+                    }}
+                  >
+                    +
                   </div>
                   <div
                     style={{
-                      fontSize: cardArray.length === 1 ? '18px' : '14px',
-                      color: '#4c1d95',
-                      fontWeight: 'bold',
-                      textAlign: 'center',
-                      // 카드 회전은 임의로 설정 (실제 데이터 없음)
-                    transform: 'rotate(0deg)',
+                      position: 'absolute',
+                      top: cardArray.length === 1 ? '16px' : '12px',
+                      right: cardArray.length === 1 ? '16px' : '12px',
+                      fontSize: cardArray.length === 1 ? '12px' : '10px',
+                      color: 'rgba(255,255,255,0.5)',
                     }}
                   >
-                    {cardName.length > 12 ? cardName.substring(0, 12) + '...' : cardName}
+                    +
+                  </div>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: cardArray.length === 1 ? '16px' : '12px',
+                      left: cardArray.length === 1 ? '16px' : '12px',
+                      fontSize: cardArray.length === 1 ? '12px' : '10px',
+                      color: 'rgba(255,255,255,0.5)',
+                    }}
+                  >
+                    +
+                  </div>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: cardArray.length === 1 ? '16px' : '12px',
+                      right: cardArray.length === 1 ? '16px' : '12px',
+                      fontSize: cardArray.length === 1 ? '12px' : '10px',
+                      color: 'rgba(255,255,255,0.5)',
+                    }}
+                  >
+                    +
                   </div>
                 </div>
                 
