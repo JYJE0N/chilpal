@@ -4,8 +4,8 @@
   "description": "78장의 완전한 타로 덱으로 당신의 운명을 확인하세요",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a0b2e",
-  "theme_color": "#5b21b6",
+  "background_color": "#2d1953",
+  "theme_color": "#2d1953",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

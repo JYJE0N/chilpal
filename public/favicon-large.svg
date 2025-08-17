@@ -1,0 +1,12 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 솔리드 보라색 배경 -->
+  <rect width="180" height="180" rx="32" fill="#2d1953"/>
+  
+  <!-- "78" 텍스트 -->
+  <text x="90" y="120" 
+        font-family="Arial, sans-serif" 
+        font-size="72" 
+        font-weight="bold" 
+        text-anchor="middle" 
+        fill="#ffffff">78</text>
+</svg>
